@@ -1,5 +1,8 @@
 <script>
+    import io from 'socket.io-client'
 	export let name;
+    const socket = io('http://47.204.224.76:8000');
+    //const socket = io('http://192.168.86.29:8000');
 </script>
 
 <main>
