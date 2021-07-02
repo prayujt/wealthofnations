@@ -4,12 +4,13 @@
   "private": true,
   "scripts": {
     "client": "cd client && npm run dev",
-    "server": "node src/server.js",
+    "server": "nodemon src/server.js",
     "start": "concurrently \"npm run client\" \"npm run server\""
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
     "@rollup/plugin-node-resolve": "^11.0.0",
+    "nodemon": "^2.0.9",
     "rollup": "^2.3.4",
     "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-livereload": "^2.0.0",
