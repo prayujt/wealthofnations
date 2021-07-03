@@ -3,8 +3,8 @@ const app = require('express')()
 const http = require('http').Server(app)
 const io = require('socket.io')(http, {
     cors: {
-        origin: 'http://47.204.224.76:2000',
-        //origin: 'http://192.168.86.29:2000',
+        //origin: 'http://47.204.224.76:2000',
+        origin: 'http://192.168.86.29:2000',
         methods: ['GET', 'POST']
     }    
 })
