@@ -5259,12 +5259,12 @@ var app = (function () {
     			a.textContent = "Svelte tutorial";
     			t6 = text(" to learn how to build Svelte apps.");
     			attr_dev(h1, "class", "svelte-1tky8bj");
-    			add_location(h1, file, 8, 1, 190);
+    			add_location(h1, file, 8, 1, 194);
     			attr_dev(a, "href", "https://svelte.dev/tutorial");
-    			add_location(a, file, 9, 14, 227);
-    			add_location(p, file, 9, 1, 214);
+    			add_location(a, file, 9, 14, 231);
+    			add_location(p, file, 9, 1, 218);
     			attr_dev(main, "class", "svelte-1tky8bj");
-    			add_location(main, file, 7, 0, 182);
+    			add_location(main, file, 7, 0, 186);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -5306,7 +5306,10 @@ var app = (function () {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("App", slots, []);
     	let { name } = $$props;
-    	const socket = io("http://47.204.224.76:8000");
+
+    	//const socket = io('http://47.204.224.76:8000');
+    	const socket = io("http://192.168.86.29:8000");
+
     	const writable_props = ["name"];
 
     	Object.keys($$props).forEach(key => {
