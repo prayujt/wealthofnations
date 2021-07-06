@@ -22,7 +22,7 @@
 
     const handleKeydown = (event) => {
         let key = event.key;
-        let pixels = 10;
+        let pixels = 20;
         if (key == 's' && gameStarted) {
             database.ref('users/' + username).transaction(user => ({
                 ...user,
@@ -65,14 +65,12 @@
 
 <main>
     {#if !gameStarted}
-        <h1>Hello!</h1>
-        <p>Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn how to build Svelte apps.</p>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" bind:value={username}><br><br>
         <button on:click={initialize}>Start</button>
     {:else}
         {#each users as player}
-            <span class="dot" style="background-color:{player.color}; position: absolute; left: {player.x}px; top: {player.y}px"></span>
+            <span class="dot" style="background-color:{player.color}; position: absolute; left: {player.x}px; top: {player.y}px">{player.name}</span>
         {/each}
     {/if}
 </main>
@@ -87,16 +85,9 @@
 		margin: 0 auto;
 	}
 
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
-	}
-
     .dot {
-        height: 25px;
-        width: 25px;
+        height: 50px;
+        width: 50px;
         border-radius: 50%;
         display: inline-block;
     }

@@ -430,6 +430,13 @@ var app = (function () {
         else
             dispatch_dev('SvelteDOMSetAttribute', { node, attribute, value });
     }
+    function set_data_dev(text, data) {
+        data = '' + data;
+        if (text.wholeText === data)
+            return;
+        dispatch_dev('SvelteDOMSetData', { node: text, data });
+        text.data = data;
+    }
     function validate_each_argument(arg) {
         if (typeof arg !== 'string' && !(arg && typeof arg === 'object' && 'length' in arg)) {
             let msg = '{#each} only iterates over array-like objects.';
@@ -477,7 +484,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (73:4) {:else}
+    // (71:4) {:else}
     function create_else_block(ctx) {
     	let each_1_anchor;
     	let each_value = /*users*/ ctx[2];
@@ -538,7 +545,7 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(73:4) {:else}",
+    		source: "(71:4) {:else}",
     		ctx
     	});
 
@@ -547,73 +554,45 @@ var app = (function () {
 
     // (67:4) {#if !gameStarted}
     function create_if_block(ctx) {
-    	let h1;
-    	let t1;
-    	let p;
-    	let t2;
-    	let a;
-    	let t4;
-    	let t5;
     	let label;
-    	let t7;
+    	let t1;
     	let input;
     	let br0;
     	let br1;
-    	let t8;
+    	let t2;
     	let button;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
-    			h1 = element("h1");
-    			h1.textContent = "Hello!";
-    			t1 = space();
-    			p = element("p");
-    			t2 = text("Visit the ");
-    			a = element("a");
-    			a.textContent = "Svelte tutorial";
-    			t4 = text(" to learn how to build Svelte apps.");
-    			t5 = space();
     			label = element("label");
     			label.textContent = "Username:";
-    			t7 = space();
+    			t1 = space();
     			input = element("input");
     			br0 = element("br");
     			br1 = element("br");
-    			t8 = space();
+    			t2 = space();
     			button = element("button");
     			button.textContent = "Start";
-    			attr_dev(h1, "class", "svelte-1g59qrp");
-    			add_location(h1, file, 67, 8, 1757);
-    			attr_dev(a, "href", "https://svelte.dev/tutorial");
-    			add_location(a, file, 68, 21, 1794);
-    			add_location(p, file, 68, 8, 1781);
     			attr_dev(label, "for", "username");
-    			add_location(label, file, 69, 8, 1899);
+    			add_location(label, file, 67, 8, 1757);
     			attr_dev(input, "type", "text");
     			attr_dev(input, "id", "username");
     			attr_dev(input, "name", "username");
-    			add_location(input, file, 70, 8, 1947);
-    			add_location(br0, file, 70, 79, 2018);
-    			add_location(br1, file, 70, 83, 2022);
-    			add_location(button, file, 71, 8, 2035);
+    			add_location(input, file, 68, 8, 1805);
+    			add_location(br0, file, 68, 79, 1876);
+    			add_location(br1, file, 68, 83, 1880);
+    			add_location(button, file, 69, 8, 1893);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, h1, anchor);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t2);
-    			append_dev(p, a);
-    			append_dev(p, t4);
-    			insert_dev(target, t5, anchor);
     			insert_dev(target, label, anchor);
-    			insert_dev(target, t7, anchor);
+    			insert_dev(target, t1, anchor);
     			insert_dev(target, input, anchor);
     			set_input_value(input, /*username*/ ctx[1]);
     			insert_dev(target, br0, anchor);
     			insert_dev(target, br1, anchor);
-    			insert_dev(target, t8, anchor);
+    			insert_dev(target, t2, anchor);
     			insert_dev(target, button, anchor);
 
     			if (!mounted) {
@@ -631,16 +610,12 @@ var app = (function () {
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(h1);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(p);
-    			if (detaching) detach_dev(t5);
     			if (detaching) detach_dev(label);
-    			if (detaching) detach_dev(t7);
+    			if (detaching) detach_dev(t1);
     			if (detaching) detach_dev(input);
     			if (detaching) detach_dev(br0);
     			if (detaching) detach_dev(br1);
-    			if (detaching) detach_dev(t8);
+    			if (detaching) detach_dev(t2);
     			if (detaching) detach_dev(button);
     			mounted = false;
     			run_all(dispose);
@@ -658,24 +633,30 @@ var app = (function () {
     	return block;
     }
 
-    // (74:8) {#each users as player}
+    // (72:8) {#each users as player}
     function create_each_block(ctx) {
     	let span;
+    	let t_value = /*player*/ ctx[9].name + "";
+    	let t;
 
     	const block = {
     		c: function create() {
     			span = element("span");
-    			attr_dev(span, "class", "dot svelte-1g59qrp");
+    			t = text(t_value);
+    			attr_dev(span, "class", "dot svelte-ewcfkw");
     			set_style(span, "background-color", /*player*/ ctx[9].color);
     			set_style(span, "position", "absolute");
     			set_style(span, "left", /*player*/ ctx[9].x + "px");
     			set_style(span, "top", /*player*/ ctx[9].y + "px");
-    			add_location(span, file, 74, 12, 2136);
+    			add_location(span, file, 72, 12, 1994);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
+    			append_dev(span, t);
     		},
     		p: function update(ctx, dirty) {
+    			if (dirty & /*users*/ 4 && t_value !== (t_value = /*player*/ ctx[9].name + "")) set_data_dev(t, t_value);
+
     			if (dirty & /*users*/ 4) {
     				set_style(span, "background-color", /*player*/ ctx[9].color);
     			}
@@ -697,7 +678,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(74:8) {#each users as player}",
+    		source: "(72:8) {#each users as player}",
     		ctx
     	});
 
@@ -721,7 +702,7 @@ var app = (function () {
     		c: function create() {
     			main = element("main");
     			if_block.c();
-    			attr_dev(main, "class", "svelte-1g59qrp");
+    			attr_dev(main, "class", "svelte-ewcfkw");
     			add_location(main, file, 65, 0, 1719);
     		},
     		l: function claim(nodes) {
@@ -801,7 +782,7 @@ var app = (function () {
 
     	const handleKeydown = event => {
     		let key = event.key;
-    		let pixels = 10;
+    		let pixels = 20;
 
     		if (key == "s" && gameStarted) {
     			database.ref("users/" + username).transaction(user => ({ ...user, y: user.y + pixels }));
