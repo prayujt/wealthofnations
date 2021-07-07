@@ -4192,7 +4192,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (85:8) {:else}
+    // (89:8) {:else}
     function create_else_block(ctx) {
     	let each_1_anchor;
     	let each_value = /*users*/ ctx[2];
@@ -4253,14 +4253,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(85:8) {:else}",
+    		source: "(89:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (80:8) {#if !gameStarted}
+    // (84:8) {#if !gameStarted}
     function create_if_block_1(ctx) {
     	let label;
     	let t1;
@@ -4289,16 +4289,16 @@ var app = (function () {
     			button1 = element("button");
     			button1.textContent = "Logout";
     			attr_dev(label, "for", "username");
-    			add_location(label, file, 80, 12, 2081);
+    			add_location(label, file, 84, 12, 2135);
     			attr_dev(input, "type", "text");
     			attr_dev(input, "id", "username");
     			attr_dev(input, "name", "username");
-    			add_location(input, file, 81, 12, 2133);
-    			add_location(br0, file, 81, 83, 2204);
-    			add_location(br1, file, 81, 87, 2208);
-    			add_location(button0, file, 82, 12, 2225);
+    			add_location(input, file, 85, 12, 2187);
+    			add_location(br0, file, 85, 83, 2258);
+    			add_location(br1, file, 85, 87, 2262);
+    			add_location(button0, file, 86, 12, 2279);
     			attr_dev(button1, "type", "button");
-    			add_location(button1, file, 83, 12, 2291);
+    			add_location(button1, file, 87, 12, 2345);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, label, anchor);
@@ -4366,14 +4366,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(80:8) {#if !gameStarted}",
+    		source: "(84:8) {#if !gameStarted}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (77:4) {#if !loggedIn}
+    // (81:4) {#if !loggedIn}
     function create_if_block(ctx) {
     	let button;
     	let mounted;
@@ -4384,7 +4384,7 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Sign in with Google";
     			attr_dev(button, "type", "button");
-    			add_location(button, file, 77, 8, 1937);
+    			add_location(button, file, 81, 8, 1991);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -4418,14 +4418,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(77:4) {#if !loggedIn}",
+    		source: "(81:4) {#if !loggedIn}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (86:12) {#each users as player}
+    // (90:12) {#each users as player}
     function create_each_block(ctx) {
     	let span;
     	let t_value = /*player*/ ctx[14].username + "";
@@ -4440,7 +4440,7 @@ var app = (function () {
     			set_style(span, "position", "absolute");
     			set_style(span, "left", /*player*/ ctx[14].x + "px");
     			set_style(span, "top", /*player*/ ctx[14].y + "px");
-    			add_location(span, file, 86, 16, 2415);
+    			add_location(span, file, 90, 16, 2469);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -4470,14 +4470,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(86:12) {#each users as player}",
+    		source: "(90:12) {#each users as player}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (70:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >
+    // (74:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >
     function create_default_slot(ctx) {
     	let if_block_anchor;
 
@@ -4522,7 +4522,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(70:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >",
+    		source: "(74:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >",
     		ctx
     	});
 
@@ -4530,6 +4530,7 @@ var app = (function () {
     }
 
     function create_fragment(ctx) {
+    	let t;
     	let main;
     	let auth;
     	let current;
@@ -4558,15 +4559,18 @@ var app = (function () {
 
     	const block = {
     		c: function create() {
+    			t = space();
     			main = element("main");
     			create_component(auth.$$.fragment);
+    			document.title = "Game";
     			attr_dev(main, "class", "svelte-ewcfkw");
-    			add_location(main, file, 68, 0, 1774);
+    			add_location(main, file, 72, 0, 1828);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
+    			insert_dev(target, t, anchor);
     			insert_dev(target, main, anchor);
     			mount_component(auth, main, null);
     			current = true;
@@ -4599,6 +4603,7 @@ var app = (function () {
     			current = false;
     		},
     		d: function destroy(detaching) {
+    			if (detaching) detach_dev(t);
     			if (detaching) detach_dev(main);
     			destroy_component(auth);
     			mounted = false;

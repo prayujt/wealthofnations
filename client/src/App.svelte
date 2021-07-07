@@ -1,3 +1,7 @@
+<svelte:head>
+    <title>Game</title>
+</svelte:head>
+
 <script>
     import Auth from './auth/Auth.svelte';
     export let database;
