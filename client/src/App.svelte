@@ -81,12 +81,12 @@
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" bind:value={username}><br><br>
             <button on:click={initialize(user.id)}>Start</button>
-            <button type="button" on:click={logout}>Logout</button>
         {:else}
             {#each users as player}
                 <span class="dot" style="background-color:{player.color}; position: absolute; left: {player.x}px; top: {player.y}px">{player.username}</span>
             {/each}
         {/if}
+        <button type="button" on:click={logout}>Logout</button>
     {/if}
     </Auth>
 </main>

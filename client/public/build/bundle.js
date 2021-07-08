@@ -4192,150 +4192,46 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (85:8) {:else}
+    // (79:4) {:else}
     function create_else_block(ctx) {
-    	let each_1_anchor;
-    	let each_value = /*users*/ ctx[2];
-    	validate_each_argument(each_value);
-    	let each_blocks = [];
-
-    	for (let i = 0; i < each_value.length; i += 1) {
-    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
-    	}
-
-    	const block = {
-    		c: function create() {
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].c();
-    			}
-
-    			each_1_anchor = empty();
-    		},
-    		m: function mount(target, anchor) {
-    			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(target, anchor);
-    			}
-
-    			insert_dev(target, each_1_anchor, anchor);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*users*/ 4) {
-    				each_value = /*users*/ ctx[2];
-    				validate_each_argument(each_value);
-    				let i;
-
-    				for (i = 0; i < each_value.length; i += 1) {
-    					const child_ctx = get_each_context(ctx, each_value, i);
-
-    					if (each_blocks[i]) {
-    						each_blocks[i].p(child_ctx, dirty);
-    					} else {
-    						each_blocks[i] = create_each_block(child_ctx);
-    						each_blocks[i].c();
-    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
-    					}
-    				}
-
-    				for (; i < each_blocks.length; i += 1) {
-    					each_blocks[i].d(1);
-    				}
-
-    				each_blocks.length = each_value.length;
-    			}
-    		},
-    		d: function destroy(detaching) {
-    			destroy_each(each_blocks, detaching);
-    			if (detaching) detach_dev(each_1_anchor);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_else_block.name,
-    		type: "else",
-    		source: "(85:8) {:else}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (80:8) {#if !gameStarted}
-    function create_if_block_1(ctx) {
-    	let label;
-    	let t1;
-    	let input;
-    	let br0;
-    	let br1;
-    	let t2;
-    	let button0;
-    	let t4;
-    	let button1;
+    	let t0;
+    	let button;
     	let mounted;
     	let dispose;
 
+    	function select_block_type_1(ctx, dirty) {
+    		if (!/*gameStarted*/ ctx[0]) return create_if_block_1;
+    		return create_else_block_1;
+    	}
+
+    	let current_block_type = select_block_type_1(ctx);
+    	let if_block = current_block_type(ctx);
+
     	const block = {
     		c: function create() {
-    			label = element("label");
-    			label.textContent = "Username:";
-    			t1 = space();
-    			input = element("input");
-    			br0 = element("br");
-    			br1 = element("br");
-    			t2 = space();
-    			button0 = element("button");
-    			button0.textContent = "Start";
-    			t4 = space();
-    			button1 = element("button");
-    			button1.textContent = "Logout";
-    			attr_dev(label, "for", "username");
-    			add_location(label, file, 80, 12, 2081);
-    			attr_dev(input, "type", "text");
-    			attr_dev(input, "id", "username");
-    			attr_dev(input, "name", "username");
-    			add_location(input, file, 81, 12, 2133);
-    			add_location(br0, file, 81, 83, 2204);
-    			add_location(br1, file, 81, 87, 2208);
-    			add_location(button0, file, 82, 12, 2225);
-    			attr_dev(button1, "type", "button");
-    			add_location(button1, file, 83, 12, 2291);
+    			if_block.c();
+    			t0 = space();
+    			button = element("button");
+    			button.textContent = "Logout";
+    			attr_dev(button, "type", "button");
+    			add_location(button, file, 88, 8, 2531);
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, label, anchor);
-    			insert_dev(target, t1, anchor);
-    			insert_dev(target, input, anchor);
-    			set_input_value(input, /*username*/ ctx[1]);
-    			insert_dev(target, br0, anchor);
-    			insert_dev(target, br1, anchor);
-    			insert_dev(target, t2, anchor);
-    			insert_dev(target, button0, anchor);
-    			insert_dev(target, t4, anchor);
-    			insert_dev(target, button1, anchor);
+    			if_block.m(target, anchor);
+    			insert_dev(target, t0, anchor);
+    			insert_dev(target, button, anchor);
 
     			if (!mounted) {
-    				dispose = [
-    					listen_dev(input, "input", /*input_input_handler*/ ctx[7]),
-    					listen_dev(
-    						button0,
-    						"click",
-    						function () {
-    							if (is_function(/*initialize*/ ctx[3](/*user*/ ctx[10].id))) /*initialize*/ ctx[3](/*user*/ ctx[10].id).apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					),
-    					listen_dev(
-    						button1,
-    						"click",
-    						function () {
-    							if (is_function(/*logout*/ ctx[13])) /*logout*/ ctx[13].apply(this, arguments);
-    						},
-    						false,
-    						false,
-    						false
-    					)
-    				];
+    				dispose = listen_dev(
+    					button,
+    					"click",
+    					function () {
+    						if (is_function(/*logout*/ ctx[13])) /*logout*/ ctx[13].apply(this, arguments);
+    					},
+    					false,
+    					false,
+    					false
+    				);
 
     				mounted = true;
     			}
@@ -4343,30 +4239,32 @@ var app = (function () {
     		p: function update(new_ctx, dirty) {
     			ctx = new_ctx;
 
-    			if (dirty & /*username*/ 2 && input.value !== /*username*/ ctx[1]) {
-    				set_input_value(input, /*username*/ ctx[1]);
+    			if (current_block_type === (current_block_type = select_block_type_1(ctx)) && if_block) {
+    				if_block.p(ctx, dirty);
+    			} else {
+    				if_block.d(1);
+    				if_block = current_block_type(ctx);
+
+    				if (if_block) {
+    					if_block.c();
+    					if_block.m(t0.parentNode, t0);
+    				}
     			}
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(label);
-    			if (detaching) detach_dev(t1);
-    			if (detaching) detach_dev(input);
-    			if (detaching) detach_dev(br0);
-    			if (detaching) detach_dev(br1);
-    			if (detaching) detach_dev(t2);
-    			if (detaching) detach_dev(button0);
-    			if (detaching) detach_dev(t4);
-    			if (detaching) detach_dev(button1);
+    			if_block.d(detaching);
+    			if (detaching) detach_dev(t0);
+    			if (detaching) detach_dev(button);
     			mounted = false;
-    			run_all(dispose);
+    			dispose();
     		}
     	};
 
     	dispatch_dev("SvelteRegisterBlock", {
     		block,
-    		id: create_if_block_1.name,
-    		type: "if",
-    		source: "(80:8) {#if !gameStarted}",
+    		id: create_else_block.name,
+    		type: "else",
+    		source: "(79:4) {:else}",
     		ctx
     	});
 
@@ -4425,7 +4323,167 @@ var app = (function () {
     	return block;
     }
 
-    // (86:12) {#each users as player}
+    // (84:8) {:else}
+    function create_else_block_1(ctx) {
+    	let each_1_anchor;
+    	let each_value = /*users*/ ctx[2];
+    	validate_each_argument(each_value);
+    	let each_blocks = [];
+
+    	for (let i = 0; i < each_value.length; i += 1) {
+    		each_blocks[i] = create_each_block(get_each_context(ctx, each_value, i));
+    	}
+
+    	const block = {
+    		c: function create() {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].c();
+    			}
+
+    			each_1_anchor = empty();
+    		},
+    		m: function mount(target, anchor) {
+    			for (let i = 0; i < each_blocks.length; i += 1) {
+    				each_blocks[i].m(target, anchor);
+    			}
+
+    			insert_dev(target, each_1_anchor, anchor);
+    		},
+    		p: function update(ctx, dirty) {
+    			if (dirty & /*users*/ 4) {
+    				each_value = /*users*/ ctx[2];
+    				validate_each_argument(each_value);
+    				let i;
+
+    				for (i = 0; i < each_value.length; i += 1) {
+    					const child_ctx = get_each_context(ctx, each_value, i);
+
+    					if (each_blocks[i]) {
+    						each_blocks[i].p(child_ctx, dirty);
+    					} else {
+    						each_blocks[i] = create_each_block(child_ctx);
+    						each_blocks[i].c();
+    						each_blocks[i].m(each_1_anchor.parentNode, each_1_anchor);
+    					}
+    				}
+
+    				for (; i < each_blocks.length; i += 1) {
+    					each_blocks[i].d(1);
+    				}
+
+    				each_blocks.length = each_value.length;
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			destroy_each(each_blocks, detaching);
+    			if (detaching) detach_dev(each_1_anchor);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_else_block_1.name,
+    		type: "else",
+    		source: "(84:8) {:else}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (80:8) {#if !gameStarted}
+    function create_if_block_1(ctx) {
+    	let label;
+    	let t1;
+    	let input;
+    	let br0;
+    	let br1;
+    	let t2;
+    	let button;
+    	let mounted;
+    	let dispose;
+
+    	const block = {
+    		c: function create() {
+    			label = element("label");
+    			label.textContent = "Username:";
+    			t1 = space();
+    			input = element("input");
+    			br0 = element("br");
+    			br1 = element("br");
+    			t2 = space();
+    			button = element("button");
+    			button.textContent = "Start";
+    			attr_dev(label, "for", "username");
+    			add_location(label, file, 80, 12, 2081);
+    			attr_dev(input, "type", "text");
+    			attr_dev(input, "id", "username");
+    			attr_dev(input, "name", "username");
+    			add_location(input, file, 81, 12, 2133);
+    			add_location(br0, file, 81, 83, 2204);
+    			add_location(br1, file, 81, 87, 2208);
+    			add_location(button, file, 82, 12, 2225);
+    		},
+    		m: function mount(target, anchor) {
+    			insert_dev(target, label, anchor);
+    			insert_dev(target, t1, anchor);
+    			insert_dev(target, input, anchor);
+    			set_input_value(input, /*username*/ ctx[1]);
+    			insert_dev(target, br0, anchor);
+    			insert_dev(target, br1, anchor);
+    			insert_dev(target, t2, anchor);
+    			insert_dev(target, button, anchor);
+
+    			if (!mounted) {
+    				dispose = [
+    					listen_dev(input, "input", /*input_input_handler*/ ctx[7]),
+    					listen_dev(
+    						button,
+    						"click",
+    						function () {
+    							if (is_function(/*initialize*/ ctx[3](/*user*/ ctx[10].id))) /*initialize*/ ctx[3](/*user*/ ctx[10].id).apply(this, arguments);
+    						},
+    						false,
+    						false,
+    						false
+    					)
+    				];
+
+    				mounted = true;
+    			}
+    		},
+    		p: function update(new_ctx, dirty) {
+    			ctx = new_ctx;
+
+    			if (dirty & /*username*/ 2 && input.value !== /*username*/ ctx[1]) {
+    				set_input_value(input, /*username*/ ctx[1]);
+    			}
+    		},
+    		d: function destroy(detaching) {
+    			if (detaching) detach_dev(label);
+    			if (detaching) detach_dev(t1);
+    			if (detaching) detach_dev(input);
+    			if (detaching) detach_dev(br0);
+    			if (detaching) detach_dev(br1);
+    			if (detaching) detach_dev(t2);
+    			if (detaching) detach_dev(button);
+    			mounted = false;
+    			run_all(dispose);
+    		}
+    	};
+
+    	dispatch_dev("SvelteRegisterBlock", {
+    		block,
+    		id: create_if_block_1.name,
+    		type: "if",
+    		source: "(80:8) {#if !gameStarted}",
+    		ctx
+    	});
+
+    	return block;
+    }
+
+    // (85:12) {#each users as player}
     function create_each_block(ctx) {
     	let span;
     	let t_value = /*player*/ ctx[14].username + "";
@@ -4440,7 +4498,7 @@ var app = (function () {
     			set_style(span, "position", "absolute");
     			set_style(span, "left", /*player*/ ctx[14].x + "px");
     			set_style(span, "top", /*player*/ ctx[14].y + "px");
-    			add_location(span, file, 86, 16, 2415);
+    			add_location(span, file, 85, 16, 2347);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -4470,7 +4528,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(86:12) {#each users as player}",
+    		source: "(85:12) {#each users as player}",
     		ctx
     	});
 
@@ -4483,7 +4541,6 @@ var app = (function () {
 
     	function select_block_type(ctx, dirty) {
     		if (!/*loggedIn*/ ctx[11]) return create_if_block;
-    		if (!/*gameStarted*/ ctx[0]) return create_if_block_1;
     		return create_else_block;
     	}
 
