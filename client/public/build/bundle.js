@@ -4214,7 +4214,7 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Logout";
     			attr_dev(button, "type", "button");
-    			add_location(button, file, 92, 8, 2585);
+    			add_location(button, file, 92, 8, 2586);
     		},
     		m: function mount(target, anchor) {
     			if_block.m(target, anchor);
@@ -4282,7 +4282,7 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Sign in with Google";
     			attr_dev(button, "type", "button");
-    			add_location(button, file, 81, 8, 1991);
+    			add_location(button, file, 81, 8, 1992);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, button, anchor);
@@ -4415,14 +4415,14 @@ var app = (function () {
     			button = element("button");
     			button.textContent = "Start";
     			attr_dev(label, "for", "username");
-    			add_location(label, file, 84, 12, 2135);
+    			add_location(label, file, 84, 12, 2136);
     			attr_dev(input, "type", "text");
     			attr_dev(input, "id", "username");
     			attr_dev(input, "name", "username");
-    			add_location(input, file, 85, 12, 2187);
-    			add_location(br0, file, 85, 83, 2258);
-    			add_location(br1, file, 85, 87, 2262);
-    			add_location(button, file, 86, 12, 2279);
+    			add_location(input, file, 85, 12, 2188);
+    			add_location(br0, file, 85, 83, 2259);
+    			add_location(br1, file, 85, 87, 2263);
+    			add_location(button, file, 86, 12, 2280);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, label, anchor);
@@ -4498,7 +4498,7 @@ var app = (function () {
     			set_style(span, "position", "absolute");
     			set_style(span, "left", /*player*/ ctx[14].x + "px");
     			set_style(span, "top", /*player*/ ctx[14].y + "px");
-    			add_location(span, file, 89, 16, 2401);
+    			add_location(span, file, 89, 16, 2402);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -4535,7 +4535,7 @@ var app = (function () {
     	return block;
     }
 
-    // (74:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >
+    // (74:4) <Auth         useRedirect={false}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >
     function create_default_slot(ctx) {
     	let if_block_anchor;
 
@@ -4579,7 +4579,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(74:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >",
+    		source: "(74:4) <Auth         useRedirect={false}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >",
     		ctx
     	});
 
@@ -4596,7 +4596,7 @@ var app = (function () {
 
     	auth = new Auth({
     			props: {
-    				useRedirect: true,
+    				useRedirect: false,
     				$$slots: {
     					default: [
     						create_default_slot,
