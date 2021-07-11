@@ -72,7 +72,7 @@
 
 <main>
     <Auth
-        useRedirect={false}
+        useRedirect={true}
         let:user
         let:loggedIn
         let:loginWithGoogle
