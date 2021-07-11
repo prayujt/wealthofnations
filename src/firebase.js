@@ -1,17 +1,9 @@
-import firebase from "firebase/app"
+var admin = require('firebase-admin');
 
-var firebaseConfig = {
-    apiKey: "AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI",
-    authDomain: "wealth-of-nations.firebaseapp.com",
-    databaseURL: "https://wealth-of-nations-default-rtdb.firebaseio.com",
-    projectId: "wealth-of-nations",
-    storageBucket: "wealth-of-nations.appspot.com",
-    messagingSenderId: "585602058367",
-    appId: "1:585602058367:web:2d7e2915b43f466e57d74a",
-    measurementId: "G-LWK0DJPE26"
-}
+admin.initializeApp({
+    credential: admin.credential.applicationDefault(),
+    databaseURL: 'https://wealth-of-nations-default-rtdb.firebaseio.com'
+});
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig)
-
-export const database = firebase.database()
+const database = admin.database();
+exports.database = database;

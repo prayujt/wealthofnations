@@ -4,6 +4,7 @@
 
 <script>
     import Auth from './auth/Auth.svelte';
+    import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
     export let database;
 
     var gameStarted = false;
@@ -12,8 +13,10 @@
     let users = {};
     let id = "";
 
+    $: checkOnline()
+
     const initialize = (id_) => {
-        id = id_
+        id = id_;
         color = '#'+(Math.random() * 0xFFFFFF << 0).toString(16).padStart(6, '0');
         database.ref('users/' + id).set({
             x: Math.floor(Math.random() * 1000),
@@ -21,11 +24,32 @@
             color: color,
             username: username
         });
+        setInterval(checkOnline, 1000);
         gameStarted = true;
     }
+    
+    const checkOnline = () => {
+        console.log('checking');
+        if (!(id == "")) {
+            database.ref('temp/' + id).once('value', snapshot => {
+                if (snapshot.exists()) {
+                    database.ref('temp/' + id).remove();
+                    return true;
+                }
+                else return false;
+            });
+        }
+        else return false;
+    }
 
-    const close = (event) => {
-        database.ref('users/' + id).remove();
+    const deleteUser = () => {
+        if (!(id == "")) database.ref('users/' + id).remove();
+    }
+
+    const handleUnload = (event) => {
+        database.ref('users/' + id).once('value').then(snap => {
+            database.ref('temp/' + id).set(snap.val())
+        });
     }
 
     const handleKeydown = (event) => {
@@ -90,12 +114,15 @@
                 <span class="dot" style="background-color:{player.color}; position: absolute; left: {player.x}px; top: {player.y}px">{player.username}</span>
             {/each}
         {/if}
-        <button type="button" on:click={logout}>Logout</button>
+        <button type="button" on:click={() => {
+            deleteUser();
+            logout();
+        }}>Logout</button>
     {/if}
     </Auth>
 </main>
 
-<svelte:window on:keydown={handleKeydown} on:beforeunload={close}/>
+<svelte:window on:unload={handleUnload} on:keydown={handleKeydown}/>
 
 <style>
 	main {
