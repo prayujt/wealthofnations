@@ -4128,7 +4128,7 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			if (default_slot) default_slot.c();
-    			add_location(div, file$7, 45, 0, 1168);
+    			add_location(div, file$7, 45, 0, 982);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -8484,7 +8484,7 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (109:4) {:else}
+    // (104:4) {:else}
     function create_else_block(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -8587,14 +8587,14 @@ var app = (function () {
     		block,
     		id: create_else_block.name,
     		type: "else",
-    		source: "(109:4) {:else}",
+    		source: "(104:4) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (107:4) {#if !loggedIn}
+    // (102:4) {#if !loggedIn}
     function create_if_block(ctx) {
     	let button;
     	let current;
@@ -8648,14 +8648,14 @@ var app = (function () {
     		block,
     		id: create_if_block.name,
     		type: "if",
-    		source: "(107:4) {#if !loggedIn}",
+    		source: "(102:4) {#if !loggedIn}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (114:8) {:else}
+    // (109:8) {:else}
     function create_else_block_1(ctx) {
     	let each_1_anchor;
     	let each_value = /*users*/ ctx[2];
@@ -8718,14 +8718,14 @@ var app = (function () {
     		block,
     		id: create_else_block_1.name,
     		type: "else",
-    		source: "(114:8) {:else}",
+    		source: "(109:8) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (110:8) {#if !gameStarted}
+    // (105:8) {#if !gameStarted}
     function create_if_block_1(ctx) {
     	let textinput;
     	let updating_value;
@@ -8775,8 +8775,8 @@ var app = (function () {
     			br1 = element("br");
     			t1 = space();
     			create_component(button.$$.fragment);
-    			add_location(br0, file, 111, 12, 3187);
-    			add_location(br1, file, 111, 16, 3191);
+    			add_location(br0, file, 106, 12, 2871);
+    			add_location(br1, file, 106, 16, 2875);
     		},
     		m: function mount(target, anchor) {
     			mount_component(textinput, target, anchor);
@@ -8831,14 +8831,14 @@ var app = (function () {
     		block,
     		id: create_if_block_1.name,
     		type: "if",
-    		source: "(110:8) {#if !gameStarted}",
+    		source: "(105:8) {#if !gameStarted}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (115:12) {#each users as player}
+    // (110:12) {#each users as player}
     function create_each_block(ctx) {
     	let span;
     	let t_value = /*player*/ ctx[17].username + "";
@@ -8853,7 +8853,7 @@ var app = (function () {
     			set_style(span, "position", "absolute");
     			set_style(span, "left", /*player*/ ctx[17].x + "px");
     			set_style(span, "top", /*player*/ ctx[17].y + "px");
-    			add_location(span, file, 115, 16, 3343);
+    			add_location(span, file, 110, 16, 3027);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, span, anchor);
@@ -8883,14 +8883,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(115:12) {#each users as player}",
+    		source: "(110:12) {#each users as player}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (113:12) <Button kind='ghost' on:click={initialize(user.id)}>
+    // (108:12) <Button kind='ghost' on:click={initialize(user.id)}>
     function create_default_slot_3(ctx) {
     	let t;
 
@@ -8910,14 +8910,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3.name,
     		type: "slot",
-    		source: "(113:12) <Button kind='ghost' on:click={initialize(user.id)}>",
+    		source: "(108:12) <Button kind='ghost' on:click={initialize(user.id)}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (119:8) <Button kind='ghost' on:click={() => {             deleteUser();             logout();         }}>
+    // (114:8) <Button kind='ghost' on:click={() => {             deleteUser();             logout();         }}>
     function create_default_slot_2(ctx) {
     	let t;
 
@@ -8937,14 +8937,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2.name,
     		type: "slot",
-    		source: "(119:8) <Button kind='ghost' on:click={() => {             deleteUser();             logout();         }}>",
+    		source: "(114:8) <Button kind='ghost' on:click={() => {             deleteUser();             logout();         }}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (108:8) <Button kind='ghost' on:click={loginWithGoogle}>
+    // (103:8) <Button kind='ghost' on:click={loginWithGoogle}>
     function create_default_slot_1(ctx) {
     	let t;
 
@@ -8964,14 +8964,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1.name,
     		type: "slot",
-    		source: "(108:8) <Button kind='ghost' on:click={loginWithGoogle}>",
+    		source: "(103:8) <Button kind='ghost' on:click={loginWithGoogle}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (100:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >
+    // (95:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >
     function create_default_slot(ctx) {
     	let current_block_type_index;
     	let if_block;
@@ -9044,7 +9044,7 @@ var app = (function () {
     		block,
     		id: create_default_slot.name,
     		type: "slot",
-    		source: "(100:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >",
+    		source: "(95:4) <Auth         useRedirect={true}         let:user         let:loggedIn         let:loginWithGoogle         let:logout     >",
     		ctx
     	});
 
@@ -9091,7 +9091,7 @@ var app = (function () {
     			attr_dev(link, "href", "https://unpkg.com/carbon-components-svelte@0.30.0/css/white.css");
     			add_location(link, file, 2, 4, 42);
     			attr_dev(main, "class", "svelte-yh56ly");
-    			add_location(main, file, 98, 0, 2735);
+    			add_location(main, file, 93, 0, 2419);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -24585,14 +24585,14 @@ var app = (function () {
     registerDatabase(firebase);
 
     var firebaseConfig = {
-        apiKey: "AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI",
-        authDomain: "wealth-of-nations.firebaseapp.com",
-        databaseURL: "https://wealth-of-nations-default-rtdb.firebaseio.com",
-        projectId: "wealth-of-nations",
-        storageBucket: "wealth-of-nations.appspot.com",
-        messagingSenderId: "585602058367",
-        appId: "1:585602058367:web:2d7e2915b43f466e57d74a",
-        measurementId: "G-LWK0DJPE26"
+    	apiKey: "AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI",
+    	authDomain: "wealth-of-nations.firebaseapp.com",
+    	databaseURL: "https://wealth-of-nations-default-rtdb.firebaseio.com",
+    	projectId: "wealth-of-nations",
+    	storageBucket: "wealth-of-nations.appspot.com",
+    	messagingSenderId: "585602058367",
+    	appId: "1:585602058367:web:2d7e2915b43f466e57d74a",
+    	measurementId: "G-LWK0DJPE26",
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -24601,8 +24601,8 @@ var app = (function () {
     const app = new App({
     	target: document.body,
     	props: {
-            database: database
-    	}
+    		database: database,
+    	},
     });
 
     return app;
