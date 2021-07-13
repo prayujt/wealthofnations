@@ -1,17 +1,19 @@
 <svelte:head>
     <title>Game</title>
+    <link rel='stylesheet' href='https://unpkg.com/carbon-components-svelte@0.30.0/css/white.css' />
 </svelte:head>
 
 <script>
     import Auth from './auth/Auth.svelte';
     import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
+    import { Button, TextInput } from 'carbon-components-svelte';
     export let database;
 
     var gameStarted = false;
     let username;
     var color;
     let users = {};
-    let id = "";
+    let id = '';
 
     $: checkOnline()
 
@@ -30,7 +32,7 @@
     
     const checkOnline = () => {
         console.log('checking');
-        if (!(id == "")) {
+        if (!(id == '')) {
             database.ref('temp/' + id).once('value', snapshot => {
                 if (snapshot.exists()) {
                     database.ref('temp/' + id).remove();
@@ -43,7 +45,7 @@
     }
 
     const deleteUser = () => {
-        if (!(id == "")) database.ref('users/' + id).remove();
+        if (!(id == '')) database.ref('users/' + id).remove();
     }
 
     const handleUnload = (event) => {
@@ -103,21 +105,21 @@
         let:logout
     >
     {#if !loggedIn}
-        <button type="button" on:click|preventDefault={loginWithGoogle}>Sign in with Google</button>
+        <Button kind='ghost' on:click={loginWithGoogle}>Sign in with Google</Button>
     {:else}
         {#if !gameStarted}
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" bind:value={username}><br><br>
-            <button on:click={initialize(user.id)}>Start</button>
+            <TextInput id='username' bind:value={username} labelText='Username' helperText='You can change this at any time' placeholder='Enter user name...' />
+            <br><br>
+            <Button kind='ghost' on:click={initialize(user.id)}>Start</Button>
         {:else}
             {#each users as player}
-                <span class="dot" style="background-color:{player.color}; position: absolute; left: {player.x}px; top: {player.y}px">{player.username}</span>
+                <span class='dot' style='background-color:{player.color}; position: absolute; left: {player.x}px; top: {player.y}px'>{player.username}</span>
             {/each}
         {/if}
-        <button type="button" on:click={() => {
+        <Button kind='ghost' on:click={() => {
             deleteUser();
             logout();
-        }}>Logout</button>
+        }}>Logout</Button>
     {/if}
     </Auth>
 </main>
@@ -138,10 +140,4 @@
         border-radius: 50%;
         display: inline-block;
     }
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
-	}
 </style>
