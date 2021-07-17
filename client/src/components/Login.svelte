@@ -6,12 +6,7 @@
 
 	export let database;
 
-	onMount(() => {
-		database.ref("test/").set({
-			username: "gay",
-			sexuality: "gay",
-		});
-	});
+	onMount(() => {});
 </script>
 
 <Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
