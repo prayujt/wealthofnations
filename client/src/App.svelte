@@ -17,5 +17,5 @@
 </svelte:head>
 
 <main>
-	<Login />
+	<Login {database} />
 </main>

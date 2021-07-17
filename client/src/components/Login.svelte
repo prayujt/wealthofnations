@@ -1,6 +1,17 @@
 <script>
 	import Auth from "../auth/Auth.svelte";
+	import Game from "./Game.svelte";
 	import { Button, TextInput } from "carbon-components-svelte";
+	import { onMount, onDestroy, beforeUpdate, afterUpdate } from "svelte";
+
+	export let database;
+
+	onMount = () => {
+		database.ref("test/").set({
+			username: "gay",
+			sexuality: "gay",
+		});
+	};
 </script>
 
 <Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
