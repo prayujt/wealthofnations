@@ -19,3 +19,10 @@
 <main>
 	<Login {database} />
 </main>
+
+<style>
+	main {
+		margin: 0;
+		padding: 0;
+	}
+</style>

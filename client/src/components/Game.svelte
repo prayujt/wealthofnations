@@ -27,8 +27,13 @@
 
 	const config = {
 		type: Phaser.AUTO, // Which renderer to use
-		width: 1800, // Canvas width in pixels
-		height: 800, // Canvas height in pixels
+		width: window.innerWidth, // Canvas width in pixels
+		height: window.innerHeight, // Canvas height in pixels
+		scale: {
+			mode: Phaser.Scale.FIT,
+			autoCenter: Phaser.Scale.CENTER_BOTH,
+		},
+		autoRound: false,
 		parent: "game-container", // ID of the DOM element to add the canvas to
 		scene: [Map],
 	};
@@ -37,3 +42,10 @@
 </script>
 
 <div id="game-container" />
+
+<style>
+	#game-container {
+		margin: 0;
+		padding: 0;
+	}
+</style>

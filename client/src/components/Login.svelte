@@ -13,12 +13,15 @@
 	{#if !loggedIn}
 		<Button kind="ghost" on:click={loginWithGoogle}>Sign in with Google</Button>
 	{:else}
-		<Button
+		<!-- <Button
 			kind="ghost"
 			on:click={() => {
 				logout();
 			}}>Logout</Button
-		>
+		> -->
 		<Game />
 	{/if}
 </Auth>
+
+<style>
+</style>
