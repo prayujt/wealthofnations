@@ -16,11 +16,14 @@
 		}
 
 		preload() {
-			this.load.tilemapTiledJSON("Map", "assets/example_map.json");
+			this.load.image("base_tiles", "assetsRPG_Nature_Tileset.png");
+			this.load.tilemapTiledJSON("tileset_nature", "assets/example_map.json");
 		}
 
 		create() {
-			var map = this.make.tilemap({ key: "Map" });
+			var map = this.make.tilemap({ key: "tileset_nature" });
+
+			const tileset = map.addTilesetImage;
 		}
 
 		update() {}
