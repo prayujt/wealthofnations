@@ -16,14 +16,19 @@
 		}
 
 		preload() {
-			this.load.image("base_tiles", "assetsRPG_Nature_Tileset.png");
-			this.load.tilemapTiledJSON("tileset_nature", "assets/example_map.json");
+			this.load.image("base_tiles", "assets/RPG_Nature_Tileset.png");
+			this.load.tilemapTiledJSON("tileset_nature", "assets/embedded_map.json");
 		}
 
 		create() {
-			var map = this.make.tilemap({ key: "tileset_nature" });
+			// this.add.image(0, 0, 'base_tiles')
+			const map = this.make.tilemap({ key: "tileset_nature" });
 
-			const tileset = map.addTilesetImage;
+			const tileset = map.addTilesetImage("RPG Nature Tileset", "base_tiles");
+
+			map.createLayer("Tile Layer 1", tileset);
+
+			map.createLayer("Tile Layer 2", tileset);
 		}
 
 		update() {}
