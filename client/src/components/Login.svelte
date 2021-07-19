@@ -19,5 +19,6 @@
 				logout();
 			}}>Logout</Button
 		>
+		<Game />
 	{/if}
 </Auth>
