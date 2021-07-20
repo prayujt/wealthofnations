@@ -1,5 +1,6 @@
 <script>
 	import Phaser from "phaser";
+	import { onMount } from "svelte";
 
 	class Map extends Phaser.Scene {
 		constructor() {
@@ -12,13 +13,10 @@
 		}
 
 		create() {
-			// this.add.image(0, 0, 'base_tiles')
 			const map = this.make.tilemap({ key: "tileset_nature" });
-
 			const tileset = map.addTilesetImage("RPG Nature Tileset", "base_tiles");
 
 			map.createLayer("Tile Layer 1", tileset);
-
 			map.createLayer("Tile Layer 2", tileset);
 		}
 
@@ -26,22 +24,32 @@
 	}
 
 	const config = {
-		type: Phaser.AUTO, // Which renderer to use
-		width: 400, // Canvas width in pixels
-		height: 400, // Canvas height in pixels
+		type: Phaser.AUTO,
+		width: 400,
+		height: 400,
 		// scale: {
 		// 	mode: Phaser.Scale.FIT,
 		// 	autoCenter: Phaser.Scale.CENTER_BOTH,
 		// },
 		// autoRound: false,
-		parent: "game-container", // ID of the DOM element to add the canvas to
+		// parent: 'game-container',
 		scene: [Map],
 	};
 
 	const game = new Phaser.Game(config);
+
+	onMount(async () => {
+		let promise = new Promise((r) => setTimeout(() => r("resolved"), 1));
+		await promise;
+		let parent = document.getElementsByTagName("canvas")[0].parentElement;
+		game.scale.resize(
+			parent.getBoundingClientRect().width,
+			parent.getBoundingClientRect().height
+		);
+	});
 </script>
 
-<div id="game-container" />
+<!-- <div id='game-container' />
 
 <style>
 	#game-container {
@@ -49,3 +57,4 @@
 		padding: 0;
 	}
 </style>
+-->
