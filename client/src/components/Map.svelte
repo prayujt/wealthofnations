@@ -48,13 +48,3 @@
 		);
 	});
 </script>
-
-<!-- <div id='game-container' />
-
-<style>
-	#game-container {
-		margin: 0;
-		padding: 0;
-	}
-</style>
--->
