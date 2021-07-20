@@ -1,8 +1,8 @@
 <script>
-	import Auth from "../auth/Auth.svelte";
-	import Game from "./Game.svelte";
-	import { Button, TextInput } from "carbon-components-svelte";
-	import { onMount, onDestroy, beforeUpdate, afterUpdate } from "svelte";
+	import Auth from '../auth/Auth.svelte';
+	import Game from './Game.svelte';
+	import { Button, TextInput } from 'carbon-components-svelte';
+	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 
 	export let database;
 

@@ -1,11 +1,11 @@
 <script>
-	import Login from "./components/Login.svelte";
-	import { onMount, onDestroy, beforeUpdate, afterUpdate } from "svelte";
-	import { Button, TextInput } from "carbon-components-svelte";
+	import Login from './components/Login.svelte';
+	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
+	import { Button, TextInput } from 'carbon-components-svelte';
 	export let database;
 
 	let users = {};
-	let id = "";
+	let id = '';
 </script>
 
 <svelte:head>

@@ -1,12 +1,12 @@
 <script>
-	import Map from "./Map.svelte";
-	import { Grid, Row, Column } from "carbon-components-svelte";
-	import { onMount, onDestroy, beforeUpdate, afterUpdate } from "svelte";
+	import Map from './Map.svelte';
+	import { Grid, Row, Column } from 'carbon-components-svelte';
+	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 
 	onMount(() => {
 		document
-			.getElementsByClassName("game")[0]
-			.appendChild(document.getElementsByTagName("canvas")[0]);
+			.getElementsByClassName('game')[0]
+			.appendChild(document.getElementsByTagName('canvas')[0]);
 	});
 </script>
 

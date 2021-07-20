@@ -1,10 +1,10 @@
-const path = require("path");
-const app = require("express")();
-const http = require("http").Server(app);
+const path = require('path');
+const app = require('express')();
+const http = require('http').Server(app);
 const port = 8000;
 
-app.get("/", (req, res) => {
-	res.send("Hello World!");
+app.get('/', (req, res) => {
+	res.send('Hello World!');
 });
 
 http.listen(port, () => {
