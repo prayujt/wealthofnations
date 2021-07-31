@@ -1,11 +1,14 @@
 <script>
 	import Login from './components/Login.svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
-	import { Button, TextInput } from 'carbon-components-svelte';
 	export let database;
 
 	let users = {};
 	let id = '';
+
+	const preventLoad = (e) => {
+		e.preventDefault();
+	};
 </script>
 
 <svelte:head>
@@ -16,7 +19,7 @@
 	/>
 </svelte:head>
 
-<main>
+<main on:contextmenu={preventLoad}>
 	<Login {database} />
 </main>
 

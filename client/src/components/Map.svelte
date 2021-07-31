@@ -2,25 +2,57 @@
 	import Phaser from 'phaser';
 	import { onMount } from 'svelte';
 
+	var mainCamera;
+
 	class Map extends Phaser.Scene {
 		constructor() {
 			super('Map');
 		}
 
 		preload() {
-			this.load.image('base_tiles', 'assets/RPG_Nature_Tileset.png');
-			this.load.tilemapTiledJSON('tileset_nature', 'assets/embedded_map.json');
+			this.load.image('base_tiles', 'assets/fantasyhextiles_v3.png');
+			this.load.image('base_tiles2', 'assets/fantasyhextiles_randr_4_v1.png');
+
+			this.load.tilemapTiledJSON(
+				'fantasy_tileset',
+				'assets/wealthofnations_map.json'
+			);
+			mainCamera = this.cameras.main;
 		}
 
 		create() {
-			const map = this.make.tilemap({ key: 'tileset_nature' });
-			const tileset = map.addTilesetImage('RPG Nature Tileset', 'base_tiles');
+			// mainCamera = this.cameras.add(0, 0, 3200, 1600);
+			const map = this.make.tilemap({ key: 'fantasy_tileset' });
+			const tileset1 = map.addTilesetImage('fantasyhextiles_v3', 'base_tiles');
+			const tileset2 = map.addTilesetImage(
+				'fantasyhextiles_randr_4_v1',
+				'base_tiles2'
+			);
 
-			map.createLayer('Tile Layer 1', tileset);
-			map.createLayer('Tile Layer 2', tileset);
+			map.createLayer('Tile Layer 1', tileset1);
+			map.createLayer('Roads', tileset2);
+
+			this.cursors = this.input.keyboard.createCursorKeys();
+
+			this.input.on('pointermove', function (p) {
+				if (!p.isDown) return;
+
+				mainCamera.scrollX -= (p.x - p.prevPosition.x) / mainCamera.zoom;
+				mainCamera.scrollY -= (p.y - p.prevPosition.y) / mainCamera.zoom;
+			});
 		}
 
-		update() {}
+		update() {
+			if (this.cursors.left.isDown) {
+				mainCamera.scrollX -= 10;
+			} else if (this.cursors.right.isDown) {
+				mainCamera.scrollX += 10;
+			} else if (this.cursors.up.isDown) {
+				mainCamera.scrollY -= 10;
+			} else if (this.cursors.down.isDown) {
+				mainCamera.scrollY += 10;
+			}
+		}
 	}
 
 	const config = {
