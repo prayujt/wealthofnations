@@ -61,6 +61,8 @@
 				if (deltaY < 0) {
 					mainCamera.zoom += 0.1;
 				}
+
+				mainCamera.setZoom(Phaser.Math.Clamp(mainCamera.zoom, 0.2, 5));
 			});
 		}
 
