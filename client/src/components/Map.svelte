@@ -3,6 +3,10 @@
 	import { onMount } from 'svelte';
 
 	var mainCamera;
+	var w;
+	var a;
+	var s;
+	var d;
 
 	class Map extends Phaser.Scene {
 		constructor() {
@@ -18,10 +22,14 @@
 				'assets/wealthofnations_map.json'
 			);
 			mainCamera = this.cameras.main;
+
+			w = this.input.keyboard.addKey('W');
+			a = this.input.keyboard.addKey('A');
+			s = this.input.keyboard.addKey('S');
+			d = this.input.keyboard.addKey('D');
 		}
 
 		create() {
-			// mainCamera = this.cameras.add(0, 0, 3200, 1600);
 			const map = this.make.tilemap({ key: 'fantasy_tileset' });
 			const tileset1 = map.addTilesetImage('fantasyhextiles_v3', 'base_tiles');
 			const tileset2 = map.addTilesetImage(
@@ -34,11 +42,25 @@
 
 			this.cursors = this.input.keyboard.createCursorKeys();
 
-			this.input.on('pointermove', function (p) {
-				if (!p.isDown) return;
+			this.input.on('pointermove', (pointer) => {
+				if (!pointer.isDown) return;
 
-				mainCamera.scrollX -= (p.x - p.prevPosition.x) / mainCamera.zoom;
-				mainCamera.scrollY -= (p.y - p.prevPosition.y) / mainCamera.zoom;
+				mainCamera.scrollX -=
+					(pointer.x - pointer.prevPosition.x) / mainCamera.zoom;
+				mainCamera.scrollY -=
+					(pointer.y - pointer.prevPosition.y) / mainCamera.zoom;
+			});
+
+			this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+				// mainCamera.pan(pointer.worldX, pointer.worldY);
+
+				if (deltaY > 0) {
+					mainCamera.zoom -= 0.1;
+				}
+
+				if (deltaY < 0) {
+					mainCamera.zoom += 0.1;
+				}
 			});
 		}
 
@@ -47,9 +69,20 @@
 				mainCamera.scrollX -= 10;
 			} else if (this.cursors.right.isDown) {
 				mainCamera.scrollX += 10;
-			} else if (this.cursors.up.isDown) {
+			}
+			if (this.cursors.up.isDown) {
 				mainCamera.scrollY -= 10;
 			} else if (this.cursors.down.isDown) {
+				mainCamera.scrollY += 10;
+			}
+			if (a.isDown) {
+				mainCamera.scrollX -= 10;
+			} else if (d.isDown) {
+				mainCamera.scrollX += 10;
+			}
+			if (w.isDown) {
+				mainCamera.scrollY -= 10;
+			} else if (s.isDown) {
 				mainCamera.scrollY += 10;
 			}
 		}
