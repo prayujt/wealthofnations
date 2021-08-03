@@ -1,103 +1,64 @@
-_Looking for a shareable component template? Go here --> [sveltejs/component-template](https://github.com/sveltejs/component-template)_
-
----
-
-# Svelte App
-
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
-
-To create a new project based on this template using [degit](https://github.com/Rich-Harris/degit):
-
-```bash
-npx degit sveltejs/template svelte-app
-cd svelte-app
-```
-
-_Note that you will need to have [Node.js](https://nodejs.org) installed._
+# Wealth of Nations
 
 ## Get started
 
 Install the dependencies...
 
 ```bash
-cd svelte-app
+cd wealthofnations
+npm install
+cd client
 npm install
 ```
 
-...then start [Rollup](https://rollupjs.org):
+...then start the game
 
 ```bash
-npm run dev
+npm run start
 ```
 
-Navigate to [localhost:5000](http://localhost:5000). You should see your app running. Edit a component file in `src`, save it, and reload the page to see your changes.
+Navigate to [localhost:2000](http://localhost:2000). You should see your app running.
 
-By default, the server will only respond to requests from localhost. To allow connections from other computers, edit the `sirv` commands in package.json to include the option `--host 0.0.0.0`.
+## Game Manual
 
-If you're using [Visual Studio Code](https://code.visualstudio.com/) we recommend installing the official extension [Svelte for VS Code](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode). If you are using other editors you may need to install a plugin in order to get syntax highlighting and intellisense.
+---
 
-## Building and running in production mode
+### Objective
 
-To create an optimised version of the app:
+There are two game modes in Wealth of Nations: Last Man Standing and Timed.
 
-```bash
-npm run build
-```
+In Last Man Standing mode, the objective of the game is to force all other players into bankruptcy.
 
-You can run the newly built app with `npm run start`. This uses [sirv](https://github.com/lukeed/sirv), which is included in your package.json's `dependencies` so that the app will work when you deploy to platforms like [Heroku](https://heroku.com).
+In Timed mode, the objective is to be the company with the most value by the end of a set amount of turns decided by the player.
 
-## Single-page app mode
+### Gameplay Mechanics
 
-By default, sirv will only respond to requests that match files in `public`. This is to maximise compatibility with static fileservers, allowing you to deploy your app anywhere.
+#### Companies
 
-If you're building a single-page app (SPA) with multiple routes, sirv needs to be able to respond to requests for _any_ path. You can make it so by editing the `"start"` command in package.json:
+<br>
+Companies are the most basic unit of income in the game. Each company has a tag that attributes it to a sector in the domestic market (eg. Oil, Consumer Goods). Company performance is shown through the company's stock price, which is explained in the Stock Market section.
 
-```js
-"start": "sirv public --single"
-```
+Each company has their own balance sheet generated at the end of each turn, where their revenue and expenses are listed out.
 
-## Using TypeScript
+##### Expenses
 
-This template comes with a script to set up a TypeScript development environment, you can run it immediately after cloning the template with:
+Company expenses will consist of 3 parts: employee wages, executive wages, and general maintenance fees. The wage for each employee per quarter is a fixed amount, but the total expense will be dependent on the number of employees hired. On the other hand, executive wages are a fixed amount, with a wage that is triple the employee wage, and a fixed number of executive employees. Maintenance fees will be another expense that is a fixed percentage of the company's net worth.
 
-```bash
-node scripts/setupTypeScript.js
-```
+##### Revenue
 
-Or remove the script via:
+During each turn, there will be a randomly generated revenue growth percentage that shows what the company expects the revenue growth for the quarter to be. However, there will be a volatility factor that grows smaller the larger the company size is, which can add or subtract to the company's expected revenue growth. When the net expenses are subtracted from this new revenue number that includes the volatility adjustment, the net profit of the company is reached. If the net profit is negative, then the stock price will go down, and if the net profit is positive, then the stock price will go up. If the net profit is close to zero, then the stock price will only change by anywhere from -1% to 1%. Note that with this model, the expected profit from the public that operates in the stock market is $0.
 
-```bash
-rm scripts/setupTypeScript.js
-```
+##### Company Actions
 
-## Deploying to the web
+When a player becomes a majority shareholder in the company, the player is appointed the CEO of the company. The CEO is a part of the executive employees group, and will have his wage included in that group. His wage is higher than the rest of the executives' wages, and can be changed by the company
 
-### With [Vercel](https://vercel.com)
+#### Cities
 
-Install `vercel` if you haven't already:
+<br>
+Cities are the
 
-```bash
-npm install -g vercel
-```
+#### Players
 
-Then, from within your project folder:
+#### Stock Market
 
-```bash
-cd public
-vercel deploy --name my-project
-```
-
-### With [surge](https://surge.sh/)
-
-Install `surge` if you haven't already:
-
-```bash
-npm install -g surge
-```
-
-Then, from within your project folder:
-
-```bash
-npm run build
-surge public my-project.surge.sh
-```
+#### Muslims and Pirates
