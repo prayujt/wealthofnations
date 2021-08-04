@@ -1,6 +1,6 @@
 <script>
 	import Auth from '../auth/Auth.svelte';
-	import Game from './Game.svelte';
+	import FindLobby from './FindLobby.svelte';
 	import { Button, TextInput } from 'carbon-components-svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 
@@ -19,7 +19,7 @@
 				logout();
 			}}>Logout</Button
 		> -->
-		<Game />
+		<FindLobby {database} {user} />
 	{/if}
 </Auth>
 

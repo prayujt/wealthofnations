@@ -47,7 +47,7 @@
 			this.cursors = this.input.keyboard.createCursorKeys();
 
 			mainCamera.setBounds(0, 0, 1600, 1850);
-			mainCamera.setZoom(2);
+			mainCamera.setZoom(0.75);
 
 			this.input.on('pointermove', (pointer) => {
 				if (!pointer.isDown) return;
