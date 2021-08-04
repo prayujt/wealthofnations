@@ -13,13 +13,7 @@
 	{#if !loggedIn}
 		<Button kind="ghost" on:click={loginWithGoogle}>Sign in with Google</Button>
 	{:else}
-		<!-- <Button
-			kind="ghost"
-			on:click={() => {
-				logout();
-			}}>Logout</Button
-		> -->
-		<FindLobby {database} {user} />
+		<FindLobby {database} {user} {logout} />
 	{/if}
 </Auth>
 

@@ -2,7 +2,13 @@
     "wealthofnations/": {
         "lobbies/": {
             "id/": {
-                "players": [],
+                "host": "uid",
+                "players/": {
+                    "uid": "username",
+                }                   
+                "gameSettings": {
+
+                }
             }
         },
         "game_id/": {

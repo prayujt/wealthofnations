@@ -1,24 +1,46 @@
 <script>
 	import Game from './Game.svelte';
 	import Lobby from './Lobby.svelte';
-	import { Button, TextInput } from 'carbon-components-svelte';
+	import {
+		Button,
+		TextInput,
+		InlineNotification,
+	} from 'carbon-components-svelte';
 
 	export let database;
 	export let user;
+	export let logout;
 
 	let gameID;
 	let inputGameID;
+	let username;
+	let usernameSubmitted = false;
 	let inLobby = false;
+
+	const setUsername = () => {
+		// database
+		//         .ref('usernames/')
+		//         .transaction(users => ({
+		//             ...users,
+		//             [user.id]: username
+		//         })
+		//         );
+		usernameSubmitted = true;
+	};
 
 	const joinGame = () => {
 		database
 			.ref('lobbies/' + inputGameID)
 			.get()
 			.then((snapshot) => {
-				if (snapshot.exists()) {
-					database.ref('lobbies/' + inputGameID).set({
-						players: [...snapshot.val().players, user.id],
-					});
+				if (snapshot.exists() && inputGameID != '') {
+					database
+						.ref('lobbies/' + inputGameID)
+						.child('players')
+						.set({
+							...snapshot.val().players,
+							[user.id]: username,
+						});
 
 					inLobby = true;
 					gameID = inputGameID;
@@ -31,7 +53,10 @@
 	const createGame = () => {
 		gameID = generateCode();
 		database.ref('lobbies/' + gameID).set({
-			players: [user.id],
+			host: user.id,
+			players: {
+				[user.id]: username,
+			},
 		});
 		inLobby = true;
 	};
@@ -42,7 +67,14 @@
 </script>
 
 <div>
-	{#if !inLobby}
+	{#if !usernameSubmitted}
+		<TextInput
+			bind:value={username}
+			labelText="Username"
+			placeholder="Enter your username"
+		/>
+		<Button on:click={setUsername}>Next</Button>
+	{:else if !inLobby}
 		<TextInput
 			bind:value={inputGameID}
 			labelText="UUID"
@@ -50,6 +82,13 @@
 		/>
 		<Button on:click={joinGame}>Join</Button>
 		<Button on:click={createGame}>Create Game</Button>
+		<Button
+			kind="ghost"
+			on:click={() => {
+				logout();
+			}}>Logout</Button
+		>
+		<br />
 	{:else}
 		<Lobby {gameID} {database} />
 	{/if}
