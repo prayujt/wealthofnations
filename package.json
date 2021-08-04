@@ -4,7 +4,7 @@
 	"private": true,
 	"scripts": {
 		"client": "cd client && npm run dev",
-		"server": "nodemon src/connections.js",
+		"server": "nodemon src/server.js",
 		"start": "concurrently \"npm run client\" \"npm run server\"",
 		"prepare": "husky install"
 	},
