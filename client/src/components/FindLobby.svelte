@@ -1,11 +1,7 @@
 <script>
 	import Game from './Game.svelte';
 	import Lobby from './Lobby.svelte';
-	import {
-		Button,
-		TextInput,
-		InlineNotification,
-	} from 'carbon-components-svelte';
+	import { Button, TextInput } from 'carbon-components-svelte';
 
 	export let database;
 	export let user;
@@ -16,16 +12,14 @@
 	let username;
 	let usernameSubmitted = false;
 	let inLobby = false;
+	let isHost;
 
 	const setUsername = () => {
-		// database
-		//         .ref('usernames/')
-		//         .transaction(users => ({
-		//             ...users,
-		//             [user.id]: username
-		//         })
-		//         );
-		usernameSubmitted = true;
+		if (username != '') {
+			usernameSubmitted = true;
+		} else {
+			alert('Username cannot be empty!');
+		}
 	};
 
 	const joinGame = () => {
@@ -42,8 +36,9 @@
 							[user.id]: username,
 						});
 
-					inLobby = true;
 					gameID = inputGameID;
+					isHost = false;
+					inLobby = true;
 				} else {
 					alert('Invalid Game Id!');
 				}
@@ -58,6 +53,7 @@
 				[user.id]: username,
 			},
 		});
+		isHost = true;
 		inLobby = true;
 	};
 
@@ -90,6 +86,6 @@
 		>
 		<br />
 	{:else}
-		<Lobby {gameID} {database} />
+		<Lobby {gameID} {database} {isHost} />
 	{/if}
 </div>
