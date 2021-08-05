@@ -7,22 +7,65 @@
 		ModalFooter,
 		Checkbox,
 		ButtonSet,
+		RadioButtonGroup,
+		RadioButton,
 	} from 'carbon-components-svelte';
 
 	export let gameID;
 	export let database;
 	export let isHost;
+	export let userID;
+	export let inLobby;
 
 	let players;
 	let open;
+
+	let gameType;
 
 	const checkGameStatus = () => {
 		//firebase garbage
 	};
 
-	const leaveLobby = () => {};
+	const saveSettings = () => {
+		open = false;
+		database
+			.ref('lobbies/' + gameID)
+			.child('settings')
+			.set({
+				type: gameType,
+			});
+	};
+
+	const leaveLobby = () => {
+		for (const [key, value] of Object.entries(players)) {
+			if (key != userID) {
+				database.ref('lobbies/' + gameID).update({
+					host: key,
+				});
+				database
+					.ref('lobbies/' + gameID)
+					.child('players')
+					.child(userID)
+					.set(null);
+				inLobby = false;
+				return;
+			}
+		}
+		inLobby = false;
+		database.ref('lobbies/' + gameID).remove();
+	};
 
 	const startGame = () => {};
+
+	database
+		.ref('lobbies/' + gameID)
+		.child('host')
+		.on('value', (snapshot) => {
+			console.log('host changed!');
+			if (snapshot.val() == userID) {
+				isHost = true;
+			}
+		});
 
 	database
 		.ref('lobbies/' + gameID)
@@ -31,7 +74,7 @@
 			players = snapshot.val();
 		});
 
-	$: console.log(players);
+	$: console.log(inLobby);
 </script>
 
 <div id="lobby-container">
@@ -56,10 +99,13 @@
 			<ComposedModal bind:open>
 				<ModalHeader label="Settings" title="Game Settings" />
 				<ModalBody hasForm>
-					<Checkbox labelText="I have reviewed the changes" />
+					<RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
+						<RadioButton labelText="Timed" value="0" />
+						<RadioButton labelText="Last Man Standing" value="1" />
+					</RadioButtonGroup>
 				</ModalBody>
 				<ModalFooter>
-					<Button on:click={() => (open = false)}>Save</Button>
+					<Button on:click={saveSettings}>Save</Button>
 				</ModalFooter>
 			</ComposedModal>
 		{:else}

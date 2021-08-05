@@ -1,5 +1,4 @@
 <script>
-	import Game from './Game.svelte';
 	import Lobby from './Lobby.svelte';
 	import { Button, TextInput } from 'carbon-components-svelte';
 
@@ -13,6 +12,7 @@
 	let usernameSubmitted = false;
 	let inLobby = false;
 	let isHost;
+	let userID = user.id;
 
 	const setUsername = () => {
 		if (username != '') {
@@ -33,7 +33,7 @@
 						.child('players')
 						.set({
 							...snapshot.val().players,
-							[user.id]: username,
+							[userID]: username,
 						});
 
 					gameID = inputGameID;
@@ -48,9 +48,9 @@
 	const createGame = () => {
 		gameID = generateCode();
 		database.ref('lobbies/' + gameID).set({
-			host: user.id,
+			host: userID,
 			players: {
-				[user.id]: username,
+				[userID]: username,
 			},
 		});
 		isHost = true;
@@ -86,6 +86,6 @@
 		>
 		<br />
 	{:else}
-		<Lobby {gameID} {database} {isHost} />
+		<Lobby bind:inLobby {gameID} {database} {isHost} {userID} />
 	{/if}
 </div>
