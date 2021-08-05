@@ -1,5 +1,5 @@
 <script>
-	import Auth from '../auth/Auth.svelte';
+	import Auth from './Auth.svelte';
 	import FindLobby from './FindLobby.svelte';
 	import { Button, TextInput } from 'carbon-components-svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';

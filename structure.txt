@@ -9,8 +9,8 @@
                 "settings": {
 
                 }
-                "chat": {
-                    
+                "messages": {
+
                 }
             }
         },

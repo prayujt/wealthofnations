@@ -43,6 +43,13 @@
 					alert('Invalid Game Id!');
 				}
 			});
+		database
+			.ref('lobbies/' + inputGameID)
+			.child('messages')
+			.push({
+				author: 'System',
+				message: username + ' has joined the lobby.',
+			});
 	};
 
 	const createGame = () => {
@@ -73,8 +80,8 @@
 	{:else if !inLobby}
 		<TextInput
 			bind:value={inputGameID}
-			labelText="UUID"
-			placeholder="Enter game UUID"
+			labelText="ID"
+			placeholder="Enter game ID"
 		/>
 		<Button on:click={joinGame}>Join</Button>
 		<Button on:click={createGame}>Create Game</Button>

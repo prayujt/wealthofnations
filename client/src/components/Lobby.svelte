@@ -10,6 +10,7 @@
 		RadioButtonGroup,
 		RadioButton,
 		TextInput,
+		TextArea,
 	} from 'carbon-components-svelte';
 
 	export let gameID;
@@ -19,6 +20,8 @@
 	export let inLobby;
 	export let username;
 
+	let message;
+	let messages = {};
 	let players;
 	let open;
 
@@ -51,23 +54,90 @@
 			});
 	};
 
-	const leaveLobby = () => {
-		for (const [key, value] of Object.entries(players)) {
-			if (key != userID) {
-				database.ref('lobbies/' + gameID).update({
-					host: key,
+	const sendMessage = () => {
+		if (message != '') {
+			database
+				.ref('lobbies/' + gameID)
+				.child('messages')
+				.push({
+					author: username,
+					message: message,
 				});
-				database
-					.ref('lobbies/' + gameID)
-					.child('players')
-					.child(userID)
-					.set(null);
-				inLobby = false;
-				return;
-			}
 		}
-		inLobby = false;
-		database.ref('lobbies/' + gameID).remove();
+		// database
+		// 	.ref('lobbies/' + gameID)
+		// 	.child('messages')
+		// 	.get()
+		// 	.then((snapshot) => {
+		// 		if (snapshot.exists()) {
+
+		// 			database
+		// 				.ref('lobbies/' + gameID)
+		// 				.child('messages')
+		// 				.set({
+		// 					...snapshot.val(),
+		// 					[username]: message,
+		// 				});
+		// 		}
+		// 		else {
+		// 			database
+		// 				.ref('lobbies/' + gameID)
+		// 				.child('messages')
+		// 				.set({
+		// 					[username]: message,
+		// 				});
+		// 		}
+		// 	});
+	};
+
+	const handleMessage = (e) => {
+		if (e.which == 13) {
+			e.preventDefault();
+			sendMessage();
+			message = '';
+		}
+	};
+
+	const leaveLobby = () => {
+		if (isHost) {
+			for (const [key, value] of Object.entries(players)) {
+				if (key != userID) {
+					database.ref('lobbies/' + gameID).update({
+						host: key,
+					});
+					database
+						.ref('lobbies/' + gameID)
+						.child('players')
+						.child(userID)
+						.set(null);
+					database
+						.ref('lobbies/' + gameID)
+						.child('messages')
+						.push({
+							author: 'System',
+							message: 'Host has left the lobby. New host is: ' + value,
+						});
+					inLobby = false;
+					return;
+				}
+			}
+			inLobby = false;
+			database.ref('lobbies/' + gameID).remove();
+		} else {
+			database
+				.ref('lobbies/' + gameID)
+				.child('players')
+				.child(userID)
+				.set(null);
+			database
+				.ref('lobbies/' + gameID)
+				.child('messages')
+				.push({
+					author: 'System',
+					message: username + ' has left the lobby.',
+				});
+			inLobby = false;
+		}
 	};
 
 	const startGame = () => {};
@@ -88,6 +158,13 @@
 		.on('value', (snapshot) => {
 			players = snapshot.val();
 		});
+
+	database
+		.ref('lobbies/' + gameID)
+		.child('messages')
+		.on('value', (snapshot) => {
+			messages = snapshot.val();
+		});
 </script>
 
 <div id="lobby-container">
@@ -98,60 +175,102 @@
 		{#each Object.entries(players) as [uuid, username]}
 			<li>{username}</li>
 		{/each}
-		<div id="bottom-left">
-			<Button
-				style="position:absolute; bottom: 0px"
-				kind="danger-tertiary"
-				on:click={leaveLobby}>Leave Lobby</Button
-			>
-		</div>
-		{#if isHost}
-			<ButtonSet style="position: absolute; bottom: 0px; right: 75px">
-				<Button on:click={() => (open = true)}>Game Settings</Button>
-				<Button on:click={startGame}>Start Game</Button>
-			</ButtonSet>
-
-			<ComposedModal bind:open>
-				<ModalHeader label="Settings" title="Game Settings" />
-				<ModalBody hasForm>
-					<RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
-						<RadioButton labelText="Timed" value="0" />
-						<RadioButton labelText="Last Man Standing" value="1" />
-					</RadioButtonGroup>
-				</ModalBody>
-				<ModalFooter>
-					<Button on:click={saveSettings}>Save</Button>
-				</ModalFooter>
-			</ComposedModal>
-		{:else}
-			<ButtonSet style="position: absolute; bottom: 0px; right: 75px">
-				<Button disabled>Game Settings</Button>
-				<Button disabled>Start Game</Button>
-			</ButtonSet>
-		{/if}
 	</div>
 	<div id="right">
-		<h1>Chat</h1>
-		<!-- can change event to on keyup for real-time -->
-		<TextInput
-			on:change={setUsername}
-			bind:value={username}
-			labelText="Username"
-			placeholder={username}
-		/>
+		<div id="chat">
+			<h1>Chat</h1>
+			{#if messages != null}
+				{#each Object.entries(messages) as [key, value]}
+					<p>{value.author}: {value.message}</p>
+				{/each}
+			{/if}
+		</div>
+		<div id="username">
+			<!-- can change event to on keyup for real-time -->
+			<TextInput
+				on:change={setUsername}
+				bind:value={username}
+				labelText="Username"
+				placeholder={username}
+			/>
+		</div>
+		<div
+			style="display: flex; position: absolute; bottom: 0px"
+			id="sendMessage"
+		>
+			<TextArea
+				on:keydown={handleMessage}
+				style="resize: none;"
+				placeholder="Type a message..."
+				bind:value={message}
+			/>
+			<Button on:click={sendMessage} kind="ghost">Send Message</Button>
+		</div>
+	</div>
+	<div id="bottom" style="position: absolute; bottom: 0px">
+		<div id="bottom-left">
+			<Button kind="danger-tertiary" on:click={leaveLobby}>Leave Lobby</Button>
+		</div>
+		<div id="bottom-right">
+			{#if isHost}
+				<ButtonSet>
+					<Button on:click={() => (open = true)}>Game Settings</Button>
+					<Button on:click={startGame}>Start Game</Button>
+				</ButtonSet>
+
+				<ComposedModal bind:open>
+					<ModalHeader label="Settings" title="Game Settings" />
+					<ModalBody hasForm>
+						<RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
+							<RadioButton labelText="Timed" value="0" />
+							<RadioButton labelText="Last Man Standing" value="1" />
+						</RadioButtonGroup>
+					</ModalBody>
+					<ModalFooter>
+						<Button on:click={saveSettings}>Save</Button>
+					</ModalFooter>
+				</ComposedModal>
+			{:else}
+				<ButtonSet>
+					<Button disabled>Game Settings</Button>
+					<Button disabled>Start Game</Button>
+				</ButtonSet>
+			{/if}
+		</div>
 	</div>
 </div>
 
 <style>
 	#lobby-container {
-		display: flex;
+		height: 100vh;
+		width: 100vw;
+		display: grid;
+		grid-template-columns: repeat(4, 1fr);
+		grid-template-rows: repeat(10, 1fr);
+		grid-column-gap: 0px;
+		grid-row-gap: 0px;
 	}
 
 	#left {
-		flex: 50%;
+		grid-area: 1 / 1 / 10 / 3;
 	}
 
 	#right {
-		flex: 50%;
+		grid-area: 1 / 3 / 10 / 5;
+		display: flex;
+		position: relative;
+	}
+
+	#bottom {
+		grid-area: 10 / 1 / 11 / 5;
+		display: flex;
+	}
+
+	#chat {
+		flex: 70%;
+	}
+
+	#username {
+		flex: 30%;
 	}
 </style>
