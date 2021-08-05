@@ -35,7 +35,13 @@
 							...snapshot.val().players,
 							[userID]: username,
 						});
-
+					database
+						.ref('lobbies/' + inputGameID)
+						.child('messages')
+						.push({
+							author: 'System',
+							message: username + ' has joined the lobby.',
+						});
 					gameID = inputGameID;
 					isHost = false;
 					inLobby = true;
@@ -43,18 +49,12 @@
 					alert('Invalid Game Id!');
 				}
 			});
-		database
-			.ref('lobbies/' + inputGameID)
-			.child('messages')
-			.push({
-				author: 'System',
-				message: username + ' has joined the lobby.',
-			});
 	};
 
 	const createGame = () => {
 		gameID = generateCode();
 		database.ref('lobbies/' + gameID).set({
+			gameStarted: false,
 			host: userID,
 			players: {
 				[userID]: username,

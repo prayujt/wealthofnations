@@ -12,6 +12,7 @@
 		TextInput,
 		TextArea,
 	} from 'carbon-components-svelte';
+	import Game from './Game.svelte';
 
 	export let gameID;
 	export let database;
@@ -24,12 +25,9 @@
 	let messages = {};
 	let players;
 	let open;
+	let gameStarted = false;
 
 	let gameType;
-
-	const checkGameStatus = () => {
-		//firebase garbage
-	};
 
 	const setUsername = () => {
 		if (username == '') {
@@ -64,30 +62,6 @@
 					message: message,
 				});
 		}
-		// database
-		// 	.ref('lobbies/' + gameID)
-		// 	.child('messages')
-		// 	.get()
-		// 	.then((snapshot) => {
-		// 		if (snapshot.exists()) {
-
-		// 			database
-		// 				.ref('lobbies/' + gameID)
-		// 				.child('messages')
-		// 				.set({
-		// 					...snapshot.val(),
-		// 					[username]: message,
-		// 				});
-		// 		}
-		// 		else {
-		// 			database
-		// 				.ref('lobbies/' + gameID)
-		// 				.child('messages')
-		// 				.set({
-		// 					[username]: message,
-		// 				});
-		// 		}
-		// 	});
 	};
 
 	const handleMessage = (e) => {
@@ -140,13 +114,28 @@
 		}
 	};
 
-	const startGame = () => {};
+	const startGame = () => {
+		database.ref('server/' + gameID).set({
+			initializeGame: true,
+		});
+		database.ref('lobbies/' + gameID).update({
+			gameStarted: true,
+		});
+	};
+
+	database
+		.ref('lobbies/' + gameID)
+		.child('gameStarted')
+		.on('value', (snapshot) => {
+			if (snapshot.val() == true) {
+				gameStarted = true;
+			}
+		});
 
 	database
 		.ref('lobbies/' + gameID)
 		.child('host')
 		.on('value', (snapshot) => {
-			console.log('host changed!');
 			if (snapshot.val() == userID) {
 				isHost = true;
 			}
@@ -167,78 +156,85 @@
 		});
 </script>
 
-<div id="lobby-container">
-	<div id="left">
-		<h1>Game ID: {gameID}</h1>
-		<br />
-		<h3>Players:</h3>
-		{#each Object.entries(players) as [uuid, username]}
-			<li>{username}</li>
-		{/each}
-	</div>
-	<div id="right">
-		<div id="chat">
-			<h1>Chat</h1>
-			{#if messages != null}
-				{#each Object.entries(messages) as [key, value]}
-					<p>{value.author}: {value.message}</p>
-				{/each}
-			{/if}
+{#if !gameStarted}
+	<div id="lobby-container">
+		<div id="left">
+			<h1>Game ID: {gameID}</h1>
+			<br />
+			<h3>Players:</h3>
+			{#each Object.entries(players) as [uuid, username]}
+				<li>{username}</li>
+			{/each}
 		</div>
-		<div id="username">
-			<!-- can change event to on keyup for real-time -->
-			<TextInput
-				on:change={setUsername}
-				bind:value={username}
-				labelText="Username"
-				placeholder={username}
-			/>
+		<div id="right">
+			<div id="chat">
+				<h1>Chat</h1>
+				{#if messages != null}
+					{#each Object.entries(messages) as [key, value]}
+						<p>{value.author}: {value.message}</p>
+					{/each}
+				{/if}
+			</div>
+			<div id="username">
+				<!-- can change event to on keyup for real-time -->
+				<TextInput
+					on:change={setUsername}
+					bind:value={username}
+					labelText="Username"
+					placeholder={username}
+				/>
+			</div>
+			<div
+				style="display: flex; position: absolute; bottom: 0px"
+				id="sendMessage"
+			>
+				<TextArea
+					on:keydown={handleMessage}
+					style="resize: none;"
+					placeholder="Type a message..."
+					bind:value={message}
+				/>
+				<Button on:click={sendMessage} kind="ghost">Send Message</Button>
+			</div>
 		</div>
-		<div
-			style="display: flex; position: absolute; bottom: 0px"
-			id="sendMessage"
-		>
-			<TextArea
-				on:keydown={handleMessage}
-				style="resize: none;"
-				placeholder="Type a message..."
-				bind:value={message}
-			/>
-			<Button on:click={sendMessage} kind="ghost">Send Message</Button>
-		</div>
-	</div>
-	<div id="bottom" style="position: absolute; bottom: 0px">
-		<div id="bottom-left">
-			<Button kind="danger-tertiary" on:click={leaveLobby}>Leave Lobby</Button>
-		</div>
-		<div id="bottom-right">
-			{#if isHost}
-				<ButtonSet>
-					<Button on:click={() => (open = true)}>Game Settings</Button>
-					<Button on:click={startGame}>Start Game</Button>
-				</ButtonSet>
+		<div id="bottom" style="position: absolute; bottom: 0px">
+			<div id="bottom-left">
+				<Button kind="danger-tertiary" on:click={leaveLobby}>Leave Lobby</Button
+				>
+			</div>
+			<div id="bottom-right">
+				{#if isHost}
+					<ButtonSet>
+						<Button on:click={() => (open = true)}>Game Settings</Button>
+						<Button on:click={startGame}>Start Game</Button>
+					</ButtonSet>
 
-				<ComposedModal bind:open>
-					<ModalHeader label="Settings" title="Game Settings" />
-					<ModalBody hasForm>
-						<RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
-							<RadioButton labelText="Timed" value="0" />
-							<RadioButton labelText="Last Man Standing" value="1" />
-						</RadioButtonGroup>
-					</ModalBody>
-					<ModalFooter>
-						<Button on:click={saveSettings}>Save</Button>
-					</ModalFooter>
-				</ComposedModal>
-			{:else}
-				<ButtonSet>
-					<Button disabled>Game Settings</Button>
-					<Button disabled>Start Game</Button>
-				</ButtonSet>
-			{/if}
+					<ComposedModal bind:open>
+						<ModalHeader label="Settings" title="Game Settings" />
+						<ModalBody hasForm>
+							<RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
+								<RadioButton labelText="Timed" value="0" />
+								<RadioButton labelText="Last Man Standing" value="1" />
+							</RadioButtonGroup>
+
+							<!-- Add additional settings here -->
+						</ModalBody>
+						<ModalFooter>
+							<Button on:click={saveSettings}>Save</Button>
+						</ModalFooter>
+					</ComposedModal>
+				{:else}
+					<ButtonSet>
+						<Button disabled>Game Settings</Button>
+						<Button disabled>Start Game</Button>
+					</ButtonSet>
+				{/if}
+			</div>
 		</div>
 	</div>
-</div>
+{:else}
+	<Game />
+{/if}
 
 <style>
 	#lobby-container {

@@ -1,21 +1,29 @@
 {
     "wealthofnations/": {
+        "server/": {
+            "id/": {
+                initializeGame: false,
+            }
+        }
         "lobbies/": {
             "id/": {
+                "gameStarted": false,
                 "host": "uid",
                 "players/": {
                     "uid": "username",
                 },
-                "settings": {
+                "settings/": {
 
-                }
-                "messages": {
+                },
+                "messages/": {
 
                 }
             }
         },
         "game_id/": {
-            "hasStarted": ,
+            "settings/": {
+
+            }
             "players/": {
                 "uuid/": {
                     "isHost": ,
