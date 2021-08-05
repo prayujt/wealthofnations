@@ -8,9 +8,9 @@
         "lobbies/": {
             "id/": {
                 "gameStarted": false,
-                "host": "uid",
+                "host": "uuid",
                 "players/": {
-                    "uid": "username",
+                    "uuid": "username",
                 },
                 "settings/": {
 
@@ -20,72 +20,74 @@
                 }
             }
         },
-        "game_id/": {
-            "settings/": {
+        "games/" : {
+            "id/": {
+                "settings/": {
 
-            }
-            "players/": {
-                "uuid/": {
-                    "isHost": ,
-                    "netWorth": ,
-                    "debt": ,
-                    "balance": ,
-                    "influence": ,
-                    "income": ,
-                    "bankrupt": ,
-                    "companies/": {
-                        "company/": {
-                            "percentage": ,
-                            "marketValue": ,
+                }
+                "players/": {
+                    "uuid/": {
+                        "username": ,
+                        "netWorth": ,
+                        "debt": ,
+                        "balance": ,
+                        "influence": ,
+                        "income": ,
+                        "bankrupt": ,
+                        "companies/": {
+                            "company/": {
+                                "percentage": ,
+                                "marketValue": ,
+                            }
                         }
                     }
-                }
-            },
-            "companies/": {
-                "company/": {
-                    "name": ,
-                    "city": ,
+                },
+                "companies/": {
+                    "company/": {
+                        "name": ,
+                        "city": ,
+                        "owner": ,
+                        "netWorth": ,
+                        "employees": ,
+                        "debt": ,
+                        "bankrupt": ,
+                        "holders": {
+                            "playerName": {
+                                "percent": ,
+                                "marketValue": ,
+                            }
+                        },
+                        "expenses/": {
+                            "employeeWages": ,
+                            "executiveWages": ,
+                            "maintenanceFees": ,
+                            "interestPayments": ,
+                            "localTax": ,
+                        },
+                        "revenue/": {
+                            "expectedGrowth": ,
+                            "volatilty": ,
+                        },
+                        "secrets": {}
+                    }
+                },
+                "cities/": {
+                    "companies": [],
                     "owner": ,
+                    "population": ,
                     "netWorth": ,
-                    "employees": ,
-                    "debt": ,
-                    "bankrupt": ,
-                    "holders": {
-                        "playerName": {
-                            "percent": ,
-                            "marketValue": ,
-                        }
-                    },
-                    "expenses/": {
-                        "employeeWages": ,
-                        "executiveWages": ,
-                        "maintenanceFees": ,
-                        "interestPayments": ,
-                        "localTax": ,
-                    },
-                    "revenue/": {
-                        "expectedGrowth": ,
-                        "volatilty": ,
-                    },
-                    "secrets": {}
-                }
-            },
-            "cities/": {
-                "companies": [],
-                "owner": ,
-                "population": ,
-                "netWorth": ,
-            },
-            "bank/": {
+                },
+                "bank/": {
 
-            },
-            "foreigners/": {
-                
-            },
-            "privateDeals/": {
+                },
+                "foreigners/": {
+                    
+                },
+                "privateDeals/": {
+
+                }
 
             }
-
         }
     }
 }

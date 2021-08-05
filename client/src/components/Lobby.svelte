@@ -12,6 +12,7 @@
 		TextInput,
 		TextArea,
 	} from 'carbon-components-svelte';
+	import { onMount } from 'svelte';
 	import Game from './Game.svelte';
 
 	export let gameID;
@@ -28,6 +29,10 @@
 	let gameStarted = false;
 
 	let gameType;
+
+	onMount(() => {
+		document.getElementsByTagName('textarea')[0].focus();
+	});
 
 	const setUsername = () => {
 		if (username == '') {

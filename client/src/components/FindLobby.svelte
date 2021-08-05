@@ -1,6 +1,7 @@
 <script>
 	import Lobby from './Lobby.svelte';
 	import { Button, TextInput } from 'carbon-components-svelte';
+	import { onMount } from 'svelte';
 
 	export let database;
 	export let user;
@@ -14,11 +15,30 @@
 	let isHost;
 	let userID = user.id;
 
+	onMount(() => {
+		document.getElementsByName('usernameBox')[0].focus();
+	});
+
+	const handleUsername = (e) => {
+		if (e.which == 13) {
+			e.preventDefault();
+			setUsername();
+		}
+	};
+
+	const handleID = (e) => {
+		if (e.which == 13) {
+			e.preventDefault();
+			joinGame();
+		}
+	};
+
 	const setUsername = () => {
 		if (username != '') {
 			usernameSubmitted = true;
 		} else {
 			alert('Username cannot be empty!');
+			document.getElementsByName('usernameBox')[0].focus();
 		}
 	};
 
@@ -47,6 +67,7 @@
 					inLobby = true;
 				} else {
 					alert('Invalid Game Id!');
+					document.getElementsByName('idBox')[0].focus();
 				}
 			});
 	};
@@ -72,6 +93,8 @@
 <div>
 	{#if !usernameSubmitted}
 		<TextInput
+			on:keydown={handleUsername}
+			name="usernameBox"
 			bind:value={username}
 			labelText="Username"
 			placeholder="Enter your username"
@@ -79,6 +102,9 @@
 		<Button on:click={setUsername}>Next</Button>
 	{:else if !inLobby}
 		<TextInput
+			on:keydown={handleID}
+			name="idBox"
+			autofocus
 			bind:value={inputGameID}
 			labelText="ID"
 			placeholder="Enter game ID"
