@@ -86,6 +86,6 @@
 		>
 		<br />
 	{:else}
-		<Lobby bind:inLobby {gameID} {database} {isHost} {userID} />
+		<Lobby bind:inLobby {gameID} {database} {isHost} {userID} {username} />
 	{/if}
 </div>

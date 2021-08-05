@@ -12555,29 +12555,29 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[15] = list[i][0];
-    	child_ctx[16] = list[i][1];
+    	child_ctx[18] = list[i][0];
+    	child_ctx[1] = list[i][1];
     	return child_ctx;
     }
 
-    // (75:2) {#each Object.entries(players) as [uuid, username]}
+    // (97:2) {#each Object.entries(players) as [uuid, username]}
     function create_each_block(ctx) {
     	let li;
-    	let t_value = /*username*/ ctx[16] + "";
+    	let t_value = /*username*/ ctx[1] + "";
     	let t;
 
     	const block = {
     		c: function create() {
     			li = element("li");
     			t = text(t_value);
-    			add_location(li, file$2, 75, 3, 1419);
+    			add_location(li, file$2, 97, 3, 1687);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, li, anchor);
     			append_dev(li, t);
     		},
     		p: function update(ctx, dirty) {
-    			if (dirty & /*players*/ 4 && t_value !== (t_value = /*username*/ ctx[16] + "")) set_data_dev(t, t_value);
+    			if (dirty & /*players*/ 8 && t_value !== (t_value = /*username*/ ctx[1] + "")) set_data_dev(t, t_value);
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(li);
@@ -12588,14 +12588,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(75:2) {#each Object.entries(players) as [uuid, username]}",
+    		source: "(97:2) {#each Object.entries(players) as [uuid, username]}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:2) <Button    kind="danger-tertiary"    style="position: absolute; bottom: 0px;"    on:click={leaveLobby}>
+    // (101:3) <Button     style="position:absolute; bottom: 0px"     kind="danger-tertiary"     on:click={leaveLobby}>
     function create_default_slot_11(ctx) {
     	let t;
 
@@ -12615,14 +12615,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_11.name,
     		type: "slot",
-    		source: "(78:2) <Button    kind=\\\"danger-tertiary\\\"    style=\\\"position: absolute; bottom: 0px;\\\"    on:click={leaveLobby}>",
+    		source: "(101:3) <Button     style=\\\"position:absolute; bottom: 0px\\\"     kind=\\\"danger-tertiary\\\"     on:click={leaveLobby}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (101:2) {:else}
+    // (125:2) {:else}
     function create_else_block$2(ctx) {
     	let buttonset;
     	let current;
@@ -12647,7 +12647,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const buttonset_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				buttonset_changes.$$scope = { dirty, ctx };
     			}
 
@@ -12671,14 +12671,14 @@ var app = (function () {
     		block,
     		id: create_else_block$2.name,
     		type: "else",
-    		source: "(101:2) {:else}",
+    		source: "(125:2) {:else}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (83:2) {#if isHost}
+    // (107:2) {#if isHost}
     function create_if_block$2(ctx) {
     	let buttonset;
     	let t;
@@ -12696,7 +12696,7 @@ var app = (function () {
     		});
 
     	function composedmodal_open_binding(value) {
-    		/*composedmodal_open_binding*/ ctx[13](value);
+    		/*composedmodal_open_binding*/ ctx[15](value);
     	}
 
     	let composedmodal_props = {
@@ -12704,8 +12704,8 @@ var app = (function () {
     		$$scope: { ctx }
     	};
 
-    	if (/*open*/ ctx[3] !== void 0) {
-    		composedmodal_props.open = /*open*/ ctx[3];
+    	if (/*open*/ ctx[4] !== void 0) {
+    		composedmodal_props.open = /*open*/ ctx[4];
     	}
 
     	composedmodal = new ComposedModal({
@@ -12730,20 +12730,20 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const buttonset_changes = {};
 
-    			if (dirty & /*$$scope, open*/ 524296) {
+    			if (dirty & /*$$scope, open*/ 2097168) {
     				buttonset_changes.$$scope = { dirty, ctx };
     			}
 
     			buttonset.$set(buttonset_changes);
     			const composedmodal_changes = {};
 
-    			if (dirty & /*$$scope, gameType*/ 524304) {
+    			if (dirty & /*$$scope, gameType*/ 2097184) {
     				composedmodal_changes.$$scope = { dirty, ctx };
     			}
 
-    			if (!updating_open && dirty & /*open*/ 8) {
+    			if (!updating_open && dirty & /*open*/ 16) {
     				updating_open = true;
-    				composedmodal_changes.open = /*open*/ ctx[3];
+    				composedmodal_changes.open = /*open*/ ctx[4];
     				add_flush_callback(() => updating_open = false);
     			}
 
@@ -12771,14 +12771,14 @@ var app = (function () {
     		block,
     		id: create_if_block$2.name,
     		type: "if",
-    		source: "(83:2) {#if isHost}",
+    		source: "(107:2) {#if isHost}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (103:4) <Button disabled>
+    // (127:4) <Button disabled>
     function create_default_slot_10(ctx) {
     	let t;
 
@@ -12798,14 +12798,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_10.name,
     		type: "slot",
-    		source: "(103:4) <Button disabled>",
+    		source: "(127:4) <Button disabled>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (104:4) <Button disabled>
+    // (128:4) <Button disabled>
     function create_default_slot_9(ctx) {
     	let t;
 
@@ -12825,14 +12825,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_9.name,
     		type: "slot",
-    		source: "(104:4) <Button disabled>",
+    		source: "(128:4) <Button disabled>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (102:3) <ButtonSet style="position: absolute; bottom: 0px; right: 75px">
+    // (126:3) <ButtonSet style="position: absolute; bottom: 0px; right: 75px">
     function create_default_slot_8(ctx) {
     	let button0;
     	let t;
@@ -12872,14 +12872,14 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const button0_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				button0_changes.$$scope = { dirty, ctx };
     			}
 
     			button0.$set(button0_changes);
     			const button1_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				button1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -12907,14 +12907,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_8.name,
     		type: "slot",
-    		source: "(102:3) <ButtonSet style=\\\"position: absolute; bottom: 0px; right: 75px\\\">",
+    		source: "(126:3) <ButtonSet style=\\\"position: absolute; bottom: 0px; right: 75px\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (85:4) <Button on:click={() => (open = true)}>
+    // (109:4) <Button on:click={() => (open = true)}>
     function create_default_slot_7(ctx) {
     	let t;
 
@@ -12934,14 +12934,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_7.name,
     		type: "slot",
-    		source: "(85:4) <Button on:click={() => (open = true)}>",
+    		source: "(109:4) <Button on:click={() => (open = true)}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (86:4) <Button on:click={startGame}>
+    // (110:4) <Button on:click={startGame}>
     function create_default_slot_6(ctx) {
     	let t;
 
@@ -12961,14 +12961,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_6.name,
     		type: "slot",
-    		source: "(86:4) <Button on:click={startGame}>",
+    		source: "(110:4) <Button on:click={startGame}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (84:3) <ButtonSet style="position: absolute; bottom: 0px; right: 75px">
+    // (108:3) <ButtonSet style="position: absolute; bottom: 0px; right: 75px">
     function create_default_slot_5(ctx) {
     	let button0;
     	let t;
@@ -12983,7 +12983,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	button0.$on("click", /*click_handler*/ ctx[11]);
+    	button0.$on("click", /*click_handler*/ ctx[13]);
 
     	button1 = new Button({
     			props: {
@@ -12993,7 +12993,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	button1.$on("click", /*startGame*/ ctx[7]);
+    	button1.$on("click", /*startGame*/ ctx[9]);
 
     	const block = {
     		c: function create() {
@@ -13010,14 +13010,14 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const button0_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				button0_changes.$$scope = { dirty, ctx };
     			}
 
     			button0.$set(button0_changes);
     			const button1_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				button1_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13045,14 +13045,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_5.name,
     		type: "slot",
-    		source: "(84:3) <ButtonSet style=\\\"position: absolute; bottom: 0px; right: 75px\\\">",
+    		source: "(108:3) <ButtonSet style=\\\"position: absolute; bottom: 0px; right: 75px\\\">",
     		ctx
     	});
 
     	return block;
     }
 
-    // (92:5) <RadioButtonGroup legendText='Game Type' bind:selected={gameType}>
+    // (116:5) <RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
     function create_default_slot_4(ctx) {
     	let radiobutton0;
     	let t;
@@ -13107,21 +13107,21 @@ var app = (function () {
     		block,
     		id: create_default_slot_4.name,
     		type: "slot",
-    		source: "(92:5) <RadioButtonGroup legendText='Game Type' bind:selected={gameType}>",
+    		source: "(116:5) <RadioButtonGroup legendText=\\\"Game Type\\\" bind:selected={gameType}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (91:4) <ModalBody hasForm>
+    // (115:4) <ModalBody hasForm>
     function create_default_slot_3$1(ctx) {
     	let radiobuttongroup;
     	let updating_selected;
     	let current;
 
     	function radiobuttongroup_selected_binding(value) {
-    		/*radiobuttongroup_selected_binding*/ ctx[12](value);
+    		/*radiobuttongroup_selected_binding*/ ctx[14](value);
     	}
 
     	let radiobuttongroup_props = {
@@ -13130,8 +13130,8 @@ var app = (function () {
     		$$scope: { ctx }
     	};
 
-    	if (/*gameType*/ ctx[4] !== void 0) {
-    		radiobuttongroup_props.selected = /*gameType*/ ctx[4];
+    	if (/*gameType*/ ctx[5] !== void 0) {
+    		radiobuttongroup_props.selected = /*gameType*/ ctx[5];
     	}
 
     	radiobuttongroup = new RadioButtonGroup({
@@ -13152,13 +13152,13 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const radiobuttongroup_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				radiobuttongroup_changes.$$scope = { dirty, ctx };
     			}
 
-    			if (!updating_selected && dirty & /*gameType*/ 16) {
+    			if (!updating_selected && dirty & /*gameType*/ 32) {
     				updating_selected = true;
-    				radiobuttongroup_changes.selected = /*gameType*/ ctx[4];
+    				radiobuttongroup_changes.selected = /*gameType*/ ctx[5];
     				add_flush_callback(() => updating_selected = false);
     			}
 
@@ -13182,14 +13182,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_3$1.name,
     		type: "slot",
-    		source: "(91:4) <ModalBody hasForm>",
+    		source: "(115:4) <ModalBody hasForm>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (98:5) <Button on:click={saveSettings}>
+    // (122:5) <Button on:click={saveSettings}>
     function create_default_slot_2$1(ctx) {
     	let t;
 
@@ -13209,14 +13209,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_2$1.name,
     		type: "slot",
-    		source: "(98:5) <Button on:click={saveSettings}>",
+    		source: "(122:5) <Button on:click={saveSettings}>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (97:4) <ModalFooter>
+    // (121:4) <ModalFooter>
     function create_default_slot_1$2(ctx) {
     	let button;
     	let current;
@@ -13229,7 +13229,7 @@ var app = (function () {
     			$$inline: true
     		});
 
-    	button.$on("click", /*saveSettings*/ ctx[5]);
+    	button.$on("click", /*saveSettings*/ ctx[7]);
 
     	const block = {
     		c: function create() {
@@ -13242,7 +13242,7 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const button_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				button_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13266,14 +13266,14 @@ var app = (function () {
     		block,
     		id: create_default_slot_1$2.name,
     		type: "slot",
-    		source: "(97:4) <ModalFooter>",
+    		source: "(121:4) <ModalFooter>",
     		ctx
     	});
 
     	return block;
     }
 
-    // (89:3) <ComposedModal bind:open>
+    // (113:3) <ComposedModal bind:open>
     function create_default_slot$2(ctx) {
     	let modalheader;
     	let t0;
@@ -13326,14 +13326,14 @@ var app = (function () {
     		p: function update(ctx, dirty) {
     			const modalbody_changes = {};
 
-    			if (dirty & /*$$scope, gameType*/ 524304) {
+    			if (dirty & /*$$scope, gameType*/ 2097184) {
     				modalbody_changes.$$scope = { dirty, ctx };
     			}
 
     			modalbody.$set(modalbody_changes);
     			const modalfooter_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				modalfooter_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13365,7 +13365,7 @@ var app = (function () {
     		block,
     		id: create_default_slot$2.name,
     		type: "slot",
-    		source: "(89:3) <ComposedModal bind:open>",
+    		source: "(113:3) <ComposedModal bind:open>",
     		ctx
     	});
 
@@ -13373,8 +13373,8 @@ var app = (function () {
     }
 
     function create_fragment$3(ctx) {
-    	let div2;
-    	let div0;
+    	let div3;
+    	let div1;
     	let h10;
     	let t0;
     	let t1;
@@ -13384,15 +13384,19 @@ var app = (function () {
     	let h3;
     	let t5;
     	let t6;
+    	let div0;
     	let button;
     	let t7;
     	let current_block_type_index;
     	let if_block;
     	let t8;
-    	let div1;
+    	let div2;
     	let h11;
+    	let t10;
+    	let textinput;
+    	let updating_value;
     	let current;
-    	let each_value = Object.entries(/*players*/ ctx[2]);
+    	let each_value = Object.entries(/*players*/ ctx[3]);
     	validate_each_argument(each_value);
     	let each_blocks = [];
 
@@ -13402,15 +13406,15 @@ var app = (function () {
 
     	button = new Button({
     			props: {
+    				style: "position:absolute; bottom: 0px",
     				kind: "danger-tertiary",
-    				style: "position: absolute; bottom: 0px;",
     				$$slots: { default: [create_default_slot_11] },
     				$$scope: { ctx }
     			},
     			$$inline: true
     		});
 
-    	button.$on("click", /*leaveLobby*/ ctx[6]);
+    	button.$on("click", /*leaveLobby*/ ctx[8]);
     	const if_block_creators = [create_if_block$2, create_else_block$2];
     	const if_blocks = [];
 
@@ -13422,13 +13426,30 @@ var app = (function () {
     	current_block_type_index = select_block_type(ctx);
     	if_block = if_blocks[current_block_type_index] = if_block_creators[current_block_type_index](ctx);
 
+    	function textinput_value_binding(value) {
+    		/*textinput_value_binding*/ ctx[16](value);
+    	}
+
+    	let textinput_props = {
+    		labelText: "Username",
+    		placeholder: /*username*/ ctx[1]
+    	};
+
+    	if (/*username*/ ctx[1] !== void 0) {
+    		textinput_props.value = /*username*/ ctx[1];
+    	}
+
+    	textinput = new TextInput({ props: textinput_props, $$inline: true });
+    	binding_callbacks.push(() => bind(textinput, "value", textinput_value_binding));
+    	textinput.$on("change", /*setUsername*/ ctx[6]);
+
     	const block = {
     		c: function create() {
-    			div2 = element("div");
-    			div0 = element("div");
+    			div3 = element("div");
+    			div1 = element("div");
     			h10 = element("h1");
     			t0 = text("Game ID: ");
-    			t1 = text(/*gameID*/ ctx[1]);
+    			t1 = text(/*gameID*/ ctx[2]);
     			t2 = space();
     			br = element("br");
     			t3 = space();
@@ -13441,60 +13462,68 @@ var app = (function () {
     			}
 
     			t6 = space();
+    			div0 = element("div");
     			create_component(button.$$.fragment);
     			t7 = space();
     			if_block.c();
     			t8 = space();
-    			div1 = element("div");
+    			div2 = element("div");
     			h11 = element("h1");
     			h11.textContent = "Chat";
-    			add_location(h10, file$2, 71, 2, 1306);
-    			add_location(br, file$2, 72, 2, 1335);
-    			add_location(h3, file$2, 73, 2, 1344);
-    			attr_dev(div0, "id", "left");
-    			attr_dev(div0, "class", "svelte-11seehz");
-    			add_location(div0, file$2, 70, 1, 1288);
-    			add_location(h11, file$2, 108, 2, 2456);
-    			attr_dev(div1, "id", "right");
+    			t10 = space();
+    			create_component(textinput.$$.fragment);
+    			add_location(h10, file$2, 93, 2, 1574);
+    			add_location(br, file$2, 94, 2, 1603);
+    			add_location(h3, file$2, 95, 2, 1612);
+    			attr_dev(div0, "id", "bottom-left");
+    			add_location(div0, file$2, 99, 2, 1719);
+    			attr_dev(div1, "id", "left");
     			attr_dev(div1, "class", "svelte-11seehz");
-    			add_location(div1, file$2, 107, 1, 2437);
-    			attr_dev(div2, "id", "lobby-container");
+    			add_location(div1, file$2, 92, 1, 1556);
+    			add_location(h11, file$2, 132, 2, 2763);
+    			attr_dev(div2, "id", "right");
     			attr_dev(div2, "class", "svelte-11seehz");
-    			add_location(div2, file$2, 69, 0, 1260);
+    			add_location(div2, file$2, 131, 1, 2744);
+    			attr_dev(div3, "id", "lobby-container");
+    			attr_dev(div3, "class", "svelte-11seehz");
+    			add_location(div3, file$2, 91, 0, 1528);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
-    			insert_dev(target, div2, anchor);
-    			append_dev(div2, div0);
-    			append_dev(div0, h10);
+    			insert_dev(target, div3, anchor);
+    			append_dev(div3, div1);
+    			append_dev(div1, h10);
     			append_dev(h10, t0);
     			append_dev(h10, t1);
-    			append_dev(div0, t2);
-    			append_dev(div0, br);
-    			append_dev(div0, t3);
-    			append_dev(div0, h3);
-    			append_dev(div0, t5);
+    			append_dev(div1, t2);
+    			append_dev(div1, br);
+    			append_dev(div1, t3);
+    			append_dev(div1, h3);
+    			append_dev(div1, t5);
 
     			for (let i = 0; i < each_blocks.length; i += 1) {
-    				each_blocks[i].m(div0, null);
+    				each_blocks[i].m(div1, null);
     			}
 
-    			append_dev(div0, t6);
+    			append_dev(div1, t6);
+    			append_dev(div1, div0);
     			mount_component(button, div0, null);
-    			append_dev(div0, t7);
-    			if_blocks[current_block_type_index].m(div0, null);
-    			append_dev(div2, t8);
-    			append_dev(div2, div1);
-    			append_dev(div1, h11);
+    			append_dev(div1, t7);
+    			if_blocks[current_block_type_index].m(div1, null);
+    			append_dev(div3, t8);
+    			append_dev(div3, div2);
+    			append_dev(div2, h11);
+    			append_dev(div2, t10);
+    			mount_component(textinput, div2, null);
     			current = true;
     		},
     		p: function update(ctx, [dirty]) {
-    			if (!current || dirty & /*gameID*/ 2) set_data_dev(t1, /*gameID*/ ctx[1]);
+    			if (!current || dirty & /*gameID*/ 4) set_data_dev(t1, /*gameID*/ ctx[2]);
 
-    			if (dirty & /*Object, players*/ 4) {
-    				each_value = Object.entries(/*players*/ ctx[2]);
+    			if (dirty & /*Object, players*/ 8) {
+    				each_value = Object.entries(/*players*/ ctx[3]);
     				validate_each_argument(each_value);
     				let i;
 
@@ -13506,7 +13535,7 @@ var app = (function () {
     					} else {
     						each_blocks[i] = create_each_block(child_ctx);
     						each_blocks[i].c();
-    						each_blocks[i].m(div0, t6);
+    						each_blocks[i].m(div1, t6);
     					}
     				}
 
@@ -13519,7 +13548,7 @@ var app = (function () {
 
     			const button_changes = {};
 
-    			if (dirty & /*$$scope*/ 524288) {
+    			if (dirty & /*$$scope*/ 2097152) {
     				button_changes.$$scope = { dirty, ctx };
     			}
 
@@ -13547,25 +13576,39 @@ var app = (function () {
     				}
 
     				transition_in(if_block, 1);
-    				if_block.m(div0, null);
+    				if_block.m(div1, null);
     			}
+
+    			const textinput_changes = {};
+    			if (dirty & /*username*/ 2) textinput_changes.placeholder = /*username*/ ctx[1];
+
+    			if (!updating_value && dirty & /*username*/ 2) {
+    				updating_value = true;
+    				textinput_changes.value = /*username*/ ctx[1];
+    				add_flush_callback(() => updating_value = false);
+    			}
+
+    			textinput.$set(textinput_changes);
     		},
     		i: function intro(local) {
     			if (current) return;
     			transition_in(button.$$.fragment, local);
     			transition_in(if_block);
+    			transition_in(textinput.$$.fragment, local);
     			current = true;
     		},
     		o: function outro(local) {
     			transition_out(button.$$.fragment, local);
     			transition_out(if_block);
+    			transition_out(textinput.$$.fragment, local);
     			current = false;
     		},
     		d: function destroy(detaching) {
-    			if (detaching) detach_dev(div2);
+    			if (detaching) detach_dev(div3);
     			destroy_each(each_blocks, detaching);
     			destroy_component(button);
     			if_blocks[current_block_type_index].d();
+    			destroy_component(textinput);
     		}
     	};
 
@@ -13588,6 +13631,7 @@ var app = (function () {
     	let { isHost } = $$props;
     	let { userID } = $$props;
     	let { inLobby } = $$props;
+    	let { username } = $$props;
     	let players;
     	let open;
     	let gameType;
@@ -13596,8 +13640,16 @@ var app = (function () {
     		
     	}; //firebase garbage
 
+    	const setUsername = () => {
+    		if (username == "") {
+    			alert("Username cannot be empty!");
+    		} else {
+    			database.ref("lobbies/" + gameID).child("players").update({ [userID]: username });
+    		}
+    	};
+
     	const saveSettings = () => {
-    		$$invalidate(3, open = false);
+    		$$invalidate(4, open = false);
     		database.ref("lobbies/" + gameID).child("settings").set({ type: gameType });
     	};
 
@@ -13606,12 +13658,12 @@ var app = (function () {
     			if (key != userID) {
     				database.ref("lobbies/" + gameID).update({ host: key });
     				database.ref("lobbies/" + gameID).child("players").child(userID).set(null);
-    				$$invalidate(8, inLobby = false);
+    				$$invalidate(10, inLobby = false);
     				return;
     			}
     		}
 
-    		$$invalidate(8, inLobby = false);
+    		$$invalidate(10, inLobby = false);
     		database.ref("lobbies/" + gameID).remove();
     	};
 
@@ -13628,33 +13680,39 @@ var app = (function () {
     	});
 
     	database.ref("lobbies/" + gameID).child("players").on("value", snapshot => {
-    		$$invalidate(2, players = snapshot.val());
+    		$$invalidate(3, players = snapshot.val());
     	});
 
-    	const writable_props = ["gameID", "database", "isHost", "userID", "inLobby"];
+    	const writable_props = ["gameID", "database", "isHost", "userID", "inLobby", "username"];
 
     	Object_1.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1.warn(`<Lobby> was created with unknown prop '${key}'`);
     	});
 
-    	const click_handler = () => $$invalidate(3, open = true);
+    	const click_handler = () => $$invalidate(4, open = true);
 
     	function radiobuttongroup_selected_binding(value) {
     		gameType = value;
-    		$$invalidate(4, gameType);
+    		$$invalidate(5, gameType);
     	}
 
     	function composedmodal_open_binding(value) {
     		open = value;
-    		$$invalidate(3, open);
+    		$$invalidate(4, open);
+    	}
+
+    	function textinput_value_binding(value) {
+    		username = value;
+    		$$invalidate(1, username);
     	}
 
     	$$self.$$set = $$props => {
-    		if ("gameID" in $$props) $$invalidate(1, gameID = $$props.gameID);
-    		if ("database" in $$props) $$invalidate(9, database = $$props.database);
+    		if ("gameID" in $$props) $$invalidate(2, gameID = $$props.gameID);
+    		if ("database" in $$props) $$invalidate(11, database = $$props.database);
     		if ("isHost" in $$props) $$invalidate(0, isHost = $$props.isHost);
-    		if ("userID" in $$props) $$invalidate(10, userID = $$props.userID);
-    		if ("inLobby" in $$props) $$invalidate(8, inLobby = $$props.inLobby);
+    		if ("userID" in $$props) $$invalidate(12, userID = $$props.userID);
+    		if ("inLobby" in $$props) $$invalidate(10, inLobby = $$props.inLobby);
+    		if ("username" in $$props) $$invalidate(1, username = $$props.username);
     	};
 
     	$$self.$capture_state = () => ({
@@ -13667,47 +13725,47 @@ var app = (function () {
     		ButtonSet,
     		RadioButtonGroup,
     		RadioButton,
+    		TextInput,
     		gameID,
     		database,
     		isHost,
     		userID,
     		inLobby,
+    		username,
     		players,
     		open,
     		gameType,
     		checkGameStatus,
+    		setUsername,
     		saveSettings,
     		leaveLobby,
     		startGame
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("gameID" in $$props) $$invalidate(1, gameID = $$props.gameID);
-    		if ("database" in $$props) $$invalidate(9, database = $$props.database);
+    		if ("gameID" in $$props) $$invalidate(2, gameID = $$props.gameID);
+    		if ("database" in $$props) $$invalidate(11, database = $$props.database);
     		if ("isHost" in $$props) $$invalidate(0, isHost = $$props.isHost);
-    		if ("userID" in $$props) $$invalidate(10, userID = $$props.userID);
-    		if ("inLobby" in $$props) $$invalidate(8, inLobby = $$props.inLobby);
-    		if ("players" in $$props) $$invalidate(2, players = $$props.players);
-    		if ("open" in $$props) $$invalidate(3, open = $$props.open);
-    		if ("gameType" in $$props) $$invalidate(4, gameType = $$props.gameType);
+    		if ("userID" in $$props) $$invalidate(12, userID = $$props.userID);
+    		if ("inLobby" in $$props) $$invalidate(10, inLobby = $$props.inLobby);
+    		if ("username" in $$props) $$invalidate(1, username = $$props.username);
+    		if ("players" in $$props) $$invalidate(3, players = $$props.players);
+    		if ("open" in $$props) $$invalidate(4, open = $$props.open);
+    		if ("gameType" in $$props) $$invalidate(5, gameType = $$props.gameType);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	$$self.$$.update = () => {
-    		if ($$self.$$.dirty & /*inLobby*/ 256) {
-    			console.log(inLobby);
-    		}
-    	};
-
     	return [
     		isHost,
+    		username,
     		gameID,
     		players,
     		open,
     		gameType,
+    		setUsername,
     		saveSettings,
     		leaveLobby,
     		startGame,
@@ -13716,7 +13774,8 @@ var app = (function () {
     		userID,
     		click_handler,
     		radiobuttongroup_selected_binding,
-    		composedmodal_open_binding
+    		composedmodal_open_binding,
+    		textinput_value_binding
     	];
     }
 
@@ -13725,11 +13784,12 @@ var app = (function () {
     		super(options);
 
     		init(this, options, instance$3, create_fragment$3, safe_not_equal, {
-    			gameID: 1,
-    			database: 9,
+    			gameID: 2,
+    			database: 11,
     			isHost: 0,
-    			userID: 10,
-    			inLobby: 8
+    			userID: 12,
+    			inLobby: 10,
+    			username: 1
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -13742,11 +13802,11 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*gameID*/ ctx[1] === undefined && !("gameID" in props)) {
+    		if (/*gameID*/ ctx[2] === undefined && !("gameID" in props)) {
     			console_1.warn("<Lobby> was created without expected prop 'gameID'");
     		}
 
-    		if (/*database*/ ctx[9] === undefined && !("database" in props)) {
+    		if (/*database*/ ctx[11] === undefined && !("database" in props)) {
     			console_1.warn("<Lobby> was created without expected prop 'database'");
     		}
 
@@ -13754,12 +13814,16 @@ var app = (function () {
     			console_1.warn("<Lobby> was created without expected prop 'isHost'");
     		}
 
-    		if (/*userID*/ ctx[10] === undefined && !("userID" in props)) {
+    		if (/*userID*/ ctx[12] === undefined && !("userID" in props)) {
     			console_1.warn("<Lobby> was created without expected prop 'userID'");
     		}
 
-    		if (/*inLobby*/ ctx[8] === undefined && !("inLobby" in props)) {
+    		if (/*inLobby*/ ctx[10] === undefined && !("inLobby" in props)) {
     			console_1.warn("<Lobby> was created without expected prop 'inLobby'");
+    		}
+
+    		if (/*username*/ ctx[1] === undefined && !("username" in props)) {
+    			console_1.warn("<Lobby> was created without expected prop 'username'");
     		}
     	}
 
@@ -13802,6 +13866,14 @@ var app = (function () {
     	set inLobby(value) {
     		throw new Error("<Lobby>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
+
+    	get username() {
+    		throw new Error("<Lobby>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set username(value) {
+    		throw new Error("<Lobby>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
     }
 
     /* src/components/FindLobby.svelte generated by Svelte v3.38.3 */
@@ -13821,7 +13893,8 @@ var app = (function () {
     		gameID: /*gameID*/ ctx[2],
     		database: /*database*/ ctx[0],
     		isHost: /*isHost*/ ctx[7],
-    		userID: /*userID*/ ctx[8]
+    		userID: /*userID*/ ctx[8],
+    		username: /*username*/ ctx[4]
     	};
 
     	if (/*inLobby*/ ctx[6] !== void 0) {
@@ -13844,6 +13917,7 @@ var app = (function () {
     			if (dirty & /*gameID*/ 4) lobby_changes.gameID = /*gameID*/ ctx[2];
     			if (dirty & /*database*/ 1) lobby_changes.database = /*database*/ ctx[0];
     			if (dirty & /*isHost*/ 128) lobby_changes.isHost = /*isHost*/ ctx[7];
+    			if (dirty & /*username*/ 16) lobby_changes.username = /*username*/ ctx[4];
 
     			if (!updating_inLobby && dirty & /*inLobby*/ 64) {
     				updating_inLobby = true;

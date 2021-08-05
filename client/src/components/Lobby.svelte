@@ -9,6 +9,7 @@
 		ButtonSet,
 		RadioButtonGroup,
 		RadioButton,
+		TextInput,
 	} from 'carbon-components-svelte';
 
 	export let gameID;
@@ -16,6 +17,7 @@
 	export let isHost;
 	export let userID;
 	export let inLobby;
+	export let username;
 
 	let players;
 	let open;
@@ -24,6 +26,19 @@
 
 	const checkGameStatus = () => {
 		//firebase garbage
+	};
+
+	const setUsername = () => {
+		if (username == '') {
+			alert('Username cannot be empty!');
+		} else {
+			database
+				.ref('lobbies/' + gameID)
+				.child('players')
+				.update({
+					[userID]: username,
+				});
+		}
 	};
 
 	const saveSettings = () => {
@@ -73,8 +88,6 @@
 		.on('value', (snapshot) => {
 			players = snapshot.val();
 		});
-
-	$: console.log(inLobby);
 </script>
 
 <div id="lobby-container">
@@ -85,11 +98,13 @@
 		{#each Object.entries(players) as [uuid, username]}
 			<li>{username}</li>
 		{/each}
-		<Button
-			kind="danger-tertiary"
-			style="position: absolute; bottom: 0px;"
-			on:click={leaveLobby}>Leave Lobby</Button
-		>
+		<div id="bottom-left">
+			<Button
+				style="position:absolute; bottom: 0px"
+				kind="danger-tertiary"
+				on:click={leaveLobby}>Leave Lobby</Button
+			>
+		</div>
 		{#if isHost}
 			<ButtonSet style="position: absolute; bottom: 0px; right: 75px">
 				<Button on:click={() => (open = true)}>Game Settings</Button>
@@ -117,6 +132,13 @@
 	</div>
 	<div id="right">
 		<h1>Chat</h1>
+		<!-- can change event to on keyup for real-time -->
+		<TextInput
+			on:change={setUsername}
+			bind:value={username}
+			labelText="Username"
+			placeholder={username}
+		/>
 	</div>
 </div>
 
