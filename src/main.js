@@ -2,8 +2,6 @@ let firebase = require('firebase/app');
 require('firebase/database');
 const Game = require('./Game');
 
-let games = [];
-
 var firebaseConfig = {
 	apiKey: 'AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI',
 	authDomain: 'wealth-of-nations.firebaseapp.com',
@@ -23,7 +21,9 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 		.child('initializeGame')
 		.on('value', (start) => {
 			if (start.val()) {
-				games.push(new Game(snapshot.ref.key, database));
+				// new Game(snapshot.ref.key, database);
+				let game = new Game(snapshot.ref.key, database);
+				game.createNewGame();
 			}
 		});
 });

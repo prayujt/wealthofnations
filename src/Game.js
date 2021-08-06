@@ -29,27 +29,29 @@ module.exports = class Game {
 		});
 
 		this.refLobby.remove();
-
-		let settings = this.getSettings();
-		console.log(settings);
-		// console.log(this.getSettings());
-		// let numCities = this.getSettings()['numCities'];
-
-		// for	(let i = 0; i < numCities; i++) {
-		// 	new City(id, database);
-		// }
 	}
+
+	createNewGame = async () => {
+		let settings = await this.getSettings();
+		let numCities = settings['numCities'];
+
+		for (let i = 0; i < numCities; i++) {
+			new City(this.id, this.database);
+		}
+	};
 
 	getID = () => {
 		return this.id;
 	};
 
 	getSettings = async () => {
-		this.refGameSettings.once('value').then((snapshot) => {
-			let value = snapshot.val();
-			// console.log(value);
-			return value;
-		});
+		let snapshot = await this.refGameSettings.once('value');
+		return snapshot.val();
+		// then((snapshot) => {
+		// let value = snapshot.val();
+		// // console.log(value);
+		// return value;
+		// });
 	};
 
 	getPlayers = async () => {
