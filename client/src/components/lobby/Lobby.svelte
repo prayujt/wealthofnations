@@ -35,8 +35,8 @@
 	let players;
 	let open;
 	let gameStarted = false;
-	let gameType;
 
+	let gameType = 'timed';
 	let numCities = 10;
 
 	onMount(() => {
@@ -80,7 +80,7 @@
 	};
 
 	const leaveLobby = () => {
-		if (isHost) {
+		if (isHost && !gameStarted) {
 			for (const [key, value] of Object.entries(players)) {
 				if (key != userID) {
 					refLobby.update({
@@ -99,7 +99,7 @@
 			inLobby = false;
 			refLobby.remove();
 			refServer.remove();
-		} else {
+		} else if (!isHost && !gameStarted) {
 			refPlayers.child(userID).set(null);
 
 			refMessages.push({
@@ -208,8 +208,11 @@
 						<ModalHeader label="Settings" title="Game Settings" />
 						<ModalBody hasForm>
 							<RadioButtonGroup legendText="Game Type" bind:selected={gameType}>
-								<RadioButton labelText="Timed" value="0" />
-								<RadioButton labelText="Last Man Standing" value="1" />
+								<RadioButton labelText="Timed" value="timed" />
+								<RadioButton
+									labelText="Last Man Standing"
+									value="lastmanstanding"
+								/>
 							</RadioButtonGroup>
 
 							<Slider
