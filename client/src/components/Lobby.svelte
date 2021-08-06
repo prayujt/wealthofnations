@@ -22,12 +22,18 @@
 	export let inLobby;
 	export let username;
 
+	//references
+	let refLobby = database.ref('lobbies/' + gameID);
+	let refServer = database.ref('server/' + gameID);
+	let refPlayers = refLobby.child('players');
+	let refSettings = refLobby.child('settings');
+	let refMessages = refLobby.child('messages');
+
 	let message;
 	let messages = {};
 	let players;
 	let open;
 	let gameStarted = false;
-
 	let gameType;
 
 	onMount(() => {
@@ -38,34 +44,26 @@
 		if (username == '') {
 			alert('Username cannot be empty!');
 		} else {
-			database
-				.ref('lobbies/' + gameID)
-				.child('players')
-				.update({
-					[userID]: username,
-				});
+			refPlayers.update({
+				[userID]: username,
+			});
 		}
 	};
 
 	const saveSettings = () => {
 		open = false;
-		database
-			.ref('lobbies/' + gameID)
-			.child('settings')
-			.set({
-				type: gameType,
-			});
+
+		refSettings.set({
+			type: gameType,
+		});
 	};
 
 	const sendMessage = () => {
 		if (message != '') {
-			database
-				.ref('lobbies/' + gameID)
-				.child('messages')
-				.push({
-					author: username,
-					message: message,
-				});
+			refMessages.push({
+				author: username,
+				message: message,
+			});
 		}
 	};
 
@@ -81,84 +79,63 @@
 		if (isHost) {
 			for (const [key, value] of Object.entries(players)) {
 				if (key != userID) {
-					database.ref('lobbies/' + gameID).update({
+					refLobby.update({
 						host: key,
 					});
-					database
-						.ref('lobbies/' + gameID)
-						.child('players')
-						.child(userID)
-						.set(null);
-					database
-						.ref('lobbies/' + gameID)
-						.child('messages')
-						.push({
-							author: 'System',
-							message: 'Host has left the lobby. New host is: ' + value,
-						});
+					refPlayers.child(userID).set(null);
+					refMessages.push({
+						author: 'System',
+						message: 'Host has left the lobby. New host is: ' + value,
+					});
+
 					inLobby = false;
 					return;
 				}
 			}
 			inLobby = false;
-			database.ref('lobbies/' + gameID).remove();
+			refLobby.remove();
 		} else {
-			database
-				.ref('lobbies/' + gameID)
-				.child('players')
-				.child(userID)
-				.set(null);
-			database
-				.ref('lobbies/' + gameID)
-				.child('messages')
-				.push({
-					author: 'System',
-					message: username + ' has left the lobby.',
-				});
+			refPlayers.child(userID).set(null);
+
+			refMessages.push({
+				author: 'System',
+				message: username + 'has left the lobby.',
+			});
+
 			inLobby = false;
 		}
 	};
 
 	const startGame = () => {
-		database.ref('server/' + gameID).set({
+		refServer.set({
 			initializeGame: true,
 		});
-		database.ref('lobbies/' + gameID).update({
+		refLobby.update({
 			gameStarted: true,
 		});
 	};
 
-	database
-		.ref('lobbies/' + gameID)
-		.child('gameStarted')
-		.on('value', (snapshot) => {
-			if (snapshot.val() == true) {
-				gameStarted = true;
-			}
-		});
+	let refGameStarted = refLobby.child('gameStarted');
+	refGameStarted.on('value', (snapshot) => {
+		if (snapshot.val() === true) {
+			gameStarted = true;
+		}
+	});
 
-	database
-		.ref('lobbies/' + gameID)
-		.child('host')
-		.on('value', (snapshot) => {
-			if (snapshot.val() == userID) {
-				isHost = true;
-			}
-		});
+	let refHost = refLobby.child('host');
+	refHost.on('value', (snapshot) => {
+		if (snapshot.val() === userID) {
+			isHost = true;
+		}
+	});
 
-	database
-		.ref('lobbies/' + gameID)
-		.child('players')
-		.on('value', (snapshot) => {
-			players = snapshot.val();
-		});
+	refPlayers.on('value', (snapshot) => {
+		players = snapshot.val();
+	});
 
-	database
-		.ref('lobbies/' + gameID)
-		.child('messages')
-		.on('value', (snapshot) => {
-			messages = snapshot.val();
-		});
+	refMessages.on('value', (snapshot) => {
+		messages = snapshot.val();
+	});
 </script>
 
 {#if !gameStarted}

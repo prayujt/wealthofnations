@@ -15,6 +15,11 @@
 	let isHost;
 	let userID = user.id;
 
+	//references
+	let refLobbies = database.ref('lobbies/' + inputGameID);
+	let refPlayers = refLobbies.child('players');
+	let refMessages = refLobbies.child('messages');
+
 	onMount(() => {
 		document.getElementsByName('usernameBox')[0].focus();
 	});
@@ -43,33 +48,25 @@
 	};
 
 	const joinGame = () => {
-		database
-			.ref('lobbies/' + inputGameID)
-			.get()
-			.then((snapshot) => {
-				if (snapshot.exists() && inputGameID != '') {
-					database
-						.ref('lobbies/' + inputGameID)
-						.child('players')
-						.set({
-							...snapshot.val().players,
-							[userID]: username,
-						});
-					database
-						.ref('lobbies/' + inputGameID)
-						.child('messages')
-						.push({
-							author: 'System',
-							message: username + ' has joined the lobby.',
-						});
-					gameID = inputGameID;
-					isHost = false;
-					inLobby = true;
-				} else {
-					alert('Invalid Game Id!');
-					document.getElementsByName('idBox')[0].focus();
-				}
-			});
+		refLobbies.get().then((snapshot) => {
+			if (snapshot.exists() && inputGameID != '') {
+				refPlayers.set({
+					...snapshot.val().players,
+					[userID]: username,
+				});
+				refMessages.push({
+					author: 'System',
+					message: username + ' has joined the lobby.',
+				});
+
+				gameID = inputGameID;
+				isHost = false;
+				inLobby = true;
+			} else {
+				alert('Invalid Game Id!');
+				document.getElementsByName('idBox')[0].focus();
+			}
+		});
 	};
 
 	const createGame = () => {
