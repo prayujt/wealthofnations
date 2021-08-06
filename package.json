@@ -28,6 +28,7 @@
 		"express": "^4.17.1",
 		"firebase": "^8.7.0",
 		"firebase-admin": "^9.10.0",
+		"random-words": "^1.1.1",
 		"sirv-cli": "^1.0.0"
 	},
 	"lint-staged": {

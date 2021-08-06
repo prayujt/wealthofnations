@@ -22,7 +22,9 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 		.ref('server/' + snapshot.ref.key)
 		.child('initializeGame')
 		.on('value', (start) => {
-			if (start.val()) games.push(new Game(snapshot.ref.key, database));
+			if (start.val()) {
+				games.push(new Game(snapshot.ref.key, database));
+			}
 		});
 });
 

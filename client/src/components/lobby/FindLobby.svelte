@@ -16,9 +16,9 @@
 	let userID = user.id;
 
 	//references
-	let refLobbies = database.ref('lobbies/' + inputGameID);
-	let refPlayers = refLobbies.child('players');
-	let refMessages = refLobbies.child('messages');
+	let refLobbies;
+	let refPlayers;
+	let refMessages;
 
 	onMount(() => {
 		document.getElementsByName('usernameBox')[0].focus();
@@ -48,6 +48,9 @@
 	};
 
 	const joinGame = () => {
+		refLobbies = database.ref('lobbies/' + inputGameID);
+		refPlayers = refLobbies.child('players');
+		refMessages = refLobbies.child('messages');
 		refLobbies.get().then((snapshot) => {
 			if (snapshot.exists() && inputGameID != '') {
 				refPlayers.set({
@@ -76,6 +79,10 @@
 			host: userID,
 			players: {
 				[userID]: username,
+			},
+			settings: {
+				type: 0,
+				numCities: 10,
 			},
 		});
 		isHost = true;

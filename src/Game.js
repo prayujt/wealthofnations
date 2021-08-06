@@ -1,56 +1,63 @@
+const City = require('./City');
 const Player = require('./Player');
 
 module.exports = class Game {
 	constructor(id, database) {
 		this.id = id;
 		this.database = database;
-		this.players = [];
 
 		console.log('Started Game #' + id);
 
-		let refGame = database.ref('games/' + id);
-		let refGameSettings = refGame.child('settings');
-		let refGamePlayers = refGame.child('players');
-		let refCompanies = refGame.child('companies');
-		let refCities = refGame.child('cities');
+		this.refGame = database.ref('games/' + id);
+		this.refGameSettings = this.refGame.child('settings');
+		this.refGamePlayers = this.refGame.child('players');
+		this.refCompanies = this.refGame.child('companies');
+		this.refCities = this.refGame.child('cities');
 
-		let refLobby = database.ref('lobbies/' + id);
-		let refLobbySettings = refLobby.child('settings');
-		let refLobbyPlayers = refLobby.child('players');
+		this.refLobby = database.ref('lobbies/' + id);
+		this.refLobbySettings = this.refLobby.child('settings');
+		this.refLobbyPlayers = this.refLobby.child('players');
 
-		refLobbySettings.once('value').then((snapshot) => {
-			refGameSettings.set(snapshot.val());
+		this.refLobbySettings.once('value').then((snapshot) => {
+			this.refGameSettings.set(snapshot.val());
 		});
 
-		refLobbyPlayers.once('value').then((snapshot) => {
+		this.refLobbyPlayers.once('value').then((snapshot) => {
 			for (const [key, value] of Object.entries(snapshot.val())) {
-				refGamePlayers.child(key).set({
-					username: value,
-					netWorth: 1000000,
-					debt: 0,
-					balance: 1000000,
-					influence: 100,
-					bankrupt: false,
-				});
+				new Player(id, key, value, database);
 			}
 		});
 
-		refCompanies.set({
-			name: 'google',
-			netWorth: 10000000000000,
-		});
+		this.refLobby.remove();
 
-		refCities.set({
-			name: 'tampa',
-			netWorth: 32131232131,
-		});
+		let settings = this.getSettings();
+		// console.log(this.getSettings());
+		// let numCities = this.getSettings()['numCities'];
 
-		database.ref('lobbies/' + id).remove();
+		// for	(let i = 0; i < numCities; i++) {
+		// 	new City(id, database);
+		// }
 	}
 
 	getID = () => {
 		return this.id;
 	};
 
-	getPlayers = () => {};
+	getSettings = async () => {
+		this.refGameSettings.once('value').then((snapshot) => {
+			let value = snapshot.val();
+			// console.log(value);
+			return value;
+		});
+	};
+
+	getPlayers = async () => {
+		this.refGamePlayers.once('value').then((snapshot) => {
+			return snapshot.val();
+		});
+	};
+
+	getCities = async () => {};
+
+	getCity = async () => {};
 };

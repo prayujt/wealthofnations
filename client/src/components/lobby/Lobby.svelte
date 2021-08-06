@@ -11,6 +11,7 @@
 		RadioButton,
 		TextInput,
 		TextArea,
+		Slider,
 	} from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import Game from '../game/Game.svelte';
@@ -36,6 +37,8 @@
 	let gameStarted = false;
 	let gameType;
 
+	let numCities = 10;
+
 	onMount(() => {
 		document.getElementsByTagName('textarea')[0].focus();
 	});
@@ -55,6 +58,7 @@
 
 		refSettings.set({
 			type: gameType,
+			numCities: numCities,
 		});
 	};
 
@@ -198,6 +202,14 @@
 								<RadioButton labelText="Timed" value="0" />
 								<RadioButton labelText="Last Man Standing" value="1" />
 							</RadioButtonGroup>
+
+							<Slider
+								labelText="Number of Cities"
+								min={10}
+								max={50}
+								maxLabel="50 cities"
+								bind:value={numCities}
+							/>
 
 							<!-- Add additional settings here -->
 						</ModalBody>
