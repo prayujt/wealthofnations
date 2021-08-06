@@ -98,6 +98,7 @@
 			}
 			inLobby = false;
 			refLobby.remove();
+			refServer.remove();
 		} else {
 			refPlayers.child(userID).set(null);
 
@@ -112,17 +113,25 @@
 
 	const startGame = () => {
 		refServer.set({
-			initializeGame: true,
-		});
-		refLobby.update({
-			gameStarted: true,
+			initializingGame: true,
 		});
 	};
 
-	let refGameStarted = refLobby.child('gameStarted');
-	refGameStarted.on('value', (snapshot) => {
+	refLobby.child('gameStarted').on('value', (snapshot) => {
 		if (snapshot.val() === true) {
 			gameStarted = true;
+		}
+	});
+
+	refServer.child('initializingGame').on('value', (snapshot) => {
+		if (snapshot.val() === false) {
+			refLobby.update({
+				gameStarted: true,
+			});
+			refServer.child('initializingGame').off();
+			refServer.child('initializingGame').remove();
+
+			refLobby.remove();
 		}
 	});
 

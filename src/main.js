@@ -18,7 +18,7 @@ const database = firebase.database();
 database.ref('lobbies').on('child_added', (snapshot) => {
 	database
 		.ref('server/' + snapshot.ref.key)
-		.child('initializeGame')
+		.child('initializingGame')
 		.on('value', (start) => {
 			if (start.val()) {
 				// new Game(snapshot.ref.key, database);
@@ -31,6 +31,5 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 const sleep = (ms) => {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms);
-		d;
 	});
 };

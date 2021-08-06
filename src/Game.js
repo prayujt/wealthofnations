@@ -28,7 +28,7 @@ module.exports = class Game {
 			}
 		});
 
-		this.refLobby.remove();
+		//this.refLobby.remove();
 	}
 
 	createNewGame = async () => {
