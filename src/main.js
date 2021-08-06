@@ -17,7 +17,6 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
-
 database.ref('lobbies').on('child_added', (snapshot) => {
 	database
 		.ref('server/' + snapshot.ref.key)
@@ -30,5 +29,6 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 const sleep = (ms) => {
 	return new Promise((resolve) => {
 		setTimeout(resolve, ms);
+		d;
 	});
 };
