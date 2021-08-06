@@ -7,7 +7,7 @@ module.exports = class Player {
 		this.database = database;
 		this.refGame = database.ref('games/' + gameID);
 		this.refPlayers = this.refGame.child('players');
-		this.refPlayer = this.refGame.child(uuid);
+		this.refPlayer = this.refPlayers.child(uuid);
 		this.refStats = this.refPlayer.child('stats');
 		this.refCompanies = this.refPlayer.child('companies');
 
