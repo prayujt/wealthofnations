@@ -1,7 +1,11 @@
+const Player = require('./Player');
+
 module.exports = class Game {
 	constructor(id, database) {
 		this.id = id;
 		this.database = database;
+		this.players = [];
+
 		console.log('Started Game #' + id);
 
 		let refGame = database.ref('games/' + id);

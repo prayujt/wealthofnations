@@ -1,6 +1,6 @@
 let firebase = require('firebase/app');
 require('firebase/database');
-let Game = require('./Game');
+const Game = require('./Game');
 
 let games = [];
 
