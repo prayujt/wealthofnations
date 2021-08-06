@@ -1,7 +1,11 @@
+const Player = require('./Player');
+
 module.exports = class Game {
 	constructor(id, database) {
 		this.id = id;
 		this.database = database;
+		this.players = [];
+
 		console.log('Started Game #' + id);
 
 		database
@@ -21,18 +25,7 @@ module.exports = class Game {
 			.once('value')
 			.then((snapshot) => {
 				for (const [key, value] of Object.entries(snapshot.val())) {
-					database
-						.ref('games/' + id)
-						.child('players')
-						.child(key)
-						.set({
-							username: value,
-							netWorth: 1000000,
-							debt: 0,
-							balance: 1000000,
-							influence: 100,
-							bankrupt: false,
-						});
+					this.players.push(new Player(id, key, value, database));
 				}
 			});
 
