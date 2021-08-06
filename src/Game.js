@@ -31,6 +31,7 @@ module.exports = class Game {
 		this.refLobby.remove();
 
 		let settings = this.getSettings();
+		console.log(settings);
 		// console.log(this.getSettings());
 		// let numCities = this.getSettings()['numCities'];
 
