@@ -23,7 +23,7 @@ Navigate to [localhost:2000](http://localhost:2000). You should see your app run
 
 ---
 
-### Objective
+### Objectiv
 
 There are two game modes in Wealth of Nations: Last Man Standing and Timed.
 
