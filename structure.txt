@@ -1,0 +1,95 @@
+{
+    "wealthofnations/": {
+        "server/": {
+            "id/": {
+                initializeGame: false,
+            }
+        }
+        "lobbies/": {
+            "id/": {
+                "gameStarted": false,
+                "host": "uuid",
+                "players/": {
+                    "uuid": "username",
+                },
+                "settings/": {
+
+                },
+                "messages/": {
+
+                }
+            }
+        },
+        "games/" : {
+            "id/": {
+                "settings/": {
+
+                }
+                "players/": {
+                    "uuid/": {
+                        "stats/:" {
+                            "username": ,
+                            "netWorth": ,
+                            "debt": ,
+                            "balance": ,
+                            "influence": ,
+                            "income": ,
+                            "bankrupt": 
+                        }
+                        "companies/": {
+                            "company/": {
+                                "percentage": ,
+                                "marketValue": ,
+                            }
+                        }
+                    }
+                },
+                "companies/": {
+                    "company/": {
+                        "name": ,
+                        "city": ,
+                        "owner": ,
+                        "netWorth": ,
+                        "employees": ,
+                        "debt": ,
+                        "bankrupt": ,
+                        "holders": {
+                            "playerName": {
+                                "percent": ,
+                                "marketValue": ,
+                            }
+                        },
+                        "expenses/": {
+                            "employeeWages": ,
+                            "executiveWages": ,
+                            "maintenanceFees": ,
+                            "interestPayments": ,
+                            "localTax": ,
+                        },
+                        "revenue/": {
+                            "expectedGrowth": ,
+                            "volatilty": ,
+                        },
+                        "secrets": {}
+                    }
+                },
+                "cities/": {
+                    "companies": [],
+                    "owner": ,
+                    "population": ,
+                    "netWorth": ,
+                },
+                "bank/": {
+
+                },
+                "foreigners/": {
+                    
+                },
+                "privateDeals/": {
+
+                }
+
+            }
+        }
+    }
+}

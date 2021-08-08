@@ -1,5 +1,5 @@
 <script>
-	import Login from './components/Login.svelte';
+	import Login from './components/login/Login.svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 	export let database;
 

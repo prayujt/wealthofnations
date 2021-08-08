@@ -1,0 +1,35 @@
+let firebase = require('firebase/app');
+require('firebase/database');
+const Game = require('./Game');
+
+var firebaseConfig = {
+	apiKey: 'AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI',
+	authDomain: 'wealth-of-nations.firebaseapp.com',
+	databaseURL: 'https://wealth-of-nations-default-rtdb.firebaseio.com',
+	projectId: 'wealth-of-nations',
+	storageBucket: 'wealth-of-nations.appspot.com',
+	messagingSenderId: '585602058367',
+	appId: '1:585602058367:web:2d7e2915b43f466e57d74a',
+	measurementId: 'G-LWK0DJPE26',
+};
+
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+database.ref('lobbies').on('child_added', (snapshot) => {
+	database
+		.ref('server/' + snapshot.ref.key)
+		.child('initializingGame')
+		.on('value', (start) => {
+			if (start.val()) {
+				// new Game(snapshot.ref.key, database);
+				let game = new Game(snapshot.ref.key, database);
+				game.createNewGame();
+			}
+		});
+});
+
+const sleep = (ms) => {
+	return new Promise((resolve) => {
+		setTimeout(resolve, ms);
+	});
+};

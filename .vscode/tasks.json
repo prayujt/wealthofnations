@@ -1,0 +1,46 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "start",
+			"problemMatcher": [],
+			"label": "npm run start",
+			"detail": "concurrently \"npm run client\" \"npm run server\"",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "install dependencies from package"
+		},
+		{
+			"type": "npm",
+			"script": "install",
+			"path": "client/",
+			"problemMatcher": [],
+			"label": "npm: install - client",
+			"detail": "install dependencies from package"
+		},
+		{
+			"type": "npm",
+			"script": "server",
+			"problemMatcher": [],
+			"label": "npm: server",
+			"detail": "nodemon src/main.js"
+		},
+		{
+			"type": "npm",
+			"script": "start",
+			"path": "client/",
+			"problemMatcher": [],
+			"label": "npm: start - client",
+			"detail": "sirv public --no-clear --port 2000 --host 0.0.0.0"
+		}
+	]
+}
