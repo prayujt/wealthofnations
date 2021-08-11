@@ -81,6 +81,7 @@
                     "owner": ,
                     "population": ,
                     "netWorth": ,
+                    "tier": ,
                 },
                 "bank/": {
 

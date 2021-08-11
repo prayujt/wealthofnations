@@ -9,16 +9,20 @@ module.exports = class Company {
 		this.refServer = database.ref('server/' + gameID);
 		this.refCompanies = this.refGame.child('companies');
 
-		this.companyName = random().address.city();
+		this.companyName = random().company.name().replace('.', '');
 		this.city = city;
+
+		this.initialNetWorth = 1;
+		this.initialEmployees = 1;
+		this.initialDebt = 0;
 
 		this.refCompanies.update({
 			[this.companyName]: {
 				city: city,
 				owner: 'Bank',
-				netWorth: 1,
-				employees: 1,
-				debt: 0,
+				netWorth: this.initialNetWorth,
+				employees: this.initialEmployees,
+				debt: this.initialDebt,
 				bankrupt: false,
 				holders: {
 					Bank: {

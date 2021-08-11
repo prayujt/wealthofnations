@@ -117,19 +117,19 @@
 		});
 	};
 
-	refLobby.child('gameStarted').on('value', (snapshot) => {
-		if (snapshot.val() === true) {
-			gameStarted = true;
-		}
-	});
+	// refLobby.child('gameStarted').on('value', (snapshot) => {
+	// 	if (snapshot.val() === true) {
+	// 		gameStarted = true;
+	// 	}
+	// });
 
 	refServer.child('initializingGame').on('value', (snapshot) => {
 		if (snapshot.val() === false) {
-			refLobby.update({
-				gameStarted: true,
-			});
-			refServer.child('initializingGame').off();
 			refServer.child('initializingGame').remove();
+			gameStarted = true;
+			// refLobby.update({
+			// 	gameStarted: true,
+			// });
 
 			refLobby.remove();
 		}
