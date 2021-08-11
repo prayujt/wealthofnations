@@ -117,20 +117,10 @@
 		});
 	};
 
-	// refLobby.child('gameStarted').on('value', (snapshot) => {
-	// 	if (snapshot.val() === true) {
-	// 		gameStarted = true;
-	// 	}
-	// });
-
 	refServer.child('initializingGame').on('value', (snapshot) => {
 		if (snapshot.val() === false) {
 			refServer.child('initializingGame').remove();
 			gameStarted = true;
-			// refLobby.update({
-			// 	gameStarted: true,
-			// });
-
 			refLobby.remove();
 		}
 	});
@@ -171,7 +161,6 @@
 				{/if}
 			</div>
 			<div id="username">
-				<!-- can change event to on keyup for real-time -->
 				<TextInput
 					on:change={setUsername}
 					bind:value={username}

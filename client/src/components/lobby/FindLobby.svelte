@@ -15,7 +15,6 @@
 	let isHost;
 	let userID = user.id;
 
-	//references
 	let refLobbies;
 	let refPlayers;
 	let refMessages;

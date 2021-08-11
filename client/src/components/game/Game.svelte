@@ -24,21 +24,6 @@
 
 <svelte:window on:beforeunload={() => {}} />
 
-<!--
-<Grid>
-	<Row>
-		<p>Top part</p>
-	</Row>
-	<Row>
-		<Column class="game" sm={1} md={8} lg={5}>
-			<Map />
-		</Column>
-		<Column sm={1} md={1} lg={5}>
-			<p>Sidebar</p>
-		</Column>
-	</Row>
-</Grid>
--->
 <style>
 	* {
 		padding: 0;

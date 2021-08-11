@@ -21,15 +21,7 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 		.child('initializingGame')
 		.on('value', (start) => {
 			if (start.val()) {
-				// new Game(snapshot.ref.key, database);
-				let game = new Game(snapshot.ref.key, database);
-				game.createNewGame();
+				new Game(snapshot.ref.key, database);
 			}
 		});
 });
-
-const sleep = (ms) => {
-	return new Promise((resolve) => {
-		setTimeout(resolve, ms);
-	});
-};
