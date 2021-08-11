@@ -44,6 +44,7 @@
                         }
                     }
                 },
+                
                 "companies/": {
                     "company/": {
                         "name": ,
@@ -74,7 +75,9 @@
                     }
                 },
                 "cities/": {
-                    "companies": [],
+                    "companies/": {
+                        
+                    },
                     "owner": ,
                     "population": ,
                     "netWorth": ,

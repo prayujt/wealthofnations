@@ -18,6 +18,8 @@ module.exports = class Game {
 		this.refLobbySettings = this.refLobby.child('settings');
 		this.refLobbyPlayers = this.refLobby.child('players');
 
+		this.refServer = database.ref('server/');
+
 		this.refLobbySettings.once('value').then((snapshot) => {
 			this.refGameSettings.set(snapshot.val());
 		});
@@ -36,7 +38,7 @@ module.exports = class Game {
 		let numCities = settings['numCities'];
 
 		for (let i = 0; i < numCities; i++) {
-			new City(this.id, this.database);
+			new City(this.id, numCities, this.database);
 		}
 	};
 
