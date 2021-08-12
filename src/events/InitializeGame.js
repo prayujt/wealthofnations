@@ -1,7 +1,13 @@
 const random = require('fakerator');
 
-const probabilities = [
+const cityTierProbabilities = [
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 5,
+];
+const companyTierProbabilities = [
+	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2,
+	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4,
+	4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7,
+	8, 8, 8, 9, 9, 10,
 ];
 const populationRanges = {
 	1: [0, 25000],
@@ -10,12 +16,37 @@ const populationRanges = {
 	4: [150001, 300000],
 	5: [300001, 1000000],
 };
-const companyRanges = {
+const numCompaniesRanges = {
 	1: [3, 5],
 	2: [5, 8],
 	3: [8, 12],
 	4: [12, 16],
 	5: [16, 25],
+};
+const netWorthRanges = {
+	1: [1000000, 10000000],
+	2: [10000001, 50000000],
+	3: [50000001, 100000000],
+	4: [100000001, 500000000],
+	5: [500000001, 1000000000],
+	6: [1000000001, 5000000000],
+	7: [10000000001, 50000000000],
+	8: [50000000001, 100000000000],
+	9: [100000000001, 500000000000],
+	9: [500000000001, 1000000000000],
+	10: [1000000000001, 5000000000000],
+};
+const employeesRanges = {
+	1: [1000, 2500],
+	2: [2501, 5000],
+	3: [5001, 10000],
+	4: [10001, 15000],
+	5: [15001, 25000],
+	6: [25001, 50000],
+	7: [50001, 100000],
+	8: [100001, 150000],
+	9: [150001, 250000],
+	10: [250001, 1000000],
 };
 
 const initializeGame = async (id, database) => {
@@ -71,7 +102,10 @@ const createCity = async (gameID, numCities, database) => {
 
 	let refCities = database.ref('games/' + gameID).child('cities');
 
-	let tier = probabilities[Math.floor(Math.random() * probabilities.length)];
+	let tier =
+		cityTierProbabilities[
+			Math.floor(Math.random() * cityTierProbabilities.length)
+		];
 	let population = Math.floor(
 		Math.random() *
 			(populationRanges[tier][0] - populationRanges[tier][1] + 1) +
@@ -79,8 +113,9 @@ const createCity = async (gameID, numCities, database) => {
 	);
 
 	let numCompanies = Math.floor(
-		Math.random() * (companyRanges[tier][0] - companyRanges[tier][1] + 1) +
-			companyRanges[tier][1]
+		Math.random() *
+			(numCompaniesRanges[tier][0] - numCompaniesRanges[tier][1] + 1) +
+			numCompaniesRanges[tier][1]
 	);
 	let netWorth = 0;
 
@@ -108,8 +143,21 @@ const createCompany = async (gameID, city, database) => {
 
 	let name = random().company.name().replace('.', '');
 
-	let netWorth = 1;
-	let employees = 1;
+	let tier =
+		companyTierProbabilities[
+			Math.floor(Math.random() * companyTierProbabilities.length)
+		];
+
+	let netWorth = Math.floor(
+		Math.random() * (netWorthRanges[tier][0] - netWorthRanges[tier][1] + 1) +
+			netWorthRanges[tier][1]
+	);
+
+	let employees = Math.floor(
+		Math.random() * (employeesRanges[tier][0] - employeesRanges[tier][1] + 1) +
+			employeesRanges[tier][1]
+	);
+
 	let debt = 0;
 
 	refCompanies.update({
@@ -138,6 +186,7 @@ const createCompany = async (gameID, city, database) => {
 				volatilty: 0,
 			},
 			secrets: {},
+			tier: tier,
 		},
 	});
 
