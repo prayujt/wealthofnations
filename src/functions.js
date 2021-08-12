@@ -1,7 +1,7 @@
 let firebase = require('firebase/app');
 require('firebase/database');
 const { initializeGame } = require('./events/InitializeGame');
-const Game = require('./Game');
+const Game = require('./classes/Game');
 
 var firebaseConfig = {
 	apiKey: 'AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI',
@@ -23,8 +23,14 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 		.child('initializingGame')
 		.on('value', (start) => {
 			if (start.val()) {
-				initializeGame(snapshot.ref.key, database);
-				// new Game(snapshot.ref.key, database);
+				initializeGame(snapshot.ref.key, database).then(() => {
+					// new Game(snapshot.ref.key, database);
+					gameFunctions(snapshot.ref.key);
+				});
 			}
 		});
 });
+
+const gameFunctions = () => {
+	// insert server-side function calls to events/ files
+};
