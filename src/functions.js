@@ -31,6 +31,6 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 		});
 });
 
-const gameFunctions = () => {
+const gameFunctions = async () => {
 	// insert server-side function calls to events/ files
 };
