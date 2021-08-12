@@ -80,7 +80,7 @@
 				[userID]: username,
 			},
 			settings: {
-				type: 0,
+				type: 'timed',
 				numCities: 10,
 			},
 		});

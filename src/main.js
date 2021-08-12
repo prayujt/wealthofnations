@@ -1,5 +1,6 @@
 let firebase = require('firebase/app');
 require('firebase/database');
+const { initializeGame } = require('./events/InitializeGame');
 const Game = require('./Game');
 
 var firebaseConfig = {
@@ -15,13 +16,15 @@ var firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
+
 database.ref('lobbies').on('child_added', (snapshot) => {
 	database
 		.ref('server/' + snapshot.ref.key)
 		.child('initializingGame')
 		.on('value', (start) => {
 			if (start.val()) {
-				new Game(snapshot.ref.key, database);
+				initializeGame(snapshot.ref.key, database);
+				// new Game(snapshot.ref.key, database);
 			}
 		});
 });

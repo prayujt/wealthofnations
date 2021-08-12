@@ -69,5 +69,9 @@ module.exports = class City {
 				tier: this.initialTier,
 			},
 		});
+
+		refServer.update({
+			initializingGame: false,
+		});
 	}
 };

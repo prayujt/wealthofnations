@@ -34,6 +34,7 @@
 	let messages = {};
 	let players;
 	let open;
+	let initializingGame = false;
 	let gameStarted = false;
 
 	let gameType = 'timed';
@@ -112,6 +113,7 @@
 	};
 
 	const startGame = () => {
+		initializingGame = true;
 		refServer.set({
 			initializingGame: true,
 		});
@@ -187,7 +189,7 @@
 				>
 			</div>
 			<div id="bottom-right">
-				{#if isHost}
+				{#if isHost && !initializingGame}
 					<ButtonSet>
 						<Button on:click={() => (open = true)}>Game Settings</Button>
 						<Button on:click={startGame}>Start Game</Button>
