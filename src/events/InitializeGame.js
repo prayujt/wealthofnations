@@ -7,10 +7,9 @@ const companyTierProbabilities = [
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2,
 	2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4,
 	4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7,
-	8, 8, 8, 9, 9, 10,
 ];
 const populationRanges = {
-	1: [0, 25000],
+	1: [1000, 25000],
 	2: [25001, 50000],
 	3: [50001, 150000],
 	4: [150001, 300000],
@@ -18,10 +17,10 @@ const populationRanges = {
 };
 const numCompaniesRanges = {
 	1: [3, 5],
-	2: [5, 8],
-	3: [8, 12],
-	4: [12, 16],
-	5: [16, 25],
+	2: [6, 9],
+	3: [10, 14],
+	4: [15, 18],
+	5: [19, 25],
 };
 const netWorthRanges = {
 	1: [1000000, 10000000],
@@ -33,8 +32,7 @@ const netWorthRanges = {
 	7: [10000000001, 50000000000],
 	8: [50000000001, 100000000000],
 	9: [100000000001, 500000000000],
-	9: [500000000001, 1000000000000],
-	10: [1000000000001, 5000000000000],
+	10: [500000000001, 1000000000000],
 };
 const employeesRanges = {
 	1: [1000, 2500],
@@ -106,26 +104,31 @@ const createCity = async (gameID, numCities, database) => {
 		cityTierProbabilities[
 			Math.floor(Math.random() * cityTierProbabilities.length)
 		];
-	let population = Math.floor(
-		Math.random() *
-			(populationRanges[tier][0] - populationRanges[tier][1] + 1) +
-			populationRanges[tier][1]
-	);
+	// let population = Math.floor(
+	// 	Math.random() *
+	// 		(populationRanges[tier][0] - populationRanges[tier][1] + 1) +
+	// 		populationRanges[tier][1]
+	// );
 
 	let numCompanies = Math.floor(
 		Math.random() *
 			(numCompaniesRanges[tier][0] - numCompaniesRanges[tier][1] + 1) +
 			numCompaniesRanges[tier][1]
 	);
+
 	let netWorth = 0;
+	let population = 0;
 
 	let companies = [];
 
 	for (let i = 0; i < numCompanies; i++) {
 		let companyData = await createCompany(gameID, name, database);
-		netWorth += companyData[0];
-		companies.push(companyData[1]);
+		companies.push(companyData[0]);
+		netWorth += companyData[1];
+		population += companyData[2];
 	}
+
+	tier = getTier(population);
 
 	refCities.update({
 		[name]: {
@@ -190,7 +193,17 @@ const createCompany = async (gameID, city, database) => {
 		},
 	});
 
-	return [netWorth, name];
+	return [name, netWorth, employees];
+};
+
+const getTier = (population) => {
+	for (const [key, value] of Object.entries(populationRanges)) {
+		if (population < value[1] && population > value[0]) {
+			console.log(key);
+			return key;
+		}
+	}
+	return 0;
 };
 
 exports.initializeGame = initializeGame;

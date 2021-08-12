@@ -1,7 +1,6 @@
 let firebase = require('firebase/app');
 require('firebase/database');
 const { initializeGame } = require('./events/InitializeGame');
-const Game = require('./classes/Game');
 
 var firebaseConfig = {
 	apiKey: 'AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI',
