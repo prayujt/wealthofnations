@@ -212,7 +212,7 @@ const createConglomerate = async (gameID, uuid, username, name, database) => {
 	refConglomerate.update({
 		[name]: {
 			city: startingCity,
-			owner: 'Bank',
+			owner: uuid,
 			netWorth: netWorthRanges[1][0],
 			employees: employeesRanges[1][0],
 			debt: 0,
