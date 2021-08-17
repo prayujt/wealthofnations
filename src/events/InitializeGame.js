@@ -47,6 +47,8 @@ const employeesRanges = {
 	10: [250001, 1000000],
 };
 
+let cities = [];
+
 const initializeGame = async (id, database) => {
 	console.log('Started Game #' + id);
 	let refGame = database.ref('games/' + id);
@@ -61,15 +63,15 @@ const initializeGame = async (id, database) => {
 	let settings = await refLobbySettings.once('value');
 	refGameSettings.set(settings.val());
 
-	let players = await refLobbyPlayers.once('value');
-	for (const [key, value] of Object.entries(players.val())) {
-		await createPlayer(id, key, value, database);
-	}
-
 	let numCities = settings.val()['numCities'];
 
 	for (let i = 0; i < numCities; i++) {
 		await createCity(id, numCities, database);
+	}
+
+	let players = await refLobbyPlayers.once('value');
+	for (const [key, value] of Object.entries(players.val())) {
+		await createPlayer(id, key, value, database);
 	}
 
 	refServer.update({
@@ -85,18 +87,21 @@ const createPlayer = async (gameID, uuid, username, database) => {
 		.child('stats');
 	refStats.set({
 		username: username,
-		netWorth: 1000000,
+		netWorth: 6000000,
 		debt: 0,
-		balance: 1000000,
+		balance: 5000000,
 		influence: 100,
 		bankrupt: false,
 		companies: [],
 	});
+	let name = username + ' LLC Inc';
 	console.log('Initialized Player with ID ' + uuid);
+	createConglomerate(gameID, uuid, username, name, database);
 };
 
 const createCity = async (gameID, numCities, database) => {
 	let name = random().address.city();
+	cities.push(name);
 
 	let refCities = database.ref('games/' + gameID).child('cities');
 
@@ -174,7 +179,7 @@ const createCompany = async (gameID, city, database) => {
 			holders: {
 				Bank: {
 					percent: 100,
-					marketValue: 1,
+					marketValue: netWorth,
 				},
 			},
 			expenses: {
@@ -196,10 +201,48 @@ const createCompany = async (gameID, city, database) => {
 	return [name, netWorth, employees];
 };
 
+const createConglomerate = async (gameID, uuid, username, name, database) => {
+	let refConglomerate = database
+		.ref('games/' + gameID)
+		.child('players/' + uuid)
+		.child('conglomerate');
+
+	let startingCity = cities[Math.floor(Math.random() * cities.length)];
+
+	refConglomerate.update({
+		[name]: {
+			city: startingCity,
+			owner: 'Bank',
+			netWorth: netWorthRanges[1][0],
+			employees: employeesRanges[1][0],
+			debt: 0,
+			bankrupt: false,
+			holders: {
+				[uuid]: {
+					percent: 100,
+					marketValue: netWorthRanges[1][0],
+				},
+			},
+			expenses: {
+				employeeWages: 0,
+				executiveWages: 0,
+				maintenanceFees: 0,
+				interestPayments: 0,
+				localTax: 0,
+			},
+			revenue: {
+				expectedGrowth: 0,
+				volatilty: 0,
+			},
+			secrets: {},
+			tier: 1,
+		},
+	});
+};
+
 const getTier = (population) => {
 	for (const [key, value] of Object.entries(populationRanges)) {
 		if (population < value[1] && population > value[0]) {
-			console.log(key);
 			return key;
 		}
 	}

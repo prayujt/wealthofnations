@@ -35,7 +35,37 @@
                             "influence": ,
                             "income": ,
                             "bankrupt": 
+                        },
+                        "conglomerate/": {
+                            "name": ,
+                            "city": ,
+                            "owner": ,
+                            "netWorth": ,
+                            "employees": ,
+                            "debt": ,
+                            "bankrupt": ,
+                            "reserves": ,
+                            "holders": {
+                                "playerName": {
+                                    "percent": ,
+                                    "marketValue": ,
+                                }
+                            },
+                            "expenses/": {
+                                "employeeWages": ,
+                                "executiveWages": ,
+                                "maintenanceFees": ,
+                                "interestPayments": ,
+                                "localTax": ,
+                            },
+                            "revenue/": {
+                                "expectedGrowth": ,
+                                "volatilty": ,
+                            },
+                            "secrets": {}
+
                         }
+
                         "companies/": {
                             "company/": {
                                 "percentage": ,
@@ -54,6 +84,7 @@
                         "employees": ,
                         "debt": ,
                         "bankrupt": ,
+                        "reserves",
                         "holders": {
                             "playerName": {
                                 "percent": ,
