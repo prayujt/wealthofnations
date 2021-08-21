@@ -96,7 +96,7 @@ const createPlayer = async (gameID, uuid, username, database) => {
 	});
 	let name = username + ' LLC Inc';
 	console.log('Initialized Player with ID ' + uuid);
-	createConglomerate(gameID, uuid, username, name, database);
+	await createConglomerate(gameID, uuid, username, name, database);
 };
 
 const createCity = async (gameID, numCities, database) => {
@@ -109,11 +109,6 @@ const createCity = async (gameID, numCities, database) => {
 		cityTierProbabilities[
 			Math.floor(Math.random() * cityTierProbabilities.length)
 		];
-	// let population = Math.floor(
-	// 	Math.random() *
-	// 		(populationRanges[tier][0] - populationRanges[tier][1] + 1) +
-	// 		populationRanges[tier][1]
-	// );
 
 	let numCompanies = Math.floor(
 		Math.random() *
