@@ -35,16 +35,40 @@ const netWorthRanges = {
 	10: [500000000001, 1000000000000],
 };
 const employeesRanges = {
-	1: [1000, 2500],
-	2: [2501, 5000],
-	3: [5001, 10000],
-	4: [10001, 15000],
-	5: [15001, 25000],
-	6: [25001, 50000],
-	7: [50001, 100000],
-	8: [100001, 150000],
-	9: [150001, 250000],
-	10: [250001, 1000000],
+	1: [25, 50],
+	2: [51, 100],
+	3: [101, 250],
+	4: [251, 500],
+	5: [501, 1000],
+	6: [1001, 2500],
+	7: [2501, 5000],
+	8: [5001, 10000],
+	9: [10001, 25000],
+	10: [25000, 100000],
+};
+const employeeWageRanges = {
+	1: [15000, 16000],
+	2: [16001, 17000],
+	3: [17001, 18000],
+	4: [18001, 20000],
+	5: [20001, 21500],
+	6: [21501, 22500],
+	7: [22501, 24000],
+	8: [24001, 26000],
+	9: [26001, 28000],
+	10: [28001, 30000],
+};
+const executiveWageRanges = {
+	1: [25000, 27500],
+	2: [27501, 30000],
+	3: [30001, 35000],
+	4: [35001, 40000],
+	5: [40001, 45000],
+	6: [45001, 50000],
+	7: [50001, 55000],
+	8: [55001, 60000],
+	9: [60001, 65000],
+	10: [65001, 100000],
 };
 
 let cities = [];
@@ -164,9 +188,20 @@ const createCompany = async (gameID, city, database) => {
 	let executives = Math.floor(Math.round(totalEmployees / 10));
 	let employees = totalEmployees - executives;
 
-	let employeeWage = 25000;
-	let executiveWage = 100000;
-	let ceoWage = 150000;
+	let employeeWage = Math.floor(
+		Math.random() *
+			(employeeWageRanges[tier][0] - employeeWageRanges[tier][1] + 1) +
+			employeeWageRanges[tier][1]
+	);
+
+	let executiveWage = Math.floor(
+		Math.random() *
+			(executiveWageRanges[tier][0] - executiveWageRanges[tier][1] + 1) +
+			executiveWageRanges[tier][1]
+	);
+	//let employeeWage = 15000;
+	//let executiveWage = 100000;
+	let ceoWage = Math.floor(Math.round(1.5 * executiveWage));
 
 	let debt = Math.floor(Math.round(netWorth / 2));
 
