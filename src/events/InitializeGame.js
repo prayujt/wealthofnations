@@ -156,12 +156,37 @@ const createCompany = async (gameID, city, database) => {
 			netWorthRanges[tier][1]
 	);
 
-	let employees = Math.floor(
+	let totalEmployees = Math.floor(
 		Math.random() * (employeesRanges[tier][0] - employeesRanges[tier][1] + 1) +
 			employeesRanges[tier][1]
 	);
 
-	let debt = 0;
+	let executives = Math.floor(Math.round(totalEmployees / 10));
+	let employees = totalEmployees - executives;
+
+	let employeeWage = 25000;
+	let executiveWage = 100000;
+	let ceoWage = 150000;
+
+	let debt = Math.floor(Math.round(netWorth / 2));
+
+	let taxRate = 5;
+
+	let employeeWages = employees * employeeWage;
+	let executiveWages = executives * executiveWage;
+	let maintenanceFees = Math.floor(Math.round(netWorth / 10));
+	let interestPayments = Math.floor(Math.round(debt / 10));
+	let localTax = Math.floor(Math.round(netWorth / (100 / taxRate)));
+	let totalExpenses =
+		employeeWages +
+		executiveWages +
+		maintenanceFees +
+		interestPayments +
+		localTax;
+
+	let currentRevenue = Math.floor(Math.round(netWorth / 1.5));
+	let expectedGrowth = 3;
+	let volatility = 5;
 
 	refCompanies.update({
 		[name]: {
@@ -178,22 +203,30 @@ const createCompany = async (gameID, city, database) => {
 				},
 			},
 			expenses: {
-				employeeWages: 0,
-				executiveWages: 0,
-				maintenanceFees: 0,
-				interestPayments: 0,
-				localTax: 0,
+				employeeWage: employeeWage,
+				executiveWage: executiveWage,
+				ceoWage: ceoWage,
+				taxRate: taxRate,
+				employeeWages: employeeWages,
+				executiveWages: executiveWages,
+				maintenanceFees: maintenanceFees,
+				interestPayments: interestPayments,
+				localTax: localTax,
+				totalExpenses: totalExpenses,
 			},
 			revenue: {
-				expectedGrowth: 0,
-				volatilty: 0,
+				currentRevenue: currentRevenue,
+				expectedGrowth: expectedGrowth,
+				volatilty: volatility,
 			},
+			expectedProfit:
+				currentRevenue * (1 + expectedGrowth / 100) - totalExpenses,
 			secrets: {},
 			tier: tier,
 		},
 	});
 
-	return [name, netWorth, employees];
+	return [name, netWorth, totalEmployees];
 };
 
 const createConglomerate = async (gameID, uuid, username, name, database) => {
