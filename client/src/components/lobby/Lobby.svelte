@@ -54,7 +54,7 @@
 		}
 	};
 
-	const saveSettings = () => {
+	const saveSettings = async () => {
 		open = false;
 
 		refSettings.set({
@@ -113,9 +113,11 @@
 	};
 
 	const startGame = () => {
-		initializingGame = true;
-		refServer.set({
-			initializingGame: true,
+		saveSettings().then(() => {
+			initializingGame = true;
+			refServer.set({
+				initializingGame: true,
+			});
 		});
 	};
 
