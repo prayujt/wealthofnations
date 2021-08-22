@@ -2,7 +2,6 @@ let firebase = require('firebase/app');
 require('firebase/database');
 const { initializeGame } = require('./events/InitializeGame');
 const { backgroundAsync } = require('./events/BackgroundAsync');
-const { backgroundTimer } = require('./events/Timer');
 
 var firebaseConfig = {
 	apiKey: 'AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI',
@@ -41,7 +40,6 @@ const gameFunctions = async (key) => {
 		.child('initializingGame')
 		.on('value', (start) => {
 			if (start.val() == false) {
-				backgroundTimer(database, key);
 				backgroundAsync(database, key);
 			}
 		});

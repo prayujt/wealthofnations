@@ -255,7 +255,7 @@ const createCompany = async (gameID, city, database) => {
 			revenue: {
 				currentRevenue: currentRevenue,
 				expectedGrowth: expectedGrowth,
-				volatilty: volatility,
+				volatility: volatility,
 			},
 			expectedProfit: Math.floor(
 				Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
@@ -339,7 +339,7 @@ const createConglomerate = async (gameID, uuid, username, name, database) => {
 			revenue: {
 				currentRevenue: currentRevenue,
 				expectedGrowth: 0,
-				volatilty: 0,
+				volatility: 0,
 			},
 			expectedProfit: Math.floor(
 				Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
