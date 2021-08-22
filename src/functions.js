@@ -1,6 +1,8 @@
 let firebase = require('firebase/app');
 require('firebase/database');
 const { initializeGame } = require('./events/InitializeGame');
+const { backgroundAsync } = require('./events/BackgroundAsync');
+const { backgroundTimer } = require('./events/Timer');
 
 var firebaseConfig = {
 	apiKey: 'AIzaSyAV_lm-m49nT1uaXBzwBwZsXzsV16ZmdiI',
@@ -24,12 +26,23 @@ database.ref('lobbies').on('child_added', (snapshot) => {
 			if (start.val()) {
 				initializeGame(snapshot.ref.key, database).then(() => {
 					// new Game(snapshot.ref.key, database);
-					gameFunctions(snapshot.ref.key);
+					gameFunctions(snapshot.ref.key).then(() => {});
 				});
 			}
 		});
 });
 
-const gameFunctions = async () => {
+const gameFunctions = async (key) => {
 	// insert server-side function calls to events/ files
+
+	// run asynchronous tasks in game background
+	database
+		.ref('server/' + key)
+		.child('initializingGame')
+		.on('value', (start) => {
+			if (start.val() == false) {
+				backgroundTimer(database, key);
+				backgroundAsync(database, key);
+			}
+		});
 };

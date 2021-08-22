@@ -199,8 +199,7 @@ const createCompany = async (gameID, city, database) => {
 			(executiveWageRanges[tier][0] - executiveWageRanges[tier][1] + 1) +
 			executiveWageRanges[tier][1]
 	);
-	//let employeeWage = 15000;
-	//let executiveWage = 100000;
+
 	let ceoWage = Math.floor(Math.round(1.5 * executiveWage));
 
 	let debt = Math.floor(Math.round(netWorth / 2));
@@ -212,12 +211,15 @@ const createCompany = async (gameID, city, database) => {
 	let maintenanceFees = Math.floor(Math.round(netWorth / 10));
 	let interestPayments = Math.floor(Math.round(debt / 10));
 	let localTax = Math.floor(Math.round(netWorth / (100 / taxRate)));
-	let totalExpenses =
-		employeeWages +
-		executiveWages +
-		maintenanceFees +
-		interestPayments +
-		localTax;
+	let totalExpenses = Math.floor(
+		Math.round(
+			employeeWages +
+				executiveWages +
+				maintenanceFees +
+				interestPayments +
+				localTax
+		)
+	);
 
 	let currentRevenue = Math.floor(Math.round(netWorth / 1.5));
 	let expectedGrowth = 3;
@@ -231,6 +233,7 @@ const createCompany = async (gameID, city, database) => {
 			employees: employees,
 			debt: debt,
 			bankrupt: false,
+			reserves: 0,
 			holders: {
 				Bank: {
 					percent: 100,
@@ -254,8 +257,9 @@ const createCompany = async (gameID, city, database) => {
 				expectedGrowth: expectedGrowth,
 				volatilty: volatility,
 			},
-			expectedProfit:
-				currentRevenue * (1 + expectedGrowth / 100) - totalExpenses,
+			expectedProfit: Math.floor(
+				Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
+			),
 			secrets: {},
 			tier: tier,
 		},
@@ -267,19 +271,53 @@ const createCompany = async (gameID, city, database) => {
 const createConglomerate = async (gameID, uuid, username, name, database) => {
 	let refConglomerate = database
 		.ref('games/' + gameID)
-		.child('players/' + uuid)
-		.child('conglomerate');
+		.child('players/' + uuid);
 
 	let startingCity = cities[Math.floor(Math.random() * cities.length)];
+
+	let netWorth = netWorthRanges[1][0];
+
+	let totalEmployees = employeesRanges[1][0];
+	let executives = Math.floor(Math.round(totalEmployees / 10));
+	let employees = totalEmployees - executives;
+
+	let employeeWage = employeeWageRanges[1][0];
+	let executiveWage = executiveWageRanges[1][0];
+
+	let ceoWage = Math.floor(Math.round(1.5 * executiveWage));
+
+	let debt = Math.floor(Math.round(netWorth / 2));
+
+	let taxRate = 5;
+
+	let employeeWages = employees * employeeWage;
+	let executiveWages = executives * executiveWage;
+	let maintenanceFees = Math.floor(Math.round(netWorth / 10));
+	let interestPayments = Math.floor(Math.round(debt / 10));
+	let localTax = Math.floor(Math.round(netWorth / (100 / taxRate)));
+	let totalExpenses = Math.floor(
+		Math.round(
+			employeeWages +
+				executiveWages +
+				maintenanceFees +
+				interestPayments +
+				localTax
+		)
+	);
+
+	let currentRevenue = Math.floor(Math.round(netWorth / 1.5));
+	let expectedGrowth = 3;
+	let volatility = 5;
 
 	refConglomerate.update({
 		[name]: {
 			city: startingCity,
 			owner: uuid,
-			netWorth: netWorthRanges[1][0],
-			employees: employeesRanges[1][0],
-			debt: 0,
+			netWorth: netWorth,
+			employees: employees,
+			debt: debt,
 			bankrupt: false,
+			reserves: 0,
 			holders: {
 				[uuid]: {
 					percent: 100,
@@ -287,16 +325,25 @@ const createConglomerate = async (gameID, uuid, username, name, database) => {
 				},
 			},
 			expenses: {
-				employeeWages: 0,
-				executiveWages: 0,
-				maintenanceFees: 0,
-				interestPayments: 0,
-				localTax: 0,
+				employeeWage: employeeWage,
+				executiveWage: executiveWage,
+				ceoWage: ceoWage,
+				taxRate: taxRate,
+				employeeWages: employeeWages,
+				executiveWages: executiveWages,
+				maintenanceFees: maintenanceFees,
+				interestPayments: interestPayments,
+				localTax: localTax,
+				totalExpenses: totalExpenses,
 			},
 			revenue: {
+				currentRevenue: currentRevenue,
 				expectedGrowth: 0,
 				volatilty: 0,
 			},
+			expectedProfit: Math.floor(
+				Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
+			),
 			secrets: {},
 			tier: 1,
 		},

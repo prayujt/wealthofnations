@@ -52,17 +52,24 @@
                                 }
                             },
                             "expenses/": {
+                                "employeeWage": ,
+                                "executiveWage": ,
+                                "ceoWage": ,
+                                "taxRate": ,
                                 "employeeWages": ,
                                 "executiveWages": ,
                                 "maintenanceFees": ,
                                 "interestPayments": ,
                                 "localTax": ,
+                                "totalExpenses": ,
                             },
                             "revenue/": {
+                                "currentRevenue": ,
                                 "expectedGrowth": ,
                                 "volatilty": ,
                             },
-                            "secrets": {}
+                            "secrets": {},
+                            "tier": ,
 
                         }
 
@@ -92,17 +99,24 @@
                             }
                         },
                         "expenses/": {
+                            "employeeWage": ,
+                            "executiveWage": ,
+                            "ceoWage": ,
+                            "taxRate": ,
                             "employeeWages": ,
                             "executiveWages": ,
                             "maintenanceFees": ,
                             "interestPayments": ,
                             "localTax": ,
+                            "totalExpenses": ,
                         },
                         "revenue/": {
+                            "currentRevenue": ,
                             "expectedGrowth": ,
                             "volatilty": ,
                         },
-                        "secrets": {}
+                        "secrets": {},
+                        "tier": ,
                     }
                 },
                 "cities/": {
