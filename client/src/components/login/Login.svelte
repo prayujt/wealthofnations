@@ -9,13 +9,25 @@
 	onMount(() => {});
 </script>
 
-<Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
-	{#if !loggedIn}
-		<Button kind="ghost" on:click={loginWithGoogle}>Sign in with Google</Button>
-	{:else}
-		<FindLobby {database} {user} {logout} />
-	{/if}
-</Auth>
+<div class="login-container">
+	<Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
+		{#if !loggedIn}
+			<h1>Wealth of Nations</h1>
+			<Button kind="ghost" on:click={loginWithGoogle}
+				>Sign in with Google</Button
+			>
+		{:else}
+			<FindLobby {database} {user} {logout} />
+		{/if}
+	</Auth>
+</div>
 
 <style>
+	.login-container {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
 </style>
