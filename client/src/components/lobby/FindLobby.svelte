@@ -93,7 +93,7 @@
 	};
 </script>
 
-<div>
+<div class="username-container">
 	{#if !usernameSubmitted}
 		<TextInput
 			on:keydown={handleUsername}
@@ -102,7 +102,7 @@
 			labelText="Username"
 			placeholder="Enter your username"
 		/>
-		<Button on:click={setUsername}>Next</Button>
+		<Button size="small" on:click={setUsername}>Next</Button>
 	{:else if !inLobby}
 		<TextInput
 			on:keydown={handleID}
@@ -125,3 +125,8 @@
 		<Lobby bind:inLobby {gameID} {database} {isHost} {userID} {username} />
 	{/if}
 </div>
+
+<style>
+	.username-container {
+	}
+</style>

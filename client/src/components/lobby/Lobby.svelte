@@ -146,8 +146,8 @@
 </script>
 
 {#if !gameStarted}
-	<div id="lobby-container">
-		<div id="left">
+	<div class="lobby-container">
+		<div class="left">
 			<h1>Game ID: {gameID}</h1>
 			<br />
 			<h3>Players:</h3>
@@ -155,7 +155,7 @@
 				<li>{username}</li>
 			{/each}
 		</div>
-		<div id="right">
+		<div class="right-container">
 			<div id="chat">
 				<h1>Chat</h1>
 				{#if messages != null}
@@ -185,7 +185,7 @@
 				<Button on:click={sendMessage} kind="ghost">Send Message</Button>
 			</div>
 		</div>
-		<div id="bottom" style="position: absolute; bottom: 0px">
+		<div class="bottom-container" style="position: absolute; bottom: 0px">
 			<div id="bottom-left">
 				<Button kind="danger-tertiary" on:click={leaveLobby}>Leave Lobby</Button
 				>
