@@ -147,7 +147,7 @@
 
 {#if !gameStarted}
 	<div class="lobby-container">
-		<div class="left">
+		<div class="left-container">
 			<h1>Game ID: {gameID}</h1>
 			<br />
 			<h3>Players:</h3>
@@ -238,7 +238,7 @@
 <svelte:window on:beforeunload={leaveLobby} />
 
 <style>
-	#lobby-container {
+	.lobby-container {
 		height: 100vh;
 		width: 100vw;
 		display: grid;
@@ -248,17 +248,17 @@
 		grid-row-gap: 0px;
 	}
 
-	#left {
+	.left-container {
 		grid-area: 1 / 1 / 10 / 3;
 	}
 
-	#right {
+	.right-container {
 		grid-area: 1 / 3 / 10 / 5;
 		display: flex;
 		position: relative;
 	}
 
-	#bottom {
+	.bottom-container {
 		grid-area: 10 / 1 / 11 / 5;
 		display: flex;
 	}
