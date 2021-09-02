@@ -3,7 +3,7 @@
 	import { Button, TextInput } from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 
-	export let database;
+	export let socket;
 	export let user;
 	export let logout;
 
@@ -15,11 +15,7 @@
 	let isHost;
 	let userID = user.id;
 
-	let refLobbies;
-	let refPlayers;
-	let refMessages;
-
-	onMount(() => {
+	onMount(async () => {
 		document.getElementsByName('usernameBox')[0].focus();
 	});
 
@@ -40,6 +36,8 @@
 	const setUsername = () => {
 		if (username != '') {
 			usernameSubmitted = true;
+			socket.uuid = userID;
+			socket.username = username;
 		} else {
 			alert('Username cannot be empty!');
 			document.getElementsByName('usernameBox')[0].focus();
@@ -47,50 +45,34 @@
 	};
 
 	const joinGame = () => {
-		refLobbies = database.ref('lobbies/' + inputGameID);
-		refPlayers = refLobbies.child('players');
-		refMessages = refLobbies.child('messages');
-		refLobbies.get().then((snapshot) => {
-			if (snapshot.exists() && inputGameID != '') {
-				refPlayers.set({
-					...snapshot.val().players,
-					[userID]: username,
-				});
-				refMessages.push({
-					author: 'System',
-					message: username + ' has joined the lobby.',
-				});
-
+		socket.emit('joinGame', inputGameID, (response) => {
+			if (response == false) {
+				alert('Invalid Game Id!');
+				document.getElementsByName('idBox')[0].focus();
+			} else {
 				gameID = inputGameID;
 				isHost = false;
 				inLobby = true;
-			} else {
-				alert('Invalid Game Id!');
-				document.getElementsByName('idBox')[0].focus();
 			}
 		});
 	};
 
 	const createGame = () => {
 		gameID = generateCode();
-		database.ref('lobbies/' + gameID).set({
-			gameStarted: false,
-			host: userID,
-			players: {
-				[userID]: username,
-			},
-			settings: {
-				type: 'timed',
-				numCities: 10,
-			},
+		socket.emit('createGame', gameID, (response) => {
+			if (response == true) {
+				isHost = true;
+				inLobby = true;
+			}
 		});
-		isHost = true;
-		inLobby = true;
 	};
 
 	const generateCode = () => {
 		return Math.floor(100000 + Math.random() * 900000);
 	};
+
+	$: console.log(socket.uuid);
+	$: console.log(socket.username);
 </script>
 
 <div class="username-container">
@@ -122,7 +104,7 @@
 		>
 		<br />
 	{:else}
-		<Lobby bind:inLobby {gameID} {database} {isHost} {userID} {username} />
+		<Lobby bind:inLobby {gameID} {socket} {isHost} {userID} {username} />
 	{/if}
 </div>
 

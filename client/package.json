@@ -5,7 +5,7 @@
 	"scripts": {
 		"build": "rollup -c",
 		"dev": "rollup -c -w",
-		"start": "sirv public --no-clear --port 2000 --host 0.0.0.0"
+		"start": "sirv public --no-clear --port 2000 --host localhost"
 	},
 	"devDependencies": {
 		"@rollup/plugin-commonjs": "^17.0.0",
@@ -19,9 +19,10 @@
 		"svelte": "^3.0.0"
 	},
 	"dependencies": {
-		"firebase": "^8.7.0",
+		"firebase": "^8.10.0",
 		"phaser": "^3.55.2",
 		"sirv-cli": "^1.0.0",
+		"socket.io-client": "^4.2.0",
 		"tslib": "^2.3.0"
 	}
 }

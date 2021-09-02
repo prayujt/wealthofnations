@@ -4,7 +4,7 @@
 	import { Button, TextInput } from 'carbon-components-svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 
-	export let database;
+	export let socket;
 
 	onMount(() => {});
 </script>
@@ -17,7 +17,7 @@
 				>Sign in with Google</Button
 			>
 		{:else}
-			<FindLobby {database} {user} {logout} />
+			<FindLobby {socket} {user} {logout} />
 		{/if}
 	</Auth>
 </div>

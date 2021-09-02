@@ -1,5 +1,4 @@
 import App from './App.svelte';
-
 import firebase from 'firebase/app';
 import 'firebase/database';
 
@@ -15,13 +14,9 @@ var firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const database = firebase.database();
 
 const app = new App({
 	target: document.body,
-	props: {
-		database: database,
-	},
 });
 
 export default app;

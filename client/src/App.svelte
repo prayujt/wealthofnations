@@ -1,10 +1,11 @@
 <script>
 	import Login from './components/login/Login.svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
-	export let database;
+	import { io } from 'socket.io-client';
 
 	let users = {};
 	let id = '';
+	let socket = io('10.20.0.236:8000');
 
 	const preventLoad = (e) => {
 		e.preventDefault();
@@ -20,7 +21,7 @@
 </svelte:head>
 
 <main on:contextmenu={preventLoad}>
-	<Login {database} />
+	<Login {socket} />
 </main>
 
 <style>

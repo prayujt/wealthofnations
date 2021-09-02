@@ -1,7 +1,25 @@
-const path = require('path');
-const app = require('express')();
-const http = require('http').Server(app);
-const port = 8000;
+let app = require('express')();
+let http = require('http').Server(app);
+let db = require('rethinkdb');
+
+const { connect } = require('./global');
+const { gameFunctions } = require('./functions/lobbyFunctions');
+
+const io = require('socket.io')(http, {
+	cors: {
+		origin: 'http://localhost:2000',
+		methods: ['GET', 'POST'],
+	},
+});
+
+let port = 8000;
+
+connect((connection) => {
+	io.on('connection', (socket) => {
+		console.log('user connected');
+		gameFunctions(connection, socket);
+	});
+});
 
 app.get('/', (req, res) => {
 	res.send('Hello World!');
