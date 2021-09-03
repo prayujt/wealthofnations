@@ -30,23 +30,11 @@ exports.insertCallback = async (name, connection, data, callback) => {
 	db.table(name).insert(data).run(connection, callback);
 };
 
-exports.exists = async (table, key) => {
-	return db.table(table).getAll(key).count().eq(1);
+exports.dropTable = async (name, connection) => {
+	db.tableDrop(name).run(connection, () => {});
+	return true;
 };
 
-exports.update = async (name, data) => {
-	db.table(name)
-		.insert({
-			username: 'prayuj',
-			netWorth: 6000000,
-			debt: 0,
-			balance: 5000000,
-			influence: 100,
-			bankrupt: false,
-			companies: ['BoA'],
-		})
-		.run(connection, (err, result) => {
-			if (err) throw err;
-			console.log(JSON.stringify(result, null, 2));
-		});
+exports.exists = async (table, key) => {
+	return db.table(table).getAll(key).count().eq(1);
 };

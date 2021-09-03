@@ -44,12 +44,13 @@
 		}
 	};
 
-	const joinGame = () => {
-		socket.emit('joinGame', inputGameID, (response) => {
-			if (response == false) {
+	const joinGame = async () => {
+		socket.emit('joinGame', inputGameID, userID, username, async (response) => {
+			if (response.status == false) {
 				alert('Invalid Game Id!');
 				document.getElementsByName('idBox')[0].focus();
 			} else {
+				socket.game = inputGameID;
 				gameID = inputGameID;
 				isHost = false;
 				inLobby = true;
@@ -57,10 +58,10 @@
 		});
 	};
 
-	const createGame = () => {
+	const createGame = async () => {
 		gameID = generateCode();
-		socket.emit('createGame', gameID, (response) => {
-			if (response == true) {
+		socket.emit('createGame', gameID, userID, username, async (response) => {
+			if (response.status == true) {
 				isHost = true;
 				inLobby = true;
 			}

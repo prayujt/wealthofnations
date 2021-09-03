@@ -2,7 +2,7 @@ let app = require('express')();
 let http = require('http').Server(app);
 let db = require('rethinkdb');
 
-const { connect } = require('./global');
+const { connect, dropTable, createTable } = require('./global');
 const { gameFunctions } = require('./functions/lobbyFunctions');
 
 const io = require('socket.io')(http, {
@@ -14,7 +14,9 @@ const io = require('socket.io')(http, {
 
 let port = 8000;
 
-connect((connection) => {
+connect(async (connection) => {
+	createTable('lobbies', 'gameID', connection, () => {});
+	createTable('lobbyPlayers', 'uuid', connection, () => {});
 	io.on('connection', (socket) => {
 		console.log('user connected');
 		gameFunctions(connection, socket);

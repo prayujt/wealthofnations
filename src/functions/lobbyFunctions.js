@@ -1,21 +1,29 @@
-const { connect, createTable, insert, exists } = require('../global');
+const {
+	connect,
+	createTable,
+	dropTable,
+	insert,
+	exists,
+} = require('../global');
 
 exports.gameFunctions = async (connection, socket) => {
 	// insert server-side function calls to events/ files
-	createTable('lobbies', 'gameID', connection, () => {});
-	createTable('lobbyPlayers', 'uuid', connection, () => {});
 
-	socket.on('joinGame', async (gameID) => {
+	socket.on('joinGame', async (gameID, uuid, username, response) => {
 		let gameExists = await exists('lobbies', gameID);
+		let status = true;
 		if (gameExists && gameID != '') {
 			insert('lobbyPlayers', connection, {
-				[socket.uuid]: socket.username,
+				gameID: gameID,
+				uuid: uuid,
+				username: username,
 			});
-			socket.game = gameID;
-			return true;
 		} else {
-			return false;
+			status = false;
 		}
+		response({
+			status: status,
+		});
 		/*refMessages.push({
             author: 'System',
             message: username + ' has joined the lobby.',
@@ -23,18 +31,27 @@ exports.gameFunctions = async (connection, socket) => {
         */
 	});
 
-	socket.on('createGame', async (gameID) => {
+	socket.on('createGame', async (gameID, uuid, username, response) => {
 		insert('lobbies', connection, {
 			gameID: gameID,
 			gameStarted: false,
-			host: socket.uuid,
-			players: {
-				[socket.uuid]: socket.username,
+			host: uuid,
+			/*players: {
+				[uuid]: username,
 			},
+			*/
 			settings: {
 				type: 'timed',
 				numCities: 10,
 			},
+		});
+		insert('lobbyPlayers', connection, {
+			gameID: gameID,
+			uuid: uuid,
+			username: username,
+		});
+		response({
+			status: true,
 		});
 	});
 
