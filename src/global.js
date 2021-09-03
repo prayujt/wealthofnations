@@ -8,13 +8,11 @@ exports.connect = async (callback) => {
 	);
 };
 
-exports.createTable = async (name, primaryKey, connection, callback) => {
-	db.tableCreate(name, { primaryKey: primaryKey }).run(connection, () => {
-		callback();
-	});
+exports.createTable = async (name, primaryKey, connection) => {
+	db.tableCreate(name, { primaryKey: primaryKey }).run(connection, () => {});
 };
 
-exports.createTableBasic = async (name, connection, callback) => {
+exports.createTableCallback = async (name, connection, callback) => {
 	db.tableCreate(name).run(connection, () => {
 		callback();
 	});
@@ -23,7 +21,9 @@ exports.createTableBasic = async (name, connection, callback) => {
 exports.insert = async (name, connection, data) => {
 	db.table(name)
 		.insert(data)
-		.run(connection, () => {});
+		.run(connection, () => {
+			return true;
+		});
 };
 
 exports.insertCallback = async (name, connection, data, callback) => {
@@ -35,6 +35,8 @@ exports.dropTable = async (name, connection) => {
 	return true;
 };
 
-exports.exists = async (table, key) => {
-	return db.table(table).getAll(key).count().eq(1);
+exports.exists = async (table, key, connection) => {
+	let exists = await db.table(table).get(key).run(connection);
+	if (exists) return true;
+	else return false;
 };

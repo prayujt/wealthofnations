@@ -45,22 +45,30 @@
 	};
 
 	const joinGame = async () => {
-		socket.emit('joinGame', inputGameID, userID, username, async (response) => {
-			if (response.status == false) {
-				alert('Invalid Game Id!');
-				document.getElementsByName('idBox')[0].focus();
-			} else {
-				socket.game = inputGameID;
-				gameID = inputGameID;
-				isHost = false;
-				inLobby = true;
+		socket.emit(
+			'joinGame',
+			parseInt(inputGameID),
+			userID,
+			username,
+			async (response) => {
+				await response;
+				if (response.status == false) {
+					alert('Invalid Game Id!');
+					document.getElementsByName('idBox')[0].focus();
+				} else {
+					socket.game = inputGameID;
+					gameID = inputGameID;
+					isHost = false;
+					inLobby = true;
+				}
 			}
-		});
+		);
 	};
 
 	const createGame = async () => {
 		gameID = generateCode();
 		socket.emit('createGame', gameID, userID, username, async (response) => {
+			await response;
 			if (response.status == true) {
 				isHost = true;
 				inLobby = true;
@@ -71,9 +79,6 @@
 	const generateCode = () => {
 		return Math.floor(100000 + Math.random() * 900000);
 	};
-
-	$: console.log(socket.uuid);
-	$: console.log(socket.username);
 </script>
 
 <div class="username-container">

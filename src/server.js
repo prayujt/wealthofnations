@@ -15,8 +15,9 @@ const io = require('socket.io')(http, {
 let port = 8000;
 
 connect(async (connection) => {
-	createTable('lobbies', 'gameID', connection, () => {});
-	createTable('lobbyPlayers', 'uuid', connection, () => {});
+	createTable('lobbies', 'gameID', connection);
+	createTable('lobbyPlayers', 'uuid', connection);
+	createTable('lobbyMessages', 'gameID', connection);
 	io.on('connection', (socket) => {
 		console.log('user connected');
 		gameFunctions(connection, socket);
