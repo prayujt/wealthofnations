@@ -17,18 +17,11 @@
 	import Game from '../game/Game.svelte';
 
 	export let gameID;
-	export let database;
+	export let socket;
 	export let isHost;
 	export let userID;
 	export let inLobby;
 	export let username;
-
-	//references
-	let refLobby = database.ref('lobbies/' + gameID);
-	let refServer = database.ref('server/' + gameID);
-	let refPlayers = refLobby.child('players');
-	let refSettings = refLobby.child('settings');
-	let refMessages = refLobby.child('messages');
 
 	let message;
 	let messages = {};
@@ -48,16 +41,14 @@
 		if (username == '') {
 			alert('Username cannot be empty!');
 		} else {
-			refPlayers.update({
-				[userID]: username,
-			});
+			socket.emit('updateLobbyUsername', userID, username);
 		}
 	};
 
 	const saveSettings = async () => {
 		open = false;
 
-		refSettings.set({
+		socket.emit('saveLobbySettings', {
 			type: gameType,
 			numCities: numCities,
 		});
@@ -65,7 +56,8 @@
 
 	const sendMessage = () => {
 		if (message != '') {
-			refMessages.push({
+			socket.emit('addLobbyMessage', {
+				gameID: gameID,
 				author: username,
 				message: message,
 			});
@@ -136,6 +128,7 @@
 		}
 	});
 
+	//socket.on('playersChange')
 	refPlayers.on('value', (snapshot) => {
 		players = snapshot.val();
 	});

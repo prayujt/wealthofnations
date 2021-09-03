@@ -30,6 +30,14 @@ exports.insertCallback = async (name, connection, data, callback) => {
 	db.table(name).insert(data).run(connection, callback);
 };
 
+exports.update = async (name, key, connection, data) => {
+	db.table(name).get(key).update(data).run(connection);
+};
+
+exports.replace = async (name, key, connection, data) => {
+	db.table(name).get(key).replace(data).run(connection);
+};
+
 exports.dropTable = async (name, connection) => {
 	db.tableDrop(name).run(connection, () => {});
 	return true;
