@@ -9,7 +9,7 @@ exports.connect = async (callback) => {
 };
 
 exports.createTable = async (name, primaryKey, connection) => {
-	db.tableCreate(name, { primaryKey: primaryKey }).run(connection, () => {});
+	await db.tableCreate(name, { primaryKey: primaryKey }).run(connection);
 };
 
 exports.createTableCallback = async (name, connection, callback) => {
@@ -18,29 +18,37 @@ exports.createTableCallback = async (name, connection, callback) => {
 	});
 };
 
-exports.insert = async (name, connection, data) => {
-	db.table(name)
-		.insert(data)
-		.run(connection, () => {
-			return true;
-		});
+exports.dropTable = async (table, connection) => {
+	await db.tableDrop(table).run(connection);
 };
 
-exports.insertCallback = async (name, connection, data, callback) => {
-	db.table(name).insert(data).run(connection, callback);
+exports.get = async (table, criteria, connection) => {
+	let data = await db.table(table).filter(criteria).run(connection);
+	return data;
 };
 
-exports.update = async (name, key, connection, data) => {
-	db.table(name).get(key).update(data).run(connection);
+exports.getIndex = async (table, index, value, connection) => {
+	let data = await db
+		.table(table)
+		.getAll(value, { index: index })
+		.run(connection);
 };
 
-exports.replace = async (name, key, connection, data) => {
-	db.table(name).get(key).replace(data).run(connection);
+exports.insert = async (table, connection, data) => {
+	await db.table(table).insert(data).run(connection);
 };
 
-exports.dropTable = async (name, connection) => {
-	db.tableDrop(name).run(connection, () => {});
-	return true;
+exports.insertCallback = async (table, connection, data, callback) => {
+	db.table(table).insert(data).run(connection, callback);
+};
+
+exports.update = async (table, key, connection, data) => {
+	await db.table(table).get(key).update(data).run(connection);
+};
+
+exports.replace = async (table, key, connection, data) => {
+	await db.table(table).get(key).replace(data).run(connection);
+	console.log('finished replacement');
 };
 
 exports.exists = async (table, key, connection) => {

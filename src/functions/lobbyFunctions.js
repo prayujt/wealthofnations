@@ -2,6 +2,7 @@ const {
 	connect,
 	createTable,
 	dropTable,
+	get,
 	insert,
 	exists,
 	update,
@@ -37,6 +38,11 @@ exports.gameFunctions = async (connection, socket) => {
 		} else {
 			status = false;
 		}
+
+		let values = await get('lobbyPlayers', { gameID: gameID_ }, connection);
+		values.toArray().then((result) => {
+			console.log(gameID_, result);
+		});
 		response({
 			status: status,
 		});
@@ -64,11 +70,7 @@ exports.gameFunctions = async (connection, socket) => {
 		username_ = username;
 		uuid_ = uuid;
 		//db.table('lobbyPlayers').filter({gameID: gameID_})
-		let values = await db
-			.table('lobbyPlayers')
-			.getAll('asd2', { index: 'username' })
-			.run(connection);
-		//let values = await db.table('lobbyPlayers').getAll('e2orlvNZfYWPpHP2RPwuvpYAfF12', {index: 'uuid'}).run(connection);
+		let values = await get('lobbyPlayers', { gameID: gameID_ }, connection);
 		values.toArray().then((result) => {
 			console.log(gameID_, result);
 		});

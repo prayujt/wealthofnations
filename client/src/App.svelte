@@ -5,7 +5,7 @@
 
 	let users = {};
 	let id = '';
-	let socket = io('10.20.0.236:8000');
+	let socket = io('localhost:8000');
 
 	const preventLoad = (e) => {
 		e.preventDefault();
