@@ -1,58 +1,43 @@
-let db = require('rethinkdb');
+const { MongoClient } = require('mongodb');
 
-exports.connect = async (callback) => {
-	db.connect({ host: 'prayujt.com', db: 'wealthofnations' }).then(
-		(connection) => {
-			callback(connection);
-		}
-	);
+const uri = 'mongodb://prayujt.com:27017';
+
+exports.connect = async (database, callback) => {
+	let client = new MongoClient(uri);
+	client.connect().then(callback(client.db(database)));
 };
 
-exports.createTable = async (name, primaryKey, connection) => {
-	await db.tableCreate(name, { primaryKey: primaryKey }).run(connection);
+// exports.createCollection = async (name, primaryKey, client) => {
+// 	await client.collection(name);
+// };
+
+exports.dropCollection = async (collection, client) => {
+	await client.collection(collection).drop();
 };
 
-exports.createTableCallback = async (name, connection, callback) => {
-	db.tableCreate(name).run(connection, () => {
-		callback();
-	});
-};
-
-exports.dropTable = async (table, connection) => {
-	await db.tableDrop(table).run(connection);
-};
-
-exports.get = async (table, criteria, connection) => {
-	let data = await db.table(table).filter(criteria).run(connection);
+exports.get = async (collection, query, client) => {
+	let data = await client.collection(collection).findOne(query);
 	return data;
 };
 
-exports.getIndex = async (table, index, value, connection) => {
-	let data = await db
-		.table(table)
-		.getAll(value, { index: index })
-		.run(connection);
+exports.insert = async (collection, data, client) => {
+	await client.collection(collection).insertOne(data);
 };
 
-exports.insert = async (table, connection, data) => {
-	await db.table(table).insert(data).run(connection);
+exports.insertMany = async (collection, data, client) => {
+	await client.collection(collection).insertMany(data);
 };
 
-exports.insertCallback = async (table, connection, data, callback) => {
-	db.table(table).insert(data).run(connection, callback);
+exports.update = async (collection, filter, data, client) => {
+	await client.collection(collection).updateOne(filter, data);
 };
 
-exports.update = async (table, key, connection, data) => {
-	await db.table(table).get(key).update(data).run(connection);
+exports.replace = async (collection, query, data, client) => {
+	await client.collection(collection).replaceOne(query, data);
 };
 
-exports.replace = async (table, key, connection, data) => {
-	await db.table(table).get(key).replace(data).run(connection);
-	console.log('finished replacement');
-};
-
-exports.exists = async (table, key, connection) => {
-	let exists = await db.table(table).get(key).run(connection);
-	if (exists) return true;
+exports.exists = async (collection, query, client) => {
+	let exists = await client.collection(collection).findOne(query);
+	if (exists != null) return true;
 	else return false;
 };

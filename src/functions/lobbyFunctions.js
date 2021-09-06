@@ -1,5 +1,4 @@
 const {
-	connect,
 	createTable,
 	dropTable,
 	get,
@@ -9,28 +8,43 @@ const {
 	replace,
 } = require('../global');
 
-let db = require('rethinkdb');
-
-exports.gameFunctions = async (connection, socket) => {
+exports.gameFunctions = async (client, socket) => {
 	// insert server-side function calls to events/ files
 	let gameID_ = 0;
 	let username_ = '';
 	let uuid_ = '';
 
+	// let watch = client.collection('lobbies').watch();
+	// watch.on("change", (next) => {
+	// 	console.log(next);
+	// });
+
 	socket.on('joinGame', async (gameID, uuid, username, response) => {
-		let gameExists = await exists('lobbies', gameID, connection);
+		let gameExists = await exists('lobbies', { gameID: gameID }, client);
 		let status = true;
+		let player = {
+			gameID: gameID,
+			uuid: uuid,
+			username: username,
+		};
+
 		if (gameExists && gameID != '') {
-			await replace('lobbyPlayers', uuid, connection, {
-				gameID: gameID,
-				uuid: uuid,
-				username: username,
-			});
-			await insert('lobbyMessages', connection, {
-				gameID: gameID,
-				author: 'System',
-				message: username + ' has joined the lobby.',
-			});
+			let playerExists = await exists('lobbyPlayers', { uuid: uuid }, client);
+			if (playerExists) {
+				await replace('lobbyPlayers', { uuid: uuid }, player, client);
+			} else {
+				await insert('lobbyPlayers', player, client);
+			}
+			await insert(
+				'lobbyMessages',
+				{
+					gameID: gameID,
+					author: 'System',
+					message: username + ' has joined the lobby.',
+				},
+				client
+			);
+
 			socket.join(gameID);
 			gameID_ = gameID;
 			username_ = username;
@@ -39,45 +53,44 @@ exports.gameFunctions = async (connection, socket) => {
 			status = false;
 		}
 
-		let values = await get('lobbyPlayers', { gameID: gameID_ }, connection);
-		values.toArray().then((result) => {
-			console.log(gameID_, result);
-		});
 		response({
 			status: status,
 		});
 	});
 
 	socket.on('createGame', async (gameID, uuid, username, response) => {
-		await insert('lobbies', connection, {
-			gameID: gameID,
-			gameStarted: false,
-			host: uuid,
-			settings: {
-				type: 'timed',
-				numCities: 10,
+		await insert(
+			'lobbies',
+			{
+				gameID: gameID,
+				gameStarted: false,
+				host: uuid,
+				settings: {
+					type: 'timed',
+					numCities: 10,
+				},
 			},
-		});
-		await replace('lobbyPlayers', uuid, connection, {
+			client
+		);
+
+		let player = {
 			gameID: gameID,
 			uuid: uuid,
 			username: username,
-		});
+		};
+
+		let playerExists = await exists('lobbyPlayers', { uuid: uuid }, client);
+		if (playerExists) {
+			await replace('lobbyPlayers', { uuid: uuid }, player, client);
+		} else {
+			await insert('lobbyPlayers', player, client);
+		}
 
 		socket.join(gameID);
 
 		gameID_ = gameID;
 		username_ = username;
 		uuid_ = uuid;
-		//db.table('lobbyPlayers').filter({gameID: gameID_})
-		let values = await get('lobbyPlayers', { gameID: gameID_ }, connection);
-		values.toArray().then((result) => {
-			console.log(gameID_, result);
-		});
-		/*db.table('lobbyPlayers').filter({gameID: gameID_}).changes().run(connection, (err, cursor) => {
-            console.log('changed', gameID_);
-            cursor.each(console.log);
-        }); */
 
 		response({
 			status: true,

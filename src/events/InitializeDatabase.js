@@ -1,14 +1,19 @@
-const { connect, dropTable, createTable } = require('../global');
+const { dropCollection } = require('../global');
 
-exports.initializeDatabase = async (connection) => {
+exports.initializeDatabase = async (client) => {
 	try {
-		await dropTable('lobbies', connection);
-		await dropTable('lobbyPlayers', connection);
-		await dropTable('lobbyMessages', connection);
+		await dropCollection('lobbies', client);
 	} catch (err) {
-		console.log('Table not found');
+		console.log('Lobbies collection not found');
 	}
-	await createTable('lobbies', 'gameID', connection);
-	await createTable('lobbyPlayers', 'uuid', connection);
-	await createTable('lobbyMessages', 'gameID', connection);
+	try {
+		await dropCollection('lobbyPlayers', client);
+	} catch (err) {
+		console.log('Lobby players collection not found');
+	}
+	try {
+		await dropCollection('lobbyMessages', client);
+	} catch (err) {
+		console.log('Lobby messages collection not found');
+	}
 };
