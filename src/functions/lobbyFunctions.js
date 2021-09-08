@@ -14,11 +14,6 @@ exports.gameFunctions = async (client, socket) => {
 	let username_ = '';
 	let uuid_ = '';
 
-	// let watch = client.collection('lobbies').watch();
-	// watch.on("change", (next) => {
-	// 	console.log(next);
-	// });
-
 	socket.on('joinGame', async (gameID, uuid, username, response) => {
 		let gameExists = await exists('lobbies', { gameID: gameID }, client);
 		let status = true;
@@ -26,6 +21,11 @@ exports.gameFunctions = async (client, socket) => {
 			gameID: gameID,
 			uuid: uuid,
 			username: username,
+		};
+		let message = {
+			gameID: gameID,
+			author: 'System',
+			message: username + ' has joined the lobby.',
 		};
 
 		if (gameExists && gameID != '') {
@@ -35,15 +35,7 @@ exports.gameFunctions = async (client, socket) => {
 			} else {
 				await insert('lobbyPlayers', player, client);
 			}
-			await insert(
-				'lobbyMessages',
-				{
-					gameID: gameID,
-					author: 'System',
-					message: username + ' has joined the lobby.',
-				},
-				client
-			);
+			await insert('lobbyMessages', message, client);
 
 			socket.join(gameID);
 			gameID_ = gameID;
@@ -85,6 +77,11 @@ exports.gameFunctions = async (client, socket) => {
 		} else {
 			await insert('lobbyPlayers', player, client);
 		}
+
+		// let watch = client.collection('lobbies').watch();
+		// watch.on("change", (next) => {
+		// 	console.log(next);
+		// });
 
 		socket.join(gameID);
 

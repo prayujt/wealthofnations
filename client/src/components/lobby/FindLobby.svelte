@@ -69,6 +69,7 @@
 		gameID = generateCode();
 		socket.emit('createGame', gameID, userID, username, async (response) => {
 			await response;
+			console.log('response', response);
 			if (response.status == true) {
 				isHost = true;
 				inLobby = true;
