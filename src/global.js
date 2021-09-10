@@ -1,6 +1,6 @@
 const { MongoClient } = require('mongodb');
 
-const uri = 'mongodb://prayujt.com:27017';
+const uri = 'mongodb://admin:chingchong123@prayujt.com:27017';
 
 exports.connect = async (database, callback) => {
 	let client = new MongoClient(uri);
