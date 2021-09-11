@@ -6,6 +6,8 @@ const {
 	exists,
 	update,
 	replace,
+	watch,
+	match,
 } = require('../global');
 
 exports.gameFunctions = async (client, socket) => {
@@ -78,11 +80,6 @@ exports.gameFunctions = async (client, socket) => {
 			await insert('lobbyPlayers', player, client);
 		}
 
-		// let watch = client.collection('lobbies').watch();
-		// watch.on("change", (next) => {
-		// 	console.log(next);
-		// });
-
 		socket.join(gameID);
 
 		gameID_ = gameID;
@@ -102,10 +99,21 @@ exports.gameFunctions = async (client, socket) => {
 		await update('lobbies', 'settings', settings, connection);
 	});
 
-	socket.on('addLobbyMessage', async (messageData) => {
+	socket.on('clientSendLobbyMessage', async (messageData) => {
 		await insert('lobbyMessages', connection, messageData);
 	});
 
+	watch(
+		'lobbyPlayers',
+		(value) => {
+			console.log(value);
+		},
+		client
+	);
+	// let thing = next.documentKey._id;
+	// console.log(typeof(thing));
+	// let thing2 = thing.substring(thing.indexOf('"'));
+	// console.log(thing2);
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
 	});

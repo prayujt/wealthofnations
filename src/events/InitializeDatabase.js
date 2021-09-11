@@ -16,4 +16,9 @@ exports.initializeDatabase = async (client) => {
 	} catch (err) {
 		console.log('Lobby messages collection not found');
 	}
+	try {
+		await dropCollection('uniqueKeys', client);
+	} catch (err) {
+		console.log('Unique IDs collection not found');
+	}
 };

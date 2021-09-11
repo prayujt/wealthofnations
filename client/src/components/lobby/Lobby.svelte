@@ -56,7 +56,7 @@
 
 	const sendMessage = () => {
 		if (message != '') {
-			socket.emit('addLobbyMessage', {
+			socket.emit('clientSendLobbyMessage', {
 				gameID: gameID,
 				author: username,
 				message: message,
@@ -128,10 +128,13 @@
 		}
 	});
 
-	//socket.on('playersChange')
-	refPlayers.on('value', (snapshot) => {
-		players = snapshot.val();
+	socket.on('lobbyPlayersChange', (players_) => {
+		players = players_;
 	});
+
+	// refPlayers.on('value', (snapshot) => {
+	// 		players = snapshot.val();
+	// 	});
 
 	refMessages.on('value', (snapshot) => {
 		messages = snapshot.val();
