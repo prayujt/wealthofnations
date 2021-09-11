@@ -1,4 +1,4 @@
-const { dropCollection } = require('../global');
+const { createCollection, dropCollection } = require('../global');
 
 exports.initializeDatabase = async (client) => {
 	try {
@@ -16,9 +16,7 @@ exports.initializeDatabase = async (client) => {
 	} catch (err) {
 		console.log('Lobby messages collection not found');
 	}
-	try {
-		await dropCollection('uniqueKeys', client);
-	} catch (err) {
-		console.log('Unique IDs collection not found');
-	}
+	await createCollection('lobbies', client);
+	await createCollection('lobbyPlayers', client);
+	await createCollection('lobbyMessages', client);
 };

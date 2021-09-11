@@ -8,10 +8,9 @@ const {
 	replace,
 	watch,
 	match,
-} = require('../global');
+} = require('../../global');
 
-exports.gameFunctions = async (client, socket) => {
-	// insert server-side function calls to events/ files
+exports.clientLobbyFunctions = async (client, socket) => {
 	let gameID_ = 0;
 	let username_ = '';
 	let uuid_ = '';
@@ -103,13 +102,6 @@ exports.gameFunctions = async (client, socket) => {
 		await insert('lobbyMessages', connection, messageData);
 	});
 
-	watch(
-		'lobbyPlayers',
-		(value) => {
-			console.log(value);
-		},
-		client
-	);
 	// let thing = next.documentKey._id;
 	// console.log(typeof(thing));
 	// let thing2 = thing.substring(thing.indexOf('"'));

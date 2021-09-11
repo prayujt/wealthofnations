@@ -7,7 +7,12 @@ let uniqueKeys = [];
 
 exports.connect = async (database, callback) => {
 	let client = new MongoClient(uri);
-	client.connect().then(callback(client.db(database)));
+	await client.connect();
+	callback(client.db(database));
+};
+
+exports.createCollection = async (collection, client) => {
+	await client.createCollection(collection);
 };
 
 exports.dropCollection = async (collection, client) => {
@@ -37,11 +42,15 @@ exports.replace = async (collection, query, data, client) => {
 
 exports.watch = async (collection, callback, client) => {
 	let watcher = client.collection(collection).watch();
+
 	watcher.on('change', async (value) => {
-		let matched = this.match(value, client);
-		if (!matched) {
-			callback(value);
-		}
+		callback(value);
+		// console.log('hello')
+		// let matched = this.match(value, client);
+		// if (!matched) {
+		// callback(value);
+		// }
+		// console.log(value);
 	});
 };
 

@@ -3,7 +3,8 @@ let http = require('http').Server(app);
 const { MongoClient } = require('mongodb');
 
 const { connect } = require('./global');
-const { gameFunctions } = require('./functions/lobbyFunctions');
+const { clientLobbyFunctions } = require('./functions/client/lobbyFunctions');
+const { serverLobbyFunctions } = require('./functions/server/lobbyFunctions');
 const { initializeDatabase } = require('./events/InitializeDatabase');
 
 const io = require('socket.io')(http, {
@@ -16,10 +17,11 @@ const io = require('socket.io')(http, {
 let port = 8000;
 
 connect('wealthofnations', async (client) => {
-	initializeDatabase(client);
+	await initializeDatabase(client);
+	await serverLobbyFunctions(client, io);
 	io.on('connection', (socket) => {
 		console.log('user connected');
-		gameFunctions(client, socket);
+		clientLobbyFunctions(client, socket);
 	});
 });
 
