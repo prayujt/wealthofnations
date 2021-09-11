@@ -15,6 +15,7 @@ exports.serverLobbyFunctions = async (client, io) => {
 		'lobbyPlayers',
 		(value) => {
 			console.log(value.fullDocument);
+			io.to();
 			// console.log(value);
 		},
 		client
