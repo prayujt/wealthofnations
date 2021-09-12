@@ -57,7 +57,7 @@
 					document.getElementsByName('idBox')[0].focus();
 				} else {
 					socket.game = inputGameID;
-					gameID = inputGameID;
+					gameID = parseInt(inputGameID);
 					isHost = false;
 					inLobby = true;
 				}
@@ -69,7 +69,6 @@
 		gameID = generateCode();
 		socket.emit('createGame', gameID, userID, username, async (response) => {
 			await response;
-			console.log('response', response);
 			if (response.status == true) {
 				isHost = true;
 				inLobby = true;

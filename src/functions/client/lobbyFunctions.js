@@ -1,14 +1,20 @@
 const {
-	createTable,
-	dropTable,
+	createCollection,
+	dropCollection,
+	remove,
+	removeAll,
 	get,
+	getAll,
 	insert,
 	exists,
 	update,
+	updateField,
 	replace,
 	watch,
 	match,
 } = require('../../global');
+
+const { initializeGame } = require('../../events/InitializeGame');
 
 exports.clientLobbyFunctions = async (client, socket) => {
 	let gameID_ = 0;
@@ -29,6 +35,9 @@ exports.clientLobbyFunctions = async (client, socket) => {
 			message: username + ' has joined the lobby.',
 		};
 
+		socket.join(uuid);
+		socket.join(gameID);
+
 		if (gameExists && gameID != '') {
 			let playerExists = await exists('lobbyPlayers', { uuid: uuid }, client);
 			if (playerExists) {
@@ -38,7 +47,6 @@ exports.clientLobbyFunctions = async (client, socket) => {
 			}
 			await insert('lobbyMessages', message, client);
 
-			socket.join(gameID);
 			gameID_ = gameID;
 			username_ = username;
 			uuid_ = uuid;
@@ -72,14 +80,15 @@ exports.clientLobbyFunctions = async (client, socket) => {
 			username: username,
 		};
 
+		socket.join(uuid);
+		socket.join(gameID);
+
 		let playerExists = await exists('lobbyPlayers', { uuid: uuid }, client);
 		if (playerExists) {
 			await replace('lobbyPlayers', { uuid: uuid }, player, client);
 		} else {
 			await insert('lobbyPlayers', player, client);
 		}
-
-		socket.join(gameID);
 
 		gameID_ = gameID;
 		username_ = username;
@@ -91,15 +100,78 @@ exports.clientLobbyFunctions = async (client, socket) => {
 	});
 
 	socket.on('updateLobbyUsername', async (userID, username) => {
-		await update('lobbyPlayers', userID, username, connection);
+		await updateField(
+			'lobbyPlayers',
+			{ userID: userID },
+			{ username: username },
+			client
+		);
 	});
 
 	socket.on('saveLobbySettings', async (settings) => {
-		await update('lobbies', 'settings', settings, connection);
+		await updateField(
+			'lobbies',
+			{ gameID: gameID_ },
+			{ settings: settings },
+			client
+		);
 	});
 
 	socket.on('clientSendLobbyMessage', async (messageData) => {
-		await insert('lobbyMessages', connection, messageData);
+		await insert('lobbyMessages', messageData, client);
+	});
+
+	socket.on('leavingLobby', async (userID, username, isHost, response) => {
+		let players = await getAll('lobbyPlayers', { gameID: gameID_ }, client);
+		let playerFound = false;
+		if (isHost) {
+			for (const [key, value] of Object.entries(players)) {
+				if (value.uuid != userID) {
+					updateField(
+						'lobbies',
+						{ gameID: gameID_ },
+						{ host: value.uuid },
+						client
+					);
+					insert(
+						'lobbyMessages',
+						{
+							gameID: gameID_,
+							author: 'System',
+							message:
+								'Host has left the lobby. New host is: ' + value.username,
+						},
+						client
+					);
+					playerFound = true;
+					socket.to(value.uuid).emit('isNewHost');
+					break;
+				}
+			}
+			if (!playerFound) {
+				remove('lobbies', { gameID: gameID_ }, client);
+				removeAll('lobbyMessages', { gameID: gameID_ }, client);
+			}
+		} else if (!isHost) {
+			await insert(
+				'lobbyMessages',
+				{
+					gameID: gameID_,
+					author: 'System',
+					message: username + ' has left the lobby.',
+				},
+				client
+			);
+			socket.leave(gameID_);
+		}
+		remove('lobbyPlayers', { uuid: userID }, client);
+		response({
+			status: true,
+		});
+	});
+
+	socket.on('startGameInitialization', async () => {
+		await initializeGame(gameID_, client);
 	});
 
 	// let thing = next.documentKey._id;

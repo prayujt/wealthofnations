@@ -1,4 +1,19 @@
 const random = require('fakerator');
+const {
+	createCollection,
+	dropCollection,
+	remove,
+	removeAll,
+	get,
+	getAll,
+	insert,
+	exists,
+	update,
+	updateField,
+	replace,
+	watch,
+	match,
+} = require('../global');
 
 const cityTierProbabilities = [
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 5,
@@ -73,61 +88,58 @@ const executiveWageRanges = {
 
 let cities = [];
 
-const initializeGame = async (id, database) => {
+const initializeGame = async (id, client) => {
 	console.log('Started Game #' + id);
-	let refGame = database.ref('games/' + id);
-	let refGameSettings = refGame.child('settings');
 
-	let refLobby = database.ref('lobbies/' + id);
-	let refLobbySettings = refLobby.child('settings');
-	let refLobbyPlayers = refLobby.child('players');
+	let lobby = await get('lobbies', { gameID: id }, client);
+	insert(
+		'games',
+		{
+			gameID: lobby.gameID,
+			settings: lobby.settings,
+		},
+		client
+	);
 
-	let refServer = database.ref('server/' + id);
-
-	let settings = await refLobbySettings.once('value');
-	refGameSettings.set(settings.val());
-
-	let numCities = settings.val()['numCities'];
+	let numCities = lobby.settings.numCities;
 
 	for (let i = 0; i < numCities; i++) {
-		await createCity(id, numCities, database);
+		await createCity(id, numCities, client);
 	}
 
-	let players = await refLobbyPlayers.once('value');
-	for (const [key, value] of Object.entries(players.val())) {
-		await createPlayer(id, key, value, database);
+	let players = await getAll('lobbyPlayers', { gameID: id }, client);
+	for (const [key, value] of Object.entries(players)) {
+		await createPlayer(id, value.uuid, value.username, client);
 	}
 
-	refServer.update({
-		initializingGame: false,
-	});
+	updateField('lobbies', { gameID: id }, { gameStarted: true }, client);
 };
 
-const createPlayer = async (gameID, uuid, username, database) => {
-	let refStats = database
-		.ref('games/' + gameID)
-		.child('players')
-		.child(uuid)
-		.child('stats');
-	refStats.set({
-		username: username,
-		netWorth: 6000000,
-		debt: 0,
-		balance: 5000000,
-		influence: 100,
-		bankrupt: false,
-		companies: [],
-	});
+const createPlayer = async (gameID, uuid, username, client) => {
+	insert(
+		'players',
+		{
+			gameID: gameID,
+			uuid: uuid,
+			username: username,
+			netWorth: 6000000,
+			debt: 0,
+			balance: 5000000,
+			influence: 100,
+			bankrupt: false,
+			companies: [],
+		},
+		client
+	);
+
 	let name = username + ' LLC Inc';
 	console.log('Initialized Player with ID ' + uuid);
-	await createConglomerate(gameID, uuid, username, name, database);
+	await createConglomerate(gameID, uuid, username, name, client);
 };
 
-const createCity = async (gameID, numCities, database) => {
+const createCity = async (gameID, numCities, client) => {
 	let name = random().address.city();
 	cities.push(name);
-
-	let refCities = database.ref('games/' + gameID).child('cities');
 
 	let tier =
 		cityTierProbabilities[
@@ -146,7 +158,7 @@ const createCity = async (gameID, numCities, database) => {
 	let companies = [];
 
 	for (let i = 0; i < numCompanies; i++) {
-		let companyData = await createCompany(gameID, name, database);
+		let companyData = await createCompany(gameID, name, client);
 		companies.push(companyData[0]);
 		netWorth += companyData[1];
 		population += companyData[2];
@@ -154,20 +166,22 @@ const createCity = async (gameID, numCities, database) => {
 
 	tier = getTier(population);
 
-	refCities.update({
-		[name]: {
+	insert(
+		'cities',
+		{
+			gameID: gameID,
+			name: name,
 			companies: companies,
 			netWorth: netWorth,
 			owner: 'Bank',
 			population: population,
 			tier: tier,
 		},
-	});
+		client
+	);
 };
 
-const createCompany = async (gameID, city, database) => {
-	let refCompanies = database.ref('games/' + gameID).child('companies');
-
+const createCompany = async (gameID, city, client) => {
 	let name = random().company.name().replace('.', '');
 
 	let tier =
@@ -225,8 +239,11 @@ const createCompany = async (gameID, city, database) => {
 	let expectedGrowth = 3;
 	let volatility = 5;
 
-	refCompanies.update({
-		[name]: {
+	insert(
+		'companies',
+		{
+			gameID: gameID,
+			name: name,
 			city: city,
 			owner: 'Bank',
 			netWorth: netWorth,
@@ -263,16 +280,13 @@ const createCompany = async (gameID, city, database) => {
 			secrets: {},
 			tier: tier,
 		},
-	});
+		client
+	);
 
 	return [name, netWorth, totalEmployees];
 };
 
-const createConglomerate = async (gameID, uuid, username, name, database) => {
-	let refConglomerate = database
-		.ref('games/' + gameID)
-		.child('players/' + uuid);
-
+const createConglomerate = async (gameID, uuid, username, name, client) => {
 	let startingCity = cities[Math.floor(Math.random() * cities.length)];
 
 	let netWorth = netWorthRanges[1][0];
@@ -309,45 +323,54 @@ const createConglomerate = async (gameID, uuid, username, name, database) => {
 	let expectedGrowth = 3;
 	let volatility = 5;
 
-	refConglomerate.update({
-		[name]: {
-			city: startingCity,
-			owner: uuid,
-			netWorth: netWorth,
-			employees: employees,
-			debt: debt,
-			bankrupt: false,
-			reserves: 0,
-			holders: {
-				[uuid]: {
-					percent: 100,
-					marketValue: netWorthRanges[1][0],
+	updateField(
+		'players',
+		{ uuid: uuid },
+		{
+			conglomerate: {
+				gameID: gameID,
+				name: name,
+				city: startingCity,
+				owner: uuid,
+				netWorth: netWorth,
+				employees: employees,
+				debt: debt,
+				bankrupt: false,
+				reserves: 0,
+				holders: {
+					[uuid]: {
+						percent: 100,
+						marketValue: netWorthRanges[1][0],
+					},
 				},
+				expenses: {
+					employeeWage: employeeWage,
+					executiveWage: executiveWage,
+					ceoWage: ceoWage,
+					taxRate: taxRate,
+					employeeWages: employeeWages,
+					executiveWages: executiveWages,
+					maintenanceFees: maintenanceFees,
+					interestPayments: interestPayments,
+					localTax: localTax,
+					totalExpenses: totalExpenses,
+				},
+				revenue: {
+					currentRevenue: currentRevenue,
+					expectedGrowth: 0,
+					volatility: 0,
+				},
+				expectedProfit: Math.floor(
+					Math.round(
+						currentRevenue * (1 + expectedGrowth / 100) - totalExpenses
+					)
+				),
+				secrets: {},
+				tier: 1,
 			},
-			expenses: {
-				employeeWage: employeeWage,
-				executiveWage: executiveWage,
-				ceoWage: ceoWage,
-				taxRate: taxRate,
-				employeeWages: employeeWages,
-				executiveWages: executiveWages,
-				maintenanceFees: maintenanceFees,
-				interestPayments: interestPayments,
-				localTax: localTax,
-				totalExpenses: totalExpenses,
-			},
-			revenue: {
-				currentRevenue: currentRevenue,
-				expectedGrowth: 0,
-				volatility: 0,
-			},
-			expectedProfit: Math.floor(
-				Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
-			),
-			secrets: {},
-			tier: 1,
 		},
-	});
+		client
+	);
 };
 
 const getTier = (population) => {

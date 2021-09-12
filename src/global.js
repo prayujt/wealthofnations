@@ -19,9 +19,22 @@ exports.dropCollection = async (collection, client) => {
 	await client.collection(collection).drop();
 };
 
+exports.remove = async (collection, filter, client) => {
+	await client.collection(collection).deleteOne(filter);
+};
+
+exports.removeAll = async (collection, filter, client) => {
+	await client.collection(collection).deleteMany(filter);
+};
+
 exports.get = async (collection, query, client) => {
 	let data = await client.collection(collection).findOne(query);
 	return data;
+};
+
+exports.getAll = async (collection, query, client) => {
+	let data = await client.collection(collection).find(query);
+	return data.toArray();
 };
 
 exports.insert = async (collection, data, client) => {
@@ -36,6 +49,10 @@ exports.update = async (collection, filter, data, client) => {
 	await client.collection(collection).updateOne(filter, data);
 };
 
+exports.updateField = async (collection, filter, data, client) => {
+	await client.collection(collection).updateOne(filter, { $set: data });
+};
+
 exports.replace = async (collection, query, data, client) => {
 	await client.collection(collection).replaceOne(query, data);
 };
@@ -45,13 +62,12 @@ exports.watch = async (collection, callback, client) => {
 
 	watcher.on('change', async (value) => {
 		callback(value);
-		// console.log('hello')
-		// let matched = this.match(value, client);
-		// if (!matched) {
-		// callback(value);
-		// }
-		// console.log(value);
 	});
+};
+
+exports.distinct = async (collection, field, client) => {
+	let distinctValues = await client.collection(collection).distinct(field);
+	return distinctValues;
 };
 
 exports.exists = async (collection, query, client) => {

@@ -25,7 +25,12 @@
 
 	let message;
 	let messages = {};
-	let players;
+	let players = [
+		{
+			uuid: userID,
+			username: username,
+		},
+	];
 	let open;
 	let initializingGame = false;
 	let gameStarted = false;
@@ -73,71 +78,41 @@
 	};
 
 	const leaveLobby = () => {
-		if (isHost && !gameStarted) {
-			for (const [key, value] of Object.entries(players)) {
-				if (key != userID) {
-					refLobby.update({
-						host: key,
-					});
-					refPlayers.child(userID).set(null);
-					refMessages.push({
-						author: 'System',
-						message: 'Host has left the lobby. New host is: ' + value,
-					});
-
-					inLobby = false;
-					return;
-				}
+		socket.emit('leavingLobby', userID, username, isHost, async (response) => {
+			if (response.status == true) {
+				inLobby = false;
 			}
-			inLobby = false;
-			refLobby.remove();
-			refServer.remove();
-		} else if (!isHost && !gameStarted) {
-			refPlayers.child(userID).set(null);
-
-			refMessages.push({
-				author: 'System',
-				message: username + 'has left the lobby.',
-			});
-
-			inLobby = false;
-		}
+		});
 	};
 
 	const startGame = () => {
 		saveSettings().then(() => {
 			initializingGame = true;
-			refServer.set({
-				initializingGame: true,
+			socket.emit('startGameInitialization', async (response) => {
+				await response;
+				if (response.status == true) {
+					gameStarted = true;
+				}
 			});
 		});
 	};
 
-	refServer.child('initializingGame').on('value', (snapshot) => {
-		if (snapshot.val() === false) {
-			refServer.child('initializingGame').remove();
-			gameStarted = true;
-			refLobby.remove();
-		}
+	socket.on('isNewHost', () => {
+		isHost = true;
 	});
 
-	let refHost = refLobby.child('host');
-	refHost.on('value', (snapshot) => {
-		if (snapshot.val() === userID) {
-			isHost = true;
-		}
-	});
-
-	socket.on('lobbyPlayersChange', (players_) => {
+	socket.on('lobbyPlayerChange', (players_) => {
+		console.log('player changed');
 		players = players_;
 	});
 
-	// refPlayers.on('value', (snapshot) => {
-	// 		players = snapshot.val();
-	// 	});
+	socket.on('lobbyMessageReceived', (messages_) => {
+		console.log('message changed');
+		messages = messages_;
+	});
 
-	refMessages.on('value', (snapshot) => {
-		messages = snapshot.val();
+	socket.on('gameStarted', () => {
+		gameStarted = true;
 	});
 </script>
 
@@ -147,8 +122,8 @@
 			<h1>Game ID: {gameID}</h1>
 			<br />
 			<h3>Players:</h3>
-			{#each Object.entries(players) as [uuid, username]}
-				<li>{username}</li>
+			{#each Object.entries(players) as [key, value]}
+				<li>{value.username}</li>
 			{/each}
 		</div>
 		<div class="right-container">
