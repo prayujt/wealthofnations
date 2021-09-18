@@ -119,49 +119,28 @@
 {#if !gameStarted}
 	<div class="lobby-container">
 		<div class="left-container">
-			<h1>Game ID: {gameID}</h1>
-			<br />
-			<h3>Players:</h3>
-			{#each Object.entries(players) as [key, value]}
-				<li>{value.username}</li>
-			{/each}
-		</div>
-		<div class="right-container">
-			<div id="chat">
-				<h1>Chat</h1>
-				{#if messages != null}
-					{#each Object.entries(messages) as [key, value]}
-						<p>{value.author}: {value.message}</p>
+			<h1 class="game-id">Game ID: {gameID}</h1>
+			<div class="player-container">
+				<div class="username">
+					<TextInput
+						on:change={setUsername}
+						bind:value={username}
+						labelText="Username"
+						placeholder={username}
+					/>
+				</div>
+
+				<div class="players">
+					<h1>Players</h1>
+					{#each Object.entries(players) as [key, value]}
+						<li>{value.username}</li>
 					{/each}
-				{/if}
+				</div>
 			</div>
-			<div id="username">
-				<TextInput
-					on:change={setUsername}
-					bind:value={username}
-					labelText="Username"
-					placeholder={username}
-				/>
-			</div>
-			<div
-				style="display: flex; position: absolute; bottom: 0px"
-				id="sendMessage"
-			>
-				<TextArea
-					on:keydown={handleMessage}
-					style="resize: none;"
-					placeholder="Type a message..."
-					bind:value={message}
-				/>
-				<Button on:click={sendMessage} kind="ghost">Send Message</Button>
-			</div>
-		</div>
-		<div class="bottom-container" style="position: absolute; bottom: 0px">
-			<div id="bottom-left">
+
+			<div class="settings">
 				<Button kind="danger-tertiary" on:click={leaveLobby}>Leave Lobby</Button
 				>
-			</div>
-			<div id="bottom-right">
 				{#if isHost && !initializingGame}
 					<ButtonSet>
 						<Button on:click={() => (open = true)}>Game Settings</Button>
@@ -201,6 +180,28 @@
 				{/if}
 			</div>
 		</div>
+
+		<div class="right-container">
+			<div class="chat-box">
+				<div class="chat-input">
+					<TextArea
+						on:keydown={handleMessage}
+						style="resize: none;"
+						placeholder="Type a message..."
+						bind:value={message}
+					/>
+					<Button on:click={sendMessage} kind="ghost">Send Message</Button>
+				</div>
+
+				<div class="text-messages">
+					{#if messages != null}
+						{#each Object.entries(messages) as [key, value]}
+							<p>{value.author}: {value.message}</p>
+						{/each}
+					{/if}
+				</div>
+			</div>
+		</div>
 	</div>
 {:else}
 	<Game />
@@ -208,37 +209,105 @@
 
 <svelte:window on:beforeunload={leaveLobby} />
 
-<style>
+<style lang="scss">
 	.lobby-container {
+		display: flex;
+		flex-direction: column;
+		flex-basis: 100%;
 		height: 100vh;
-		width: 100vw;
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		grid-template-rows: repeat(10, 1fr);
-		grid-column-gap: 0px;
-		grid-row-gap: 0px;
+		width: 100vh;
+
+		border: 1px solid black;
+
+		.left-container {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 100%;
+			border: 1px solid black;
+
+			.game-id {
+				border: 1px solid black;
+			}
+
+			.player-container {
+				border: 1px solid black;
+
+				.username {
+					border: 1px solid black;
+				}
+			}
+
+			.settings {
+				border: 1px solid black;
+			}
+		}
+
+		.right-container {
+			display: flex;
+			flex-direction: column;
+			flex-basis: 100%;
+			border: 1px solid black;
+
+			.chat-box {
+				border: 1px solid black;
+
+				.chat-input {
+					border: 1px solid black;
+				}
+
+				.chat-messages {
+					border: 1px solid black;
+				}
+			}
+		}
 	}
 
-	.left-container {
-		grid-area: 1 / 1 / 10 / 3;
-	}
+	// .lobby-container {
+	// 	border: 2px solid black;
 
-	.right-container {
-		grid-area: 1 / 3 / 10 / 5;
-		display: flex;
-		position: relative;
-	}
+	// 	height: 100vh;
+	// 	width: 100vw;
+	// 	display: grid;
+	// 	grid-template-columns: repeat(4, 1fr);
+	// 	grid-template-rows: repeat(10, 1fr);
+	// 	grid-column-gap: 0px;
+	// 	grid-row-gap: 0px;
+	// }
 
-	.bottom-container {
-		grid-area: 10 / 1 / 11 / 5;
-		display: flex;
-	}
+	// .left-container {
+	// 	border: 2px solid black;
 
-	#chat {
-		flex: 70%;
-	}
+	// 	grid-area: 1 / 1 / 10 / 3;
+	// }
 
-	#username {
-		flex: 30%;
-	}
+	// .right-container {
+	// 	border: 2px solid black;
+
+	// 	grid-area: 1 / 3 / 10 / 5;
+	// 	display: flex;
+	// 	position: relative;
+	// }
+
+	// .bottom-container {
+	// 	border: 2px solid black;
+
+	// 	grid-area: 10 / 1 / 11 / 5;
+	// 	display: flex;
+	// }
+
+	// .game-id {
+	// 	border: 2px solid black;
+	// }
+
+	// #chat {
+	// 	border: 2px solid black;
+
+	// 	flex: 70%;
+	// }
+
+	// #username {
+	// 	border: 2px solid black;
+
+	// 	flex: 30%;
+	// }
 </style>

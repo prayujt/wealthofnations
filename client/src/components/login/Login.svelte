@@ -12,7 +12,7 @@
 <div class="login-container">
 	<Auth useRedirect={true} let:user let:loggedIn let:loginWithGoogle let:logout>
 		{#if !loggedIn}
-			<h1>Wealth of Nations</h1>
+			<h1 class="title">Wealth of Nations</h1>
 			<Button kind="ghost" on:click={loginWithGoogle}
 				>Sign in with Google</Button
 			>
@@ -22,7 +22,7 @@
 	</Auth>
 </div>
 
-<style>
+<style lang="scss">
 	.login-container {
 		min-height: 100vh;
 		display: flex;

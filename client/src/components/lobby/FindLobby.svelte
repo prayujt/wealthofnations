@@ -115,6 +115,4 @@
 </div>
 
 <style>
-	.username-container {
-	}
 </style>
