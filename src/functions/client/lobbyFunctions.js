@@ -102,7 +102,7 @@ exports.clientLobbyFunctions = async (client, socket) => {
 	socket.on('updateLobbyUsername', async (userID, username) => {
 		await updateField(
 			'lobbyPlayers',
-			{ userID: userID },
+			{ uuid: userID },
 			{ username: username },
 			client
 		);
@@ -174,10 +174,6 @@ exports.clientLobbyFunctions = async (client, socket) => {
 		await initializeGame(gameID_, client);
 	});
 
-	// let thing = next.documentKey._id;
-	// console.log(typeof(thing));
-	// let thing2 = thing.substring(thing.indexOf('"'));
-	// console.log(thing2);
 	socket.on('disconnect', () => {
 		console.log('user disconnected');
 	});

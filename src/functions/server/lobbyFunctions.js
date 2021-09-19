@@ -18,7 +18,7 @@ exports.serverLobbyFunctions = async (client, io) => {
 	watch(
 		'lobbyPlayers',
 		async (value) => {
-			if (value.operationType == 'delete') {
+			if (value.operationType == 'delete' || value.operationType == 'update') {
 				let gameIDs = await distinct('lobbyPlayers', 'gameID', client);
 				gameIDs.forEach(async (gameID) => {
 					let players = await getAll(
