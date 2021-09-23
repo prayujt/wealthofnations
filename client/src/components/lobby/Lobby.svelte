@@ -183,6 +183,14 @@
 
 		<div class="right-container">
 			<div class="chat-box">
+				<div class="text-messages">
+					{#if messages != null}
+						{#each Object.entries(messages) as [key, value]}
+							<p>{value.author}: {value.message}</p>
+						{/each}
+					{/if}
+				</div>
+
 				<div class="chat-input">
 					<TextArea
 						on:keydown={handleMessage}
@@ -191,14 +199,6 @@
 						bind:value={message}
 					/>
 					<Button on:click={sendMessage} kind="ghost">Send Message</Button>
-				</div>
-
-				<div class="text-messages">
-					{#if messages != null}
-						{#each Object.entries(messages) as [key, value]}
-							<p>{value.author}: {value.message}</p>
-						{/each}
-					{/if}
 				</div>
 			</div>
 		</div>
@@ -212,51 +212,62 @@
 <style lang="scss">
 	.lobby-container {
 		display: flex;
-		flex-direction: column;
-		flex-basis: 100%;
-		height: 100vh;
-		width: 100vh;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		min-height: 100vh;
+		width: 100vw;
 
 		border: 1px solid black;
 
 		.left-container {
 			display: flex;
 			flex-direction: column;
-			flex-basis: 100%;
+			width: 40%;
 			border: 1px solid black;
+			margin: 1rem;
 
 			.game-id {
 				border: 1px solid black;
+				margin: 1rem;
 			}
 
 			.player-container {
 				border: 1px solid black;
+				margin: 1rem;
 
 				.username {
 					border: 1px solid black;
+					margin: 1rem;
 				}
 			}
 
 			.settings {
+				display: flex;
+				flex-wrap: nowrap;
 				border: 1px solid black;
+				margin: 1rem;
 			}
 		}
 
 		.right-container {
 			display: flex;
 			flex-direction: column;
-			flex-basis: 100%;
+			width: 60%;
 			border: 1px solid black;
+			margin: 1rem;
 
 			.chat-box {
 				border: 1px solid black;
-
-				.chat-input {
-					border: 1px solid black;
-				}
+				margin: 1rem;
 
 				.chat-messages {
 					border: 1px solid black;
+					margin: 1rem;
+				}
+
+				.chat-input {
+					border: 1px solid black;
+					margin: 1rem;
 				}
 			}
 		}
