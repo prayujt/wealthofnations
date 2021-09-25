@@ -15,6 +15,8 @@
 	} from 'carbon-components-svelte';
 	import { onMount } from 'svelte';
 	import Game from '../game/Game.svelte';
+	import LobbyMessages from './LobbyMessages.svelte';
+	import LobbyUser from './LobbyUser.svelte';
 
 	export let gameID;
 	export let socket;
@@ -131,9 +133,9 @@
 				</div>
 
 				<div class="players">
-					<h1>Players</h1>
+					<h1 id="player-title">Players</h1>
 					{#each Object.entries(players) as [key, value]}
-						<li>{value.username}</li>
+						<ul class="player-inList">{value.username}</ul>
 					{/each}
 				</div>
 			</div>
@@ -183,23 +185,22 @@
 
 		<div class="right-container">
 			<div class="chat-box">
-				<div class="text-messages">
+				<div>
 					{#if messages != null}
 						{#each Object.entries(messages) as [key, value]}
-							<p>{value.author}: {value.message}</p>
+							<p class="text-messages">{value.author}: {value.message}</p>
 						{/each}
 					{/if}
 				</div>
-
-				<div class="chat-input">
-					<TextArea
-						on:keydown={handleMessage}
-						style="resize: none;"
-						placeholder="Type a message..."
-						bind:value={message}
-					/>
-					<Button on:click={sendMessage} kind="ghost">Send Message</Button>
-				</div>
+			</div>
+			<div class="chat-input">
+				<TextArea
+					on:keydown={handleMessage}
+					style="resize: none;"
+					placeholder="Type a message..."
+					bind:value={message}
+				/>
+				<Button on:click={sendMessage} kind="ghost">Send Message</Button>
 			</div>
 		</div>
 	</div>
@@ -233,11 +234,23 @@
 
 			.player-container {
 				border: 1px solid black;
+				height: 40rem;
 				margin: 1rem;
 
 				.username {
 					border: 1px solid black;
 					margin: 1rem;
+				}
+
+				#player-title {
+					border: 1px solid black;
+					margin: 1rem;
+				}
+
+				.player-inList {
+					border: 1px solid black;
+					margin: 1rem;
+					padding: padding;
 				}
 			}
 
@@ -258,17 +271,34 @@
 
 			.chat-box {
 				border: 1px solid black;
+				display: flex;
 				margin: 1rem;
+				height: 45rem;
+				overflow-y: scroll;
 
 				.chat-messages {
 					border: 1px solid black;
+					flex: 1;
+					display: flex;
+					flex-direction: column;
+					justify-content: flex-end;
 					margin: 1rem;
 				}
 
-				.chat-input {
+				.text-messages {
 					border: 1px solid black;
+					flex: 1;
+					display: flex;
+					flex-direction: column;
+					justify-content: flex-end;
 					margin: 1rem;
 				}
+			}
+			.chat-input {
+				display: flex;
+				flex-direction: row;
+				border: 1px solid black;
+				margin: 1rem;
 			}
 		}
 	}
