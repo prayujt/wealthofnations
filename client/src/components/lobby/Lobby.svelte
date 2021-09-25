@@ -188,7 +188,8 @@
 				<div>
 					{#if messages != null}
 						{#each Object.entries(messages) as [key, value]}
-							<p class="text-messages">{value.author}: {value.message}</p>
+							<!-- <p class="text-messages">{value.author}: {value.message}</p> -->
+							<LobbyMessages username={value.author} message={value.message} />
 						{/each}
 					{/if}
 				</div>
@@ -215,7 +216,7 @@
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
-		min-height: 100vh;
+		height: 100vh;
 		width: 100vw;
 
 		border: 1px solid black;
