@@ -212,13 +212,18 @@
 <svelte:window on:beforeunload={leaveLobby} />
 
 <style lang="scss">
+	$black: #393b45;
+	$grey: #6e7889;
+	$white: #fffafa;
+	$red: #c5283d;
+
 	.lobby-container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
 		height: 100vh;
 		width: 100vw;
-
+		background-color: $white;
 		border: 1px solid black;
 
 		.left-container {
@@ -227,9 +232,12 @@
 			width: 40%;
 			border: 1px solid black;
 			margin: 1rem;
+			background-color: $white;
 
 			.game-id {
-				border: 1px solid black;
+				// border: 1px solid black;
+				background-color: $red;
+				color: $white;
 				margin: 1rem;
 			}
 
@@ -237,15 +245,18 @@
 				border: 1px solid black;
 				height: 40rem;
 				margin: 1rem;
+				background-color: $white;
 
 				.username {
 					border: 1px solid black;
 					margin: 1rem;
+					background-color: $white;
 				}
 
 				#player-title {
 					border: 1px solid black;
 					margin: 1rem;
+					background-color: $white;
 				}
 
 				.player-inList {
@@ -275,6 +286,7 @@
 				display: flex;
 				margin: 1rem;
 				height: 45rem;
+				overflow-wrap: normal;
 				overflow-y: scroll;
 
 				.chat-messages {
