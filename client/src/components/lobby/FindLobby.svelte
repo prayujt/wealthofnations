@@ -46,7 +46,7 @@
 
 	const joinGame = async () => {
 		socket.emit(
-			'joinGame',
+			'joinLobby',
 			parseInt(inputGameID),
 			userID,
 			username,
@@ -67,7 +67,7 @@
 
 	const createGame = async () => {
 		gameID = generateCode();
-		socket.emit('createGame', gameID, userID, username, async (response) => {
+		socket.emit('createLobby', gameID, userID, username, async (response) => {
 			await response;
 			if (response.status == true) {
 				isHost = true;

@@ -64,7 +64,7 @@
 	const sendMessage = () => {
 		if (message != '') {
 			socket.emit('clientSendLobbyMessage', {
-				gameID: gameID,
+				type: 'lobby',
 				author: username,
 				message: message,
 			});
@@ -80,7 +80,7 @@
 	};
 
 	const leaveLobby = () => {
-		socket.emit('leavingLobby', userID, username, isHost, async (response) => {
+		socket.emit('leaveLobby', userID, username, isHost, async (response) => {
 			if (response.status == true) {
 				inLobby = false;
 			}
@@ -90,6 +90,11 @@
 	const startGame = () => {
 		saveSettings().then(() => {
 			initializingGame = true;
+			socket.emit('clientSendLobbyMessage', {
+				type: 'lobby',
+				author: 'System',
+				message: 'The game will begin momentarily...',
+			});
 			socket.emit('startGameInitialization', async (response) => {
 				await response;
 				if (response.status == true) {
@@ -104,12 +109,10 @@
 	});
 
 	socket.on('lobbyPlayerChange', (players_) => {
-		console.log('player changed');
 		players = players_;
 	});
 
 	socket.on('lobbyMessageReceived', (messages_) => {
-		console.log('message changed');
 		messages = messages_;
 	});
 
