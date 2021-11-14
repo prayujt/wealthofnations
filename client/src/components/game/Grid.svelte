@@ -4,25 +4,31 @@
 	import P5 from 'p5-svelte';
 
 	const sketch = (p5) => {
-		let squares = [
-			[0, 0, 0],
-			[0, 0, 0],
-			[0, 0, 0],
-		];
-		const drawGrid = (grid) => {
-			for (let i = 0; i < grid.length; i++) {
-				for (let j = 0; j < grid[i].length; j++) {
-					p5.rect(20 * i, 20 * j, 20, 20);
+		let value = 0;
+
+		const drawGrid = () => {
+			for (let i = 0; i < 20; i++) {
+				for (let j = 0; j < 20; j++) {
+					new Tile(20 * i, 20 * j).createTile();
 				}
 			}
 		};
+
+		function Tile(x, y) {
+			this.x = x;
+			this.y = y;
+
+			this.createTile = () => {
+				p5.rect(this.x, this.y, 20, 20);
+			};
+		}
 
 		p5.setup = () => {
 			p5.createCanvas(400, 400);
 		};
 
 		p5.draw = () => {
-			drawGrid(squares);
+			drawGrid();
 		};
 	};
 </script>
