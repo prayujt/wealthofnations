@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb');
 
 const uri =
-	'mongodb://admin:chingchong123@prayujt.com:27017/?authSource=admin&readPreference=primary&directConnection=true&ssl=false';
+	'mongodb://admin:chingchong@prayujt.com:27017/?authSource=admin&readPreference=primary&directConnection=true&ssl=false';
 
 let uniqueKeys = [];
 
