@@ -76,6 +76,7 @@ exports.clientLobbyFunctions = async (client, socket) => {
 				client
 			);
 			socket.leave(socket.gameID);
+			socket.leave(userID);
 		}
 		remove('players', { uuid: userID }, client);
 		response({

@@ -49,7 +49,11 @@ exports.getAll = async (collection, query, client) => {
 };
 
 exports.insert = async (collection, data, client) => {
-	await client.collection(collection).insertOne(data);
+	try {
+		await client.collection(collection).insertOne(data);
+	} catch (MongoServerError) {
+		console.log('Caught duplicate!');
+	}
 };
 
 exports.insertMany = async (collection, data, client) => {
