@@ -1,34 +1,33 @@
 <script>
 	import Tile from './Tile.svelte';
 	import { onMount } from 'svelte';
+	import P5 from 'p5-svelte';
 
-	let grid = [
-		[0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0],
-		[0, 0, 0, 0, 0],
-	];
-
-	let canvas;
-	onMount(() => {
-		const ctx = canvas.getContext('2d');
-
-		console.log(grid);
-
-		for (let row = 0; row < grid.length; row++) {
-			for (let col = 0; col < grid[row].length; col++) {
-				ctx.fillStyle = 'green';
-				ctx.fillRect(row * 20 + 5, col * 20 + 5, 20, 20);
+	const sketch = (p5) => {
+		let squares = [
+			[0, 0, 0],
+			[0, 0, 0],
+			[0, 0, 0],
+		];
+		const drawGrid = (grid) => {
+			for (let i = 0; i < grid.length; i++) {
+				for (let j = 0; j < grid[i].length; j++) {
+					p5.rect(20 * i, 20 * j, 20, 20);
+				}
 			}
-		}
-	});
+		};
+
+		p5.setup = () => {
+			p5.createCanvas(400, 400);
+		};
+
+		p5.draw = () => {
+			drawGrid(squares);
+		};
+	};
 </script>
 
-<canvas id="canvas" bind:this={canvas} width="500" height="300" />
+<P5 {sketch} />
 
 <style>
-	#canvas {
-		border: 5px solid black;
-	}
 </style>
