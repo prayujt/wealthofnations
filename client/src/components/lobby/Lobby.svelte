@@ -64,7 +64,7 @@
 	const sendMessage = () => {
 		if (message != '') {
 			socket.emit('clientSendLobbyMessage', {
-				gameID: gameID,
+				type: 'lobby',
 				author: username,
 				message: message,
 			});
@@ -80,7 +80,7 @@
 	};
 
 	const leaveLobby = () => {
-		socket.emit('leavingLobby', userID, username, isHost, async (response) => {
+		socket.emit('leaveLobby', userID, username, isHost, async (response) => {
 			if (response.status == true) {
 				inLobby = false;
 			}
@@ -90,6 +90,11 @@
 	const startGame = () => {
 		saveSettings().then(() => {
 			initializingGame = true;
+			socket.emit('clientSendLobbyMessage', {
+				type: 'lobby',
+				author: 'System',
+				message: 'The game will begin momentarily...',
+			});
 			socket.emit('startGameInitialization', async (response) => {
 				await response;
 				if (response.status == true) {
@@ -104,12 +109,10 @@
 	});
 
 	socket.on('lobbyPlayerChange', (players_) => {
-		console.log('player changed');
 		players = players_;
 	});
 
 	socket.on('lobbyMessageReceived', (messages_) => {
-		console.log('message changed');
 		messages = messages_;
 	});
 
@@ -188,7 +191,8 @@
 				<div>
 					{#if messages != null}
 						{#each Object.entries(messages) as [key, value]}
-							<p class="text-messages">{value.author}: {value.message}</p>
+							<!-- <p class="text-messages">{value.author}: {value.message}</p> -->
+							<LobbyMessages username={value.author} message={value.message} />
 						{/each}
 					{/if}
 				</div>
@@ -211,13 +215,18 @@
 <svelte:window on:beforeunload={leaveLobby} />
 
 <style lang="scss">
+	$black: #393b45;
+	$grey: #6e7889;
+	$white: #fffafa;
+	$red: #c5283d;
+
 	.lobby-container {
 		display: flex;
 		flex-direction: row;
 		flex-wrap: nowrap;
-		min-height: 100vh;
+		height: 100vh;
 		width: 100vw;
-
+		background-color: $white;
 		border: 1px solid black;
 
 		.left-container {
@@ -226,9 +235,12 @@
 			width: 40%;
 			border: 1px solid black;
 			margin: 1rem;
+			background-color: $white;
 
 			.game-id {
-				border: 1px solid black;
+				// border: 1px solid black;
+				background-color: $red;
+				color: $white;
 				margin: 1rem;
 			}
 
@@ -236,15 +248,18 @@
 				border: 1px solid black;
 				height: 40rem;
 				margin: 1rem;
+				background-color: $white;
 
 				.username {
 					border: 1px solid black;
 					margin: 1rem;
+					background-color: $white;
 				}
 
 				#player-title {
 					border: 1px solid black;
 					margin: 1rem;
+					background-color: $white;
 				}
 
 				.player-inList {
@@ -274,6 +289,7 @@
 				display: flex;
 				margin: 1rem;
 				height: 45rem;
+				overflow-wrap: normal;
 				overflow-y: scroll;
 
 				.chat-messages {

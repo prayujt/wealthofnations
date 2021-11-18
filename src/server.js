@@ -3,8 +3,9 @@ let http = require('http').Server(app);
 const { MongoClient } = require('mongodb');
 
 const { connect } = require('./global');
-const { clientLobbyFunctions } = require('./functions/client/lobbyFunctions');
-const { serverLobbyFunctions } = require('./functions/server/lobbyFunctions');
+const {
+	clientFindLobbyFunctions,
+} = require('./functions/client/findLobbyFunctions');
 const { initializeDatabase } = require('./events/InitializeDatabase');
 
 const io = require('socket.io')(http, {
@@ -18,10 +19,8 @@ let port = 8000;
 
 connect('wealthofnations', async (client) => {
 	await initializeDatabase(client);
-	await serverLobbyFunctions(client, io);
 	io.on('connection', (socket) => {
-		console.log('user connected');
-		clientLobbyFunctions(client, socket);
+		clientFindLobbyFunctions(socket, client, io);
 	});
 });
 

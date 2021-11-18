@@ -91,37 +91,27 @@ let cities = [];
 const initializeGame = async (id, client) => {
 	console.log('Started Game #' + id);
 
-	let lobby = await get('lobbies', { gameID: id }, client);
-	insert(
-		'games',
-		{
-			gameID: lobby.gameID,
-			settings: lobby.settings,
-		},
-		client
-	);
+	let game = await get('game', {}, client);
 
-	let numCities = lobby.settings.numCities;
+	let numCities = game.settings.numCities;
 
 	for (let i = 0; i < numCities; i++) {
 		await createCity(id, numCities, client);
 	}
 
-	let players = await getAll('lobbyPlayers', { gameID: id }, client);
+	let players = await getAll('players', {}, client);
 	for (const [key, value] of Object.entries(players)) {
 		await createPlayer(id, value.uuid, value.username, client);
 	}
 
-	updateField('lobbies', { gameID: id }, { gameStarted: true }, client);
+	await updateField('game', {}, { gameStarted: true }, client);
 };
 
 const createPlayer = async (gameID, uuid, username, client) => {
-	insert(
+	updateField(
 		'players',
+		{ uuid: uuid },
 		{
-			gameID: gameID,
-			uuid: uuid,
-			username: username,
 			netWorth: 6000000,
 			debt: 0,
 			balance: 5000000,
