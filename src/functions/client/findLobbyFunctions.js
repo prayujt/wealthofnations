@@ -104,4 +104,8 @@ exports.clientFindLobbyFunctions = async (socket, client, io) => {
 			status: true,
 		});
 	});
+
+	socket.on('disconnect', () => {
+		console.log('user disconnected');
+	});
 };

@@ -82,6 +82,9 @@ exports.clientLobbyFunctions = async (client, socket) => {
 		response({
 			status: true,
 		});
+		socket.removeAllListeners('startGameInitialization');
+		socket.removeAllListeners('clientSendLobbyMessage');
+		socket.removeAllListeners('updateLobbyUsername');
 	});
 
 	socket.on('startGameInitialization', async (response) => {
@@ -90,9 +93,5 @@ exports.clientLobbyFunctions = async (client, socket) => {
 		response({
 			status: true,
 		});
-	});
-
-	socket.on('disconnect', () => {
-		console.log('user disconnected');
 	});
 };
