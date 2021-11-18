@@ -191,7 +191,6 @@
 				<div>
 					{#if messages != null}
 						{#each Object.entries(messages) as [key, value]}
-							<!-- <p class="text-messages">{value.author}: {value.message}</p> -->
 							<LobbyMessages username={value.author} message={value.message} />
 						{/each}
 					{/if}
@@ -318,53 +317,4 @@
 			}
 		}
 	}
-
-	// .lobby-container {
-	// 	border: 2px solid black;
-
-	// 	height: 100vh;
-	// 	width: 100vw;
-	// 	display: grid;
-	// 	grid-template-columns: repeat(4, 1fr);
-	// 	grid-template-rows: repeat(10, 1fr);
-	// 	grid-column-gap: 0px;
-	// 	grid-row-gap: 0px;
-	// }
-
-	// .left-container {
-	// 	border: 2px solid black;
-
-	// 	grid-area: 1 / 1 / 10 / 3;
-	// }
-
-	// .right-container {
-	// 	border: 2px solid black;
-
-	// 	grid-area: 1 / 3 / 10 / 5;
-	// 	display: flex;
-	// 	position: relative;
-	// }
-
-	// .bottom-container {
-	// 	border: 2px solid black;
-
-	// 	grid-area: 10 / 1 / 11 / 5;
-	// 	display: flex;
-	// }
-
-	// .game-id {
-	// 	border: 2px solid black;
-	// }
-
-	// #chat {
-	// 	border: 2px solid black;
-
-	// 	flex: 70%;
-	// }
-
-	// #username {
-	// 	border: 2px solid black;
-
-	// 	flex: 30%;
-	// }
 </style>

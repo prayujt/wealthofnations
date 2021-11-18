@@ -23,9 +23,9 @@
 	/>
 </svelte:head>
 
-<!-- <main on:contextmenu={preventLoad}>
+<main on:contextmenu={preventLoad}>
 	<Login {socket} />
-</main> -->
+</main>
 
 <main on:contextmenu={preventLoad}>
 	<Grid />
