@@ -7,29 +7,50 @@
 	let height = 600;
 
 	//TODO: Convert to svelte store
-	let grid;
+	let grid = [];
 
 	onMount(() => {
 		ctx = canvas.getContext('2d');
 		canvas.width = width;
 		canvas.height = height;
 		//drawTile(ctx);
-		new Tile(0, 0).createTile();
+		createGrid();
+		displayGrid();
 	});
 
-	// const draw = function () {
-	// 	ctx.fillStyle = "green";
-	//     ctx.fillRect(0,0,15,15);
-	// };
+	const createGrid = () => {
+		let spacing = 1;
+		for (let i = 0; i < 20; i++) {
+			let row = [];
+			grid.push(row);
+			for (let j = 0; j < 20; j++) {
+				row.push(new Tile(i * 22, j * 22));
+			}
+		}
+	};
 
+	const displayGrid = () => {
+		grid.forEach((row) => {
+			row.forEach((tile) => {
+				tile.createTile();
+			});
+		});
+	};
+
+	/**
+	 * Default tile size: 10 x 10
+	 *
+	 */
 	const Tile = function (x, y) {
 		this.x = x;
 		this.y = y;
 
 		this.createTile = () => {
 			ctx.fillStyle = 'green';
-			ctx.fillRect(this.x, this.y, 15, 15);
+			ctx.fillRect(this.x, this.y, 20, 20);
 		};
+
+		//TODO: Add get tile location
 	};
 </script>
 
