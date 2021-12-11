@@ -1,8 +1,8 @@
 <script>
 	import Login from './components/login/Login.svelte';
 	import Game from './components/game/Game.svelte';
-	import Tile from './components/game/Tile.svelte';
 	import Grid from './components/game/Grid.svelte';
+	import Canvas from './components/game/Canvas.svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 	import { io } from 'socket.io-client';
 
@@ -23,17 +23,20 @@
 	/>
 </svelte:head>
 
-<main on:contextmenu={preventLoad}>
+<!-- <main on:contextmenu={preventLoad}>
 	<Login {socket} />
-</main>
+</main> -->
 
 <main on:contextmenu={preventLoad}>
-	<Grid />
+	<Canvas />
 </main>
 
 <style>
 	main {
-		margin: 10px;
+		margin: 0;
 		padding: 0;
+	}
+	:root::-webkit-scrollbar {
+		display: none;
 	}
 </style>
