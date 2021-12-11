@@ -13,7 +13,19 @@
 		ctx = canvas.getContext('2d');
 		canvas.width = width;
 		canvas.height = height;
-		//drawTile(ctx);
+
+		canvas.addEventListener('click', function (event) {
+			let x = event.clientX - (canvas.offsetLeft + canvas.clientLeft);
+			let y = event.clientY - (canvas.offsetTop + canvas.clientTop);
+
+			let canvasX = x * (canvas.width / canvas.clientWidth);
+			let canvasY = y * (canvas.height / canvas.clientHeight);
+
+			console.log(`x: ${canvasX} y: ${canvasY}`);
+		});
+
+		console.log(canvas);
+
 		createGrid();
 		displayGrid();
 	});
@@ -51,7 +63,17 @@
 		};
 
 		//TODO: Add get tile location
+		this.getTile = () => {
+			console.log(`x: ${this.x} y: ${this.y}`);
+		};
 	};
+
+	//Onclick event for getting the tile
+	// canvas.addEventListener('click', function (event) {
+	// 	let x = event.pageX;
+	// 	let y = event.pageY;
+	// 	console.log(`x: ${x} y: ${y}`);
+	// });
 </script>
 
 <canvas id="canvas" bind:this={canvas} {width} {height} />
