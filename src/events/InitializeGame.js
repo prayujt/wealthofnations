@@ -94,20 +94,41 @@ const initializeGame = async (id, client) => {
 	let game = await get('game', {}, client);
 
 	let numCities = game.settings.numCities;
+	let numCols = Math.round(Math.sqrt(numCities) * numCities);
+	let numRows = numCols;
 
 	for (let i = 0; i < numCities; i++) {
-		await createCity(id, numCities, client);
+		await createCity(i, numCities, client);
 	}
 
 	let players = await getAll('players', {}, client);
 	for (const [key, value] of Object.entries(players)) {
-		await createPlayer(id, value.uuid, value.username, client);
+		await createPlayer(value.uuid, value.username, client);
+	}
+
+	let cityCount = 0;
+	let cityTiles = Array.from({ length: numRows }, () =>
+		Array.from({ length: numCols }, () => -1)
+	);
+	while (cityCount < numCities) {
+		let rowNum = Math.round(Math.random() * numRows - 1);
+		let colNum = Math.round(Math.random() * numCols - 1);
+		if (cityTiles[rowNum][colNum] == -1) {
+			cityTiles[rowNum][colNum] = cityCount;
+			cityCount++;
+		}
+	}
+
+	for (let i = 0; i < numRows; i++) {
+		for (let j = 0; j < numCols; j++) {
+			await createTile(i, j, cityTiles[i][j], client);
+		}
 	}
 
 	await updateField('game', {}, { gameStarted: true }, client);
 };
 
-const createPlayer = async (gameID, uuid, username, client) => {
+const createPlayer = async (uuid, username, client) => {
 	updateField(
 		'players',
 		{ uuid: uuid },
@@ -124,10 +145,10 @@ const createPlayer = async (gameID, uuid, username, client) => {
 
 	let name = username + ' LLC Inc';
 	console.log('Initialized Player with ID ' + uuid);
-	await createConglomerate(gameID, uuid, username, name, client);
+	await createConglomerate(uuid, username, name, client);
 };
 
-const createCity = async (gameID, numCities, client) => {
+const createCity = async (index, numCities, client) => {
 	let name = random().address.city();
 	cities.push(name);
 
@@ -148,7 +169,7 @@ const createCity = async (gameID, numCities, client) => {
 	let companies = [];
 
 	for (let i = 0; i < numCompanies; i++) {
-		let companyData = await createCompany(gameID, name, client);
+		let companyData = await createCompany(name, client);
 		companies.push(companyData[0]);
 		netWorth += companyData[1];
 		population += companyData[2];
@@ -159,7 +180,7 @@ const createCity = async (gameID, numCities, client) => {
 	insert(
 		'cities',
 		{
-			gameID: gameID,
+			index: index,
 			name: name,
 			companies: companies,
 			netWorth: netWorth,
@@ -171,7 +192,7 @@ const createCity = async (gameID, numCities, client) => {
 	);
 };
 
-const createCompany = async (gameID, city, client) => {
+const createCompany = async (city, client) => {
 	let name = random().company.name().replace('.', '');
 
 	let tier =
@@ -232,7 +253,6 @@ const createCompany = async (gameID, city, client) => {
 	insert(
 		'companies',
 		{
-			gameID: gameID,
 			name: name,
 			city: city,
 			owner: 'Bank',
@@ -276,7 +296,7 @@ const createCompany = async (gameID, city, client) => {
 	return [name, netWorth, totalEmployees];
 };
 
-const createConglomerate = async (gameID, uuid, username, name, client) => {
+const createConglomerate = async (uuid, username, name, client) => {
 	let startingCity = cities[Math.floor(Math.random() * cities.length)];
 
 	let netWorth = netWorthRanges[1][0];
@@ -318,7 +338,6 @@ const createConglomerate = async (gameID, uuid, username, name, client) => {
 		{ uuid: uuid },
 		{
 			conglomerate: {
-				gameID: gameID,
 				name: name,
 				city: startingCity,
 				owner: uuid,
@@ -358,6 +377,21 @@ const createConglomerate = async (gameID, uuid, username, name, client) => {
 				secrets: {},
 				tier: 1,
 			},
+		},
+		client
+	);
+};
+
+const createTile = (row, col, cityIndex, client) => {
+	let type = 'city';
+	if (cityIndex == -1) type = 'empty';
+	insert(
+		'map',
+		{
+			type: type,
+			city: cityIndex,
+			row: row,
+			column: col,
 		},
 		client
 	);
