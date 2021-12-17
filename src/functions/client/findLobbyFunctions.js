@@ -38,23 +38,26 @@ exports.clientFindLobbyFunctions = async (socket, client, io) => {
 		};
 
 		if (gameExists && gameID != '') {
-			connect('wealthofnations' + gameID.toString(), async (newClient) => {
-				let playerExists = await exists('players', { uuid: uuid }, newClient);
-				if (playerExists) {
-					await replace('players', { uuid: uuid }, player, newClient);
-				} else {
-					await insert('players', player, newClient);
+			await connect(
+				'wealthofnations' + gameID.toString(),
+				async (newClient) => {
+					let playerExists = await exists('players', { uuid: uuid }, newClient);
+					if (playerExists) {
+						await replace('players', { uuid: uuid }, player, newClient);
+					} else {
+						await insert('players', player, newClient);
+					}
+
+					socket.join(uuid);
+					socket.join(gameID);
+					socket.gameID = gameID;
+					socket.username = username;
+					socket.uuid = uuid;
+
+					await insert('messages', message, newClient);
+					clientLobbyFunctions(newClient, socket);
 				}
-
-				socket.join(uuid);
-				socket.join(gameID);
-				socket.gameID = gameID;
-				socket.username = username;
-				socket.uuid = uuid;
-
-				await insert('messages', message, newClient);
-				clientLobbyFunctions(newClient, socket);
-			});
+			);
 		} else {
 			status = false;
 		}
@@ -71,7 +74,7 @@ exports.clientFindLobbyFunctions = async (socket, client, io) => {
 		socket.username = username;
 		socket.uuid = uuid;
 
-		connect('wealthofnations' + gameID.toString(), async (newClient) => {
+		await connect('wealthofnations' + gameID.toString(), async (newClient) => {
 			await insert(
 				'game',
 				{

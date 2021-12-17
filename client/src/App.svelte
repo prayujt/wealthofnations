@@ -27,10 +27,9 @@
 	<Login {socket} />
 </main>
 
-<main on:contextmenu={preventLoad}>
+<!-- <main on:contextmenu={preventLoad}>
 	<Grid />
-</main>
-
+</main> -->
 <style>
 	main {
 		margin: 10px;

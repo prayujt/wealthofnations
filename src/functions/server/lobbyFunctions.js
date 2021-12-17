@@ -14,8 +14,11 @@ const {
 	removeAll,
 } = require('../../global');
 
+const { serverGameFunctions } = require('./gameFunctions');
+
 exports.serverLobbyFunctions = async (client, io, gameID) => {
-	watch(
+	let messageIndex = 0;
+	let playersWatch = watch(
 		'players',
 		async (value) => {
 			let players = await getAll('players', {}, client);
@@ -24,13 +27,32 @@ exports.serverLobbyFunctions = async (client, io, gameID) => {
 		client
 	);
 
-	watch(
+	let messagesWatch = watch(
 		'messages',
 		async (value) => {
 			if (value.operationType != 'delete') {
-				// let gameID = value.fullDocument.gameID;
-				let messages = await getAll('messages', {}, client);
-				io.to(gameID).emit('lobbyMessageReceived', messages);
+				io.to(gameID).emit(
+					'lobbyMessageReceived',
+					value.fullDocument,
+					messageIndex
+				);
+				messageIndex++;
+			}
+		},
+		client
+	);
+	let gameStartedWatch = watch(
+		'game',
+		async (value) => {
+			if (value.operationType == 'update') {
+				if ('gameStarted' in value.updateDescription.updatedFields) {
+					if (value.updateDescription.updatedFields.gameStarted == true) {
+						await playersWatch.close();
+						await messagesWatch.close();
+						await gameStartedWatch.close();
+						serverGameFunctions(client, io, gameID);
+					}
+				}
 			}
 		},
 		client

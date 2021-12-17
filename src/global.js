@@ -74,12 +74,24 @@ exports.replace = async (collection, query, data, client) => {
 	await client.collection(collection).replaceOne(query, data);
 };
 
-exports.watch = async (collection, callback, client) => {
+exports.watch = (collection, callback, client) => {
 	let watcher = client.collection(collection).watch();
 
 	watcher.on('change', async (value) => {
 		callback(value);
 	});
+	return watcher;
+};
+
+exports.watchFull = (collection, callback, client) => {
+	let watcher = client
+		.collection(collection)
+		.watch([], { fullDocument: 'updateLookup' });
+
+	watcher.on('change', async (value) => {
+		callback(value);
+	});
+	return watcher;
 };
 
 exports.distinct = async (collection, field, client) => {

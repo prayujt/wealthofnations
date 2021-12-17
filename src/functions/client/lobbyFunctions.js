@@ -16,6 +16,7 @@ const {
 } = require('../../global');
 
 const { initializeGame } = require('../../events/InitializeGame');
+const { clientGameFunctions } = require('./gameFunctions');
 
 exports.clientLobbyFunctions = async (client, socket) => {
 	socket.on('updateLobbyUsername', async (userID, username) => {
@@ -85,10 +86,16 @@ exports.clientLobbyFunctions = async (client, socket) => {
 		socket.removeAllListeners('startGameInitialization');
 		socket.removeAllListeners('clientSendLobbyMessage');
 		socket.removeAllListeners('updateLobbyUsername');
+		socket.removeAllListeners('saveLobbySettings');
 	});
 
 	socket.on('startGameInitialization', async (response) => {
 		await initializeGame(socket.gameID, client);
+		socket.removeAllListeners('startGameInitialization');
+		socket.removeAllListeners('clientSendLobbyMessage');
+		socket.removeAllListeners('updateLobbyUsername');
+		socket.removeAllListeners('saveLobbySettings');
+		socket.removeAllListeners('leaveLobby');
 		socket.to(socket.gameID).emit('gameStarted');
 		response({
 			status: true,

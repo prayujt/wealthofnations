@@ -3,10 +3,16 @@
 	import { Grid, Row, Column } from 'carbon-components-svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 
-	onMount(() => {
-		document
-			.getElementsByClassName('game')[0]
-			.appendChild(document.getElementsByTagName('canvas')[0]);
+	export let gameID;
+	export let socket;
+	export let isHost;
+	export let userID;
+	export let username;
+
+	onMount(() => {});
+
+	socket.on('tileChange', (tile) => {
+		console.log(tile);
 	});
 </script>
 

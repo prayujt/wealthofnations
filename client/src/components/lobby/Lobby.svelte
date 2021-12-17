@@ -112,11 +112,22 @@
 		players = players_;
 	});
 
-	socket.on('lobbyMessageReceived', (messages_) => {
-		messages = messages_;
+	socket.on('lobbyMessageReceived', (message, messageIndex) => {
+		messages[messageIndex] = message;
+		let element = document.getElementsByClassName('chat-box')[0];
+		element.scrollTop = element.scrollHeight;
+	});
+
+	socket.on('tileReceived', (tileData) => {
+		console.log(tileData);
+		// process data
 	});
 
 	socket.on('gameStarted', () => {
+		socket.removeAllListeners('isNewHost');
+		socket.removeAllListeners('lobbyPlayerChange');
+		socket.removeAllListeners('lobbyMessageReceived');
+		socket.removeAllListeners('gameStarted');
 		gameStarted = true;
 	});
 </script>
@@ -208,7 +219,7 @@
 		</div>
 	</div>
 {:else}
-	<Game />
+	<Game {gameID} {socket} {isHost} {userID} {username} />
 {/if}
 
 <svelte:window on:beforeunload={leaveLobby} />

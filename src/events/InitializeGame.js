@@ -88,13 +88,13 @@ const executiveWageRanges = {
 
 let cities = [];
 
-const initializeGame = async (id, client) => {
-	console.log('Started Game #' + id);
+const initializeGame = async (gameID, client) => {
+	console.log('Started Game #' + gameID);
 
 	let game = await get('game', {}, client);
 
 	let numCities = game.settings.numCities;
-	let numCols = Math.round(Math.sqrt(numCities) * numCities);
+	let numCols = Math.round(Math.sqrt(Math.sqrt(numCities)) * numCities);
 	let numRows = numCols;
 
 	for (let i = 0; i < numCities; i++) {
@@ -395,6 +395,12 @@ const createTile = (row, col, cityIndex, client) => {
 		},
 		client
 	);
+	// socket.to(socket.gameID).emit('tileReceived', {
+	//     type: type,
+	//     city: cityIndex,
+	//     row: row,
+	//     column: col,
+	// });
 };
 
 const getTier = (population) => {
