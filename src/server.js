@@ -10,7 +10,7 @@ const { initializeDatabase } = require('./events/InitializeDatabase');
 
 const io = require('socket.io')(http, {
 	cors: {
-		origin: 'http://prayujt:2000',
+		origin: 'http://localhost:2000',
 		methods: ['GET', 'POST'],
 	},
 });
