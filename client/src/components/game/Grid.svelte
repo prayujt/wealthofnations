@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	import Tile from './Tile.svelte';
 	import { onMount } from 'svelte';
 	import P5 from 'p5-svelte';
@@ -36,4 +36,4 @@
 <P5 {sketch} />
 
 <style>
-</style>
+</style> -->
