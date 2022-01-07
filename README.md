@@ -77,7 +77,7 @@ Each player will have access to an interface that allows them to purchase and se
 
 #### Hostile Entities
 
-##### Muslims and Pirates
+##### Pirates
 
 Players have the option to hire foreigners to infiltrate enemy companies and affect their performance. The impact that this has on enemy companies is fixed. However, the chance of success is based upon your own influence levels. If you are caught, and the hit job fails, then the impact that this has on your own companies' revenue is greater the more influence you have.
 
