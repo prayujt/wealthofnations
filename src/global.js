@@ -3,7 +3,7 @@ const { MongoClient } = require('mongodb');
 let uniqueKeys = [];
 
 const uri =
-	'mongodb://admin:testing@prayujt.com:27017/?authSource=admin&readPreference=primary&directConnection=true&ssl=false';
+	'mongodb://admin:admin@prayujt.com:27017/?authSource=admin&readPreference=primary&directConnection=true&ssl=false';
 
 exports.connect = async (database, callback) => {
 	let client = new MongoClient(uri);
