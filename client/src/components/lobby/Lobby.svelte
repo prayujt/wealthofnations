@@ -42,6 +42,10 @@
 
 	onMount(() => {
 		document.getElementsByTagName('textarea')[0].focus();
+		let element = document.getElementsByClassName('chat-box')[0];
+		window.setInterval(() => {
+			element.scrollTop = element.scrollHeight;
+		}, 100);
 	});
 
 	const setUsername = () => {
@@ -114,8 +118,6 @@
 
 	socket.on('lobbyMessageReceived', (message, messageIndex) => {
 		messages[messageIndex] = message;
-		let element = document.getElementsByClassName('chat-box')[0];
-		element.scrollTop = element.scrollHeight;
 	});
 
 	socket.on('tileReceived', (tileData) => {
@@ -199,7 +201,7 @@
 
 		<div class="right-container">
 			<div class="chat-box">
-				<div>
+				<div class="messages">
 					{#if messages != null}
 						{#each Object.entries(messages) as [key, value]}
 							<LobbyMessages username={value.author} message={value.message} />

@@ -30,7 +30,8 @@
 		"mongodb": "^4.1.1",
 		"node-sass": "^6.0.1",
 		"sirv-cli": "^1.0.0",
-		"socket.io": "^4.2.0"
+		"socket.io": "^4.2.0",
+		"svelte-scrollto": "^0.2.0"
 	},
 	"lint-staged": {
 		"**/*": "prettier --write --ignore-unknown"
