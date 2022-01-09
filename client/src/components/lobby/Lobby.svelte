@@ -39,13 +39,14 @@
 
 	let gameType = 'timed';
 	let numCities = 10;
+	let interval;
 
 	onMount(() => {
 		document.getElementsByTagName('textarea')[0].focus();
-		let element = document.getElementsByClassName('chat-box')[0];
-		window.setInterval(() => {
-			element.scrollTop = element.scrollHeight;
-		}, 100);
+		// let element = document.getElementsByClassName('chat-box')[0];
+		// 		interval = window.setInterval(() => {
+		// 			element.scrollTop = element.scrollHeight;
+		// 		}, 100);
 	});
 
 	const setUsername = () => {
@@ -118,6 +119,10 @@
 
 	socket.on('lobbyMessageReceived', (message, messageIndex) => {
 		messages[messageIndex] = message;
+		window.setTimeout(() => {
+			let element = document.getElementsByClassName('chat-box')[0];
+			element.scrollTop = element.scrollHeight;
+		}, 1);
 	});
 
 	socket.on('tileReceived', (tileData) => {
