@@ -1,7 +1,6 @@
 <script>
 	import Login from './components/login/Login.svelte';
 	import Game from './components/game/Game.svelte';
-	import Grid from './components/game/Grid.svelte';
 	import Canvas from './components/game/Canvas.svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 	import { io } from 'socket.io-client';
