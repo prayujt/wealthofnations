@@ -97,6 +97,7 @@ exports.clientLobbyFunctions = async (client, socket) => {
 		socket.removeAllListeners('saveLobbySettings');
 		socket.removeAllListeners('leaveLobby');
 		socket.to(socket.gameID).emit('gameStarted');
+		clientGameFunctions(client, socket);
 		response({
 			status: true,
 		});

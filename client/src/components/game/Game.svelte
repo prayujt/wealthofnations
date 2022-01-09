@@ -11,9 +11,15 @@
 
 	onMount(() => {});
 
-	socket.on('tileChange', (tile) => {
+	socket.on('tileChange', async (tile) => {
 		console.log(tile);
 	});
+
+	// Example of getting tile data at (0,0)
+	/** socket.emit('getTileData', 0, 0, async (response) => {
+		await response;
+		console.log(response);
+	}); **/
 </script>
 
 <div class="container">
