@@ -1,5 +1,7 @@
 <script>
 	import { onMount } from 'svelte';
+	export let rows;
+	export let columns;
 
 	let ctx;
 	let canvas;
@@ -31,11 +33,13 @@
 	});
 
 	const createGrid = () => {
+		console.log('rows: ' + rows);
+		console.log('columns: ' + columns);
 		let spacing = 1;
-		for (let i = 0; i < 20; i++) {
+		for (let i = 0; i < rows; i++) {
 			let row = [];
 			grid.push(row);
-			for (let j = 0; j < 20; j++) {
+			for (let j = 0; j < columns; j++) {
 				row.push(new Tile(i * 22, j * 22));
 			}
 		}

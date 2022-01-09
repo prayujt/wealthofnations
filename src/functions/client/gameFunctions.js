@@ -20,4 +20,11 @@ exports.clientGameFunctions = async (client, socket) => {
 		let tile = await get('map', { row: row, column: column }, client);
 		response(tile);
 	});
+	socket.on('getMapSize', async (response) => {
+		let array = await getAll('map', {}, client);
+		response(
+			Math.sqrt(Object.keys(array).length),
+			Math.sqrt(Object.keys(array).length)
+		);
+	});
 };

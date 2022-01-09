@@ -1,5 +1,5 @@
-<!-- <script>
-	import Tile from './Tile.svelte';
+<script>
+	// import Tile from './Tile.svelte';
 	import { onMount } from 'svelte';
 	import P5 from 'p5-svelte';
 
@@ -14,14 +14,14 @@
 			}
 		};
 
-		function Tile(x, y) {
+		const Tile = (x, y) => {
 			this.x = x;
 			this.y = y;
 
 			this.createTile = () => {
 				p5.rect(this.x, this.y, 20, 20);
 			};
-		}
+		};
 
 		p5.setup = () => {
 			p5.createCanvas(400, 400);
@@ -36,4 +36,4 @@
 <P5 {sketch} />
 
 <style>
-</style> -->
+</style>

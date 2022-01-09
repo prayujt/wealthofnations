@@ -1,6 +1,7 @@
 <script>
 	import Map from './Map.svelte';
-	import { Grid, Row, Column } from 'carbon-components-svelte';
+	import Canvas from './Canvas.svelte';
+	import { Grid, Row, Column, Loading } from 'carbon-components-svelte';
 	import { onMount, onDestroy, beforeUpdate, afterUpdate } from 'svelte';
 
 	export let gameID;
@@ -9,7 +10,15 @@
 	export let userID;
 	export let username;
 
-	onMount(() => {});
+	let rowsPromise,
+		columnsPromise = new Promise((resolve, reject) => {});
+
+	onMount(() => {
+		socket.emit('getMapSize', async (rows, columns) => {
+			rowsPromise = await rows;
+			columnsPromise = await columns;
+		});
+	});
 
 	socket.on('tileChange', async (tile) => {
 		console.log(tile);
@@ -27,7 +36,19 @@
 		<p>Header</p>
 	</div>
 	<div class="game">
-		<Map />
+		{#await rowsPromise}
+			<Loading small />
+		{:then rows}
+			{#await columnsPromise}
+				<Loading small />
+			{:then columns}
+				<Canvas {rows} {columns} />
+			{/await}
+		{:catch error}
+			<p>Error</p>
+		{/await}
+		<!-- <Grid /> -->
+		<!-- <Map /> -->
 	</div>
 	<div class="panel">
 		<p>Sidebar</p>
