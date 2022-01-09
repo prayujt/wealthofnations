@@ -102,4 +102,8 @@ exports.clientLobbyFunctions = async (client, socket) => {
 			status: true,
 		});
 	});
+
+	socket.on('gameFunctions', () => {
+		clientGameFunctions(client, socket);
+	});
 };

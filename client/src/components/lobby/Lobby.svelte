@@ -131,10 +131,12 @@
 	});
 
 	socket.on('gameStarted', () => {
+		socket.emit('gameFunctions');
 		socket.removeAllListeners('isNewHost');
 		socket.removeAllListeners('lobbyPlayerChange');
 		socket.removeAllListeners('lobbyMessageReceived');
 		socket.removeAllListeners('gameStarted');
+		socket.removeAllListeners('gameFunctions');
 		gameStarted = true;
 	});
 </script>

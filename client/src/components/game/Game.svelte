@@ -37,10 +37,10 @@
 	</div>
 	<div class="game">
 		{#await rowsPromise}
-			<Loading small />
+			<Loading />
 		{:then rows}
 			{#await columnsPromise}
-				<Loading small />
+				<Loading />
 			{:then columns}
 				<Canvas {rows} {columns} />
 			{/await}

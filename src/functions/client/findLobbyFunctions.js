@@ -21,10 +21,14 @@ const { serverLobbyFunctions } = require('../server/lobbyFunctions');
 
 exports.clientFindLobbyFunctions = async (socket, client, io) => {
 	socket.on('joinLobby', async (gameID, uuid, username, response) => {
-		let gameExists = await databaseExists(
-			'wealthofnations' + gameID.toString(),
-			client
-		);
+		let gameExists;
+		if (gameID == null) gameExists = false;
+		else {
+			gameExists = await databaseExists(
+				'wealthofnations' + gameID.toString(),
+				client
+			);
+		}
 		let status = true;
 		let player = {
 			gameID: gameID,
