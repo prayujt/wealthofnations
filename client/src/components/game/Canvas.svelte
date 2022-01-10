@@ -7,6 +7,9 @@
 	let canvas;
 	let width = 800;
 	let height = 600;
+	const TILE_HEIGHT = 20;
+	const TILE_WIDTH = 20;
+	const SPACE = 2;
 
 	//TODO: Convert to svelte store
 	let grid = [];
@@ -24,6 +27,7 @@
 			let canvasY = y * (canvas.height / canvas.clientHeight);
 
 			console.log(`x: ${canvasX} y: ${canvasY}`);
+			getTile(canvasX, canvasY);
 		});
 
 		console.log(canvas);
@@ -35,12 +39,13 @@
 	const createGrid = () => {
 		console.log('rows: ' + rows);
 		console.log('columns: ' + columns);
-		let spacing = 1;
 		for (let i = 0; i < rows; i++) {
 			let row = [];
 			grid.push(row);
 			for (let j = 0; j < columns; j++) {
-				row.push(new Tile(i * 22, j * 22));
+				row.push(
+					new Tile(j * (TILE_WIDTH + SPACE), i * (TILE_HEIGHT + SPACE), i, j)
+				);
 			}
 		}
 	};
@@ -53,22 +58,35 @@
 		});
 	};
 
+	//TODO: Add get tile location
+	const getTile = (x, y) => {
+		for (let i = 0; i < grid.length; i++) {
+			for (let j = 0; j < grid[i].length; j++) {
+				let tile = grid[i][j];
+				if (
+					tile.row * (TILE_HEIGHT + SPACE) < y &&
+					tile.row * (TILE_HEIGHT + SPACE) + TILE_HEIGHT > y &&
+					tile.column * (TILE_WIDTH + SPACE) < x &&
+					tile.column * (TILE_WIDTH + SPACE) + TILE_WIDTH > x
+				)
+					console.log(tile);
+			}
+		}
+	};
+
 	/**
 	 * Default tile size: 10 x 10
 	 *
 	 */
-	const Tile = function (x, y) {
+	const Tile = function (x, y, row, col) {
 		this.x = x;
 		this.y = y;
+		this.row = row;
+		this.column = col;
 
 		this.createTile = () => {
 			ctx.fillStyle = 'green';
-			ctx.fillRect(this.x, this.y, 20, 20);
-		};
-
-		//TODO: Add get tile location
-		this.getTile = () => {
-			console.log(`x: ${this.x} y: ${this.y}`);
+			ctx.fillRect(this.x, this.y, TILE_HEIGHT, TILE_WIDTH);
 		};
 	};
 

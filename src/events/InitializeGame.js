@@ -111,8 +111,10 @@ const initializeGame = async (gameID, client) => {
 		Array.from({ length: numCols }, () => -1)
 	);
 	while (cityCount < numCities) {
-		let rowNum = Math.round(Math.random() * numRows - 1);
-		let colNum = Math.round(Math.random() * numCols - 1);
+		let rowNum = Math.round(Math.random() * numRows);
+		let colNum = Math.round(Math.random() * numCols);
+		console.log(rowNum);
+		console.log(colNum);
 		if (cityTiles[rowNum][colNum] == -1) {
 			cityTiles[rowNum][colNum] = cityCount;
 			cityCount++;
