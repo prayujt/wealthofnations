@@ -1,9 +1,9 @@
 const { MongoClient } = require('mongodb');
+require('dotenv').config();
 
 let uniqueKeys = [];
 
-const uri =
-	'mongodb://admin:admin@10.2.0.251:27017/?authSource=admin&readPreference=primary&directConnection=true&ssl=false';
+const uri = process.env.URL;
 
 exports.connect = async (database, callback) => {
 	let client = new MongoClient(uri);
