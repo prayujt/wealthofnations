@@ -7,6 +7,7 @@ const {
 	get,
 	getAll,
 	insert,
+	insertMany,
 	exists,
 	update,
 	updateField,
@@ -86,7 +87,11 @@ const executiveWageRanges = {
 	10: [65001, 100000],
 };
 
+let city_names = [];
 let cities = [];
+let players = [];
+let companies = [];
+let tiles = [];
 
 const initializeGame = async (gameID, client) => {
 	console.log('Started Game #' + gameID);
@@ -127,10 +132,53 @@ const initializeGame = async (gameID, client) => {
 		}
 	}
 
+	// set here
+	await insertMany('cities', cities, client);
+	await insertMany('companies', companies, client);
+	await insertMany('map', tiles, client);
+
 	await updateField('game', {}, { gameStarted: true }, client);
 };
 
 const createPlayer = async (uuid, username, client) => {
+	let name = username + ' LLC Inc';
+
+	let startingCity = city_names[Math.floor(Math.random() * city_names.length)];
+
+	let netWorth = netWorthRanges[1][0];
+
+	let totalEmployees = employeesRanges[1][0];
+	let executives = Math.floor(Math.round(totalEmployees / 10));
+	let employees = totalEmployees - executives;
+
+	let employeeWage = employeeWageRanges[1][0];
+	let executiveWage = executiveWageRanges[1][0];
+
+	let ceoWage = Math.floor(Math.round(1.5 * executiveWage));
+
+	let debt = Math.floor(Math.round(netWorth / 2));
+
+	let taxRate = 5;
+
+	let employeeWages = employees * employeeWage;
+	let executiveWages = executives * executiveWage;
+	let maintenanceFees = Math.floor(Math.round(netWorth / 10));
+	let interestPayments = Math.floor(Math.round(debt / 10));
+	let localTax = Math.floor(Math.round(netWorth / (100 / taxRate)));
+	let totalExpenses = Math.floor(
+		Math.round(
+			employeeWages +
+				executiveWages +
+				maintenanceFees +
+				interestPayments +
+				localTax
+		)
+	);
+
+	let currentRevenue = Math.floor(Math.round(netWorth / 1.5));
+	let expectedGrowth = 3;
+	let volatility = 5;
+
 	updateField(
 		'players',
 		{ uuid: uuid },
@@ -141,18 +189,56 @@ const createPlayer = async (uuid, username, client) => {
 			influence: 100,
 			bankrupt: false,
 			companies: [],
+			conglomerate: {
+				name: name,
+				city: startingCity,
+				owner: uuid,
+				netWorth: netWorth,
+				employees: employees,
+				debt: debt,
+				bankrupt: false,
+				reserves: 0,
+				holders: {
+					[uuid]: {
+						percent: 100,
+						marketValue: netWorthRanges[1][0],
+					},
+				},
+				expenses: {
+					employeeWage: employeeWage,
+					executiveWage: executiveWage,
+					ceoWage: ceoWage,
+					taxRate: taxRate,
+					employeeWages: employeeWages,
+					executiveWages: executiveWages,
+					maintenanceFees: maintenanceFees,
+					interestPayments: interestPayments,
+					localTax: localTax,
+					totalExpenses: totalExpenses,
+				},
+				revenue: {
+					currentRevenue: currentRevenue,
+					expectedGrowth: 0,
+					volatility: 0,
+				},
+				expectedProfit: Math.floor(
+					Math.round(
+						currentRevenue * (1 + expectedGrowth / 100) - totalExpenses
+					)
+				),
+				secrets: {},
+				tier: 1,
+			},
 		},
 		client
 	);
 
-	let name = username + ' LLC Inc';
 	console.log('Initialized Player with ID ' + uuid);
-	await createConglomerate(uuid, username, name, client);
 };
 
 const createCity = async (index, numCities, client) => {
 	let name = random().address.city();
-	cities.push(name);
+	city_names.push(name);
 
 	let tier =
 		cityTierProbabilities[
@@ -179,19 +265,15 @@ const createCity = async (index, numCities, client) => {
 
 	tier = getTier(population);
 
-	insert(
-		'cities',
-		{
-			index: index,
-			name: name,
-			companies: companies,
-			netWorth: netWorth,
-			owner: 'Bank',
-			population: population,
-			tier: tier,
-		},
-		client
-	);
+	cities.push({
+		index: index,
+		name: name,
+		companies: companies,
+		netWorth: netWorth,
+		owner: 'Bank',
+		population: population,
+		tier: tier,
+	});
 };
 
 const createCompany = async (city, client) => {
@@ -252,151 +334,57 @@ const createCompany = async (city, client) => {
 	let expectedGrowth = 3;
 	let volatility = 5;
 
-	insert(
-		'companies',
-		{
-			name: name,
-			city: city,
-			owner: 'Bank',
-			netWorth: netWorth,
-			employees: employees,
-			debt: debt,
-			bankrupt: false,
-			reserves: 0,
-			holders: {
-				Bank: {
-					percent: 100,
-					marketValue: netWorth,
-				},
+	companies.push({
+		name: name,
+		city: city,
+		owner: 'Bank',
+		netWorth: netWorth,
+		employees: employees,
+		debt: debt,
+		bankrupt: false,
+		reserves: 0,
+		holders: {
+			Bank: {
+				percent: 100,
+				marketValue: netWorth,
 			},
-			expenses: {
-				employeeWage: employeeWage,
-				executiveWage: executiveWage,
-				ceoWage: ceoWage,
-				taxRate: taxRate,
-				employeeWages: employeeWages,
-				executiveWages: executiveWages,
-				maintenanceFees: maintenanceFees,
-				interestPayments: interestPayments,
-				localTax: localTax,
-				totalExpenses: totalExpenses,
-			},
-			revenue: {
-				currentRevenue: currentRevenue,
-				expectedGrowth: expectedGrowth,
-				volatility: volatility,
-			},
-			expectedProfit: Math.floor(
-				Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
-			),
-			secrets: {},
-			tier: tier,
 		},
-		client
-	);
+		expenses: {
+			employeeWage: employeeWage,
+			executiveWage: executiveWage,
+			ceoWage: ceoWage,
+			taxRate: taxRate,
+			employeeWages: employeeWages,
+			executiveWages: executiveWages,
+			maintenanceFees: maintenanceFees,
+			interestPayments: interestPayments,
+			localTax: localTax,
+			totalExpenses: totalExpenses,
+		},
+		revenue: {
+			currentRevenue: currentRevenue,
+			expectedGrowth: expectedGrowth,
+			volatility: volatility,
+		},
+		expectedProfit: Math.floor(
+			Math.round(currentRevenue * (1 + expectedGrowth / 100) - totalExpenses)
+		),
+		secrets: {},
+		tier: tier,
+	});
 
 	return [name, netWorth, totalEmployees];
-};
-
-const createConglomerate = async (uuid, username, name, client) => {
-	let startingCity = cities[Math.floor(Math.random() * cities.length)];
-
-	let netWorth = netWorthRanges[1][0];
-
-	let totalEmployees = employeesRanges[1][0];
-	let executives = Math.floor(Math.round(totalEmployees / 10));
-	let employees = totalEmployees - executives;
-
-	let employeeWage = employeeWageRanges[1][0];
-	let executiveWage = executiveWageRanges[1][0];
-
-	let ceoWage = Math.floor(Math.round(1.5 * executiveWage));
-
-	let debt = Math.floor(Math.round(netWorth / 2));
-
-	let taxRate = 5;
-
-	let employeeWages = employees * employeeWage;
-	let executiveWages = executives * executiveWage;
-	let maintenanceFees = Math.floor(Math.round(netWorth / 10));
-	let interestPayments = Math.floor(Math.round(debt / 10));
-	let localTax = Math.floor(Math.round(netWorth / (100 / taxRate)));
-	let totalExpenses = Math.floor(
-		Math.round(
-			employeeWages +
-				executiveWages +
-				maintenanceFees +
-				interestPayments +
-				localTax
-		)
-	);
-
-	let currentRevenue = Math.floor(Math.round(netWorth / 1.5));
-	let expectedGrowth = 3;
-	let volatility = 5;
-
-	updateField(
-		'players',
-		{ uuid: uuid },
-		{
-			conglomerate: {
-				name: name,
-				city: startingCity,
-				owner: uuid,
-				netWorth: netWorth,
-				employees: employees,
-				debt: debt,
-				bankrupt: false,
-				reserves: 0,
-				holders: {
-					[uuid]: {
-						percent: 100,
-						marketValue: netWorthRanges[1][0],
-					},
-				},
-				expenses: {
-					employeeWage: employeeWage,
-					executiveWage: executiveWage,
-					ceoWage: ceoWage,
-					taxRate: taxRate,
-					employeeWages: employeeWages,
-					executiveWages: executiveWages,
-					maintenanceFees: maintenanceFees,
-					interestPayments: interestPayments,
-					localTax: localTax,
-					totalExpenses: totalExpenses,
-				},
-				revenue: {
-					currentRevenue: currentRevenue,
-					expectedGrowth: 0,
-					volatility: 0,
-				},
-				expectedProfit: Math.floor(
-					Math.round(
-						currentRevenue * (1 + expectedGrowth / 100) - totalExpenses
-					)
-				),
-				secrets: {},
-				tier: 1,
-			},
-		},
-		client
-	);
 };
 
 const createTile = (row, col, cityIndex, client) => {
 	let type = 'city';
 	if (cityIndex == -1) type = 'empty';
-	insert(
-		'map',
-		{
-			type: type,
-			city: cityIndex,
-			row: row,
-			column: col,
-		},
-		client
-	);
+	tiles.push({
+		type: type,
+		city: cityIndex,
+		row: row,
+		column: col,
+	});
 	// socket.to(socket.gameID).emit('tileReceived', {
 	//     type: type,
 	//     city: cityIndex,
