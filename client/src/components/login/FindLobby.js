@@ -38,19 +38,25 @@ export default function FindLobby() {
 	const joinGame = async () => {
 		let inputGameID = parseInt(joinGameID.value);
 		console.log(inputGameID);
-		socket.emit('joinLobby', inputGameID, username, async (response) => {
-			await response;
-			if (response.status === false) {
-				alert('Invalid Game ID!');
-			} else {
-				console.log(response.player);
-				dispatch(createSession(joinGameID.value));
-				dispatch(changeIsHost(false));
-				dispatch(changeJoined(true));
-				dispatch(addPlayer(Object.values(response.player)));
-				navigate(`/lobby/${inputGameID}`);
+		socket.emit(
+			'joinLobby',
+			inputGameID,
+			userID,
+			username,
+			async (response) => {
+				await response;
+				if (response.status === false) {
+					alert('Invalid Game ID!');
+				} else {
+					console.log(response.player);
+					dispatch(createSession(joinGameID.value));
+					dispatch(changeIsHost(false));
+					dispatch(changeJoined(true));
+					dispatch(addPlayer(Object.values(response.player)));
+					navigate(`/lobby/${inputGameID}`);
+				}
 			}
-		});
+		);
 		// navigate(`/lobby/:${gameID}`);     //for debugging
 	};
 
@@ -58,18 +64,23 @@ export default function FindLobby() {
 		let newGameID = Math.floor(100000 + Math.random() * 900000);
 		dispatch(createSession(newGameID));
 
-		socket.emit('createLobby', newGameID, username, async (response) => {
-			await response;
-			if (response.status === true) {
-				console.log(response.player);
-				dispatch(changeIsHost(true));
-				dispatch(changeJoined(true));
-				dispatch(addPlayer([username]));
-				navigate(`/lobby/${newGameID}`);
-			} else {
-				alert('failed to create lobby');
+		socket.emit(
+			'createLobby',
+			newGameID,
+			userID,
+			username,
+			async (response) => {
+				await response;
+				if (response.status === true) {
+					dispatch(changeIsHost(true));
+					dispatch(changeJoined(true));
+					dispatch(addPlayer([username]));
+					navigate(`/lobby/${newGameID}`);
+				} else {
+					alert('failed to create lobby');
+				}
 			}
-		});
+		);
 		//navigate(`/lobby/${newGameID}`);     //for debugging
 	};
 
@@ -77,12 +88,12 @@ export default function FindLobby() {
 		setGameID({ value: e.target.value });
 	};
 
-	const handelJoinGame = (e) => {
+	const handleJoinGame = (e) => {
 		e.preventDefault();
 		joinGame();
 	};
 
-	const handelCreateGame = (e) => {
+	const handleCreateGame = (e) => {
 		e.preventDefault();
 		createGame();
 	};
@@ -95,7 +106,7 @@ export default function FindLobby() {
 				</Typography>
 			</header>
 			<section>
-				<form id="findlobby-form" onSubmit={handelJoinGame}>
+				<form id="findlobby-form" onSubmit={handleJoinGame}>
 					<label>
 						<TextField
 							id="findlobby-input"
@@ -118,7 +129,7 @@ export default function FindLobby() {
 			<Button
 				variant="contained"
 				id="findlobby-button-create"
-				onClick={handelCreateGame}
+				onClick={handleCreateGame}
 				color="error"
 			>
 				Create Game

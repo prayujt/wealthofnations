@@ -22,7 +22,16 @@ export default function Lobby() {
 	const socket = useContext(SocketContext);
 
 	socket.on('lobbyPlayerChange', (players) => {
-		dispatch(updatePlayers(Object.values(players)));
+		console.log('nword');
+		console.log(players);
+		let usernames = [];
+		for (const [key, value] of Object.entries(players)) {
+			console.log(key + ' ' + value);
+			usernames.push(value.username);
+		}
+		console.log('usernames');
+		console.log(usernames);
+		dispatch(updatePlayers(usernames));
 	});
 
 	const startGame = () => {
@@ -40,7 +49,7 @@ export default function Lobby() {
 
 			<div className="lobby-container-players">
 				<Paper id="lobby-paper-players" variant="elevation">
-					{players[0].map((player) => {
+					{players.map((player) => {
 						return (
 							<Typography variant="h6" component="p">
 								{player}
