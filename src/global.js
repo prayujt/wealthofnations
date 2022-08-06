@@ -1,11 +1,12 @@
 const { MongoClient } = require('mongodb');
-require('dotenv').config();
+const dotenv = require('dotenv');
 
 let uniqueKeys = [];
 
 const uri = process.env.URL;
 
 exports.connect = async (database, callback) => {
+	console.log(uri);
 	let client = new MongoClient(uri);
 	await client.connect();
 	callback(client.db(database));
